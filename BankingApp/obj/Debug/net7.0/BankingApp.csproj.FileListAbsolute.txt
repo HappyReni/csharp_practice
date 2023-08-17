@@ -1,0 +1,14 @@
+E:\Workplace\c#\csharp_practice\BankingApp\bin\Debug\net7.0\BankingApp.exe
+E:\Workplace\c#\csharp_practice\BankingApp\bin\Debug\net7.0\BankingApp.deps.json
+E:\Workplace\c#\csharp_practice\BankingApp\bin\Debug\net7.0\BankingApp.runtimeconfig.json
+E:\Workplace\c#\csharp_practice\BankingApp\bin\Debug\net7.0\BankingApp.dll
+E:\Workplace\c#\csharp_practice\BankingApp\bin\Debug\net7.0\BankingApp.pdb
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.GeneratedMSBuildEditorConfig.editorconfig
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.AssemblyInfoInputs.cache
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.AssemblyInfo.cs
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.csproj.CoreCompileInputs.cache
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.dll
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\refint\BankingApp.dll
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.pdb
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\BankingApp.genruntimeconfig.cache
+E:\Workplace\c#\csharp_practice\BankingApp\obj\Debug\net7.0\ref\BankingApp.dll
