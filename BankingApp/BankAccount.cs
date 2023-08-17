@@ -7,7 +7,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BA
+namespace BankingApp
 {
     public class BankAccount
     {
