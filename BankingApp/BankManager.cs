@@ -15,7 +15,7 @@ namespace BankingApp
         }
 
         private string _serviceSelector { get; set; }
-        private List<BankAccount> _accounts = new List<BankAccount>();
+        private List<BankAccount> _accounts = new();
 
         private void MainMenu()
         {
@@ -23,9 +23,9 @@ namespace BankingApp
             Console.WriteLine("".PadLeft(24,'='));
             Console.WriteLine("Choose the service.");
             Console.WriteLine("1. Create New Account");
-            Console.WriteLine("2. Check the balance"); 
+            Console.WriteLine("2. Check Balance"); 
             Console.WriteLine("3. Transfer");
-            Console.WriteLine("4. View all accounts");
+            Console.WriteLine("4. View All Accounts");
 
             Console.Write(">> ");
             _serviceSelector = Console.ReadLine();
@@ -43,7 +43,7 @@ namespace BankingApp
                     CreateAccount();
                     break;
                 case "2":
-                    Console.WriteLine("2. 잔액 조회");
+                    CheckBalance();
                     break;
                 case "3":
                     Console.WriteLine("3. 계좌 이체");
@@ -52,7 +52,7 @@ namespace BankingApp
                     ViewAllAccounts();
                     break;
                 default:
-                    Console.WriteLine("잘못된 입력입니다. 다시 입력해주세요.");
+                    Console.WriteLine("Invalid input. Please try again.");
                     Console.ReadLine();
                     MainMenu();
                     break;
@@ -74,11 +74,56 @@ namespace BankingApp
                 var acc = new BankAccount(name, money);
                 _accounts.Add(acc);
             }
-            else { Console.WriteLine("Please input an integer value only for the initial balance."); }
+            else 
+            { 
+                Console.WriteLine("Please input an integer value only for the initial balance."); 
+            }
+
             Console.ReadLine();
             MainMenu();
         }
 
+        private void CheckBalance()
+        {
+            Console.Clear();
+            Console.WriteLine("2. Check Balance\n\n");
+            Console.WriteLine("Please type your account number.");
+            Console.Write(">> ");
+            var res = int.TryParse(Console.ReadLine(), out int number);
+
+            if (res)
+            {
+                var acc = SearchAccount(number);
+
+                if (acc != null) acc.CheckBalance();
+                else
+                {
+                    Console.WriteLine("Invalid Account Number. Please Try Again.");
+                    Console.ReadLine();
+                    CheckBalance();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input. Please Try Again.");
+                Console.ReadLine();
+                CheckBalance();
+            }
+            Console.ReadLine();
+            MainMenu();
+        }
+
+        private BankAccount SearchAccount(int n)
+        {
+            foreach(var acc in _accounts)
+            {
+                if(acc.Number == n)
+                {
+                    return acc;
+                }
+            }
+            return null;
+        }
         private void ViewAllAccounts()
         {
             Console.WriteLine("4. Create New Account\n\n");

@@ -35,7 +35,7 @@ namespace BankingApp
 
         #region fields
         private int number;
-        private int Number
+        public int Number
         {
             get => number;
 
@@ -46,7 +46,7 @@ namespace BankingApp
             }
         }
         private string Owner { get; set; }
-        private decimal Balance { get; set; }
+        public int Balance { get; set; }
         private static List<int> _accountNumbers = new();
         private static List<Transaction> _transactions = new();
         #endregion
@@ -57,14 +57,14 @@ namespace BankingApp
             if (_accountNumbers.Contains(number)) return true;
             else return false;
         }
-        public void MakeDeposit(decimal amount)
+        public void MakeDeposit(int amount)
         {
             Balance += amount;
             Console.WriteLine($"{Number}-{Owner}\t입금 되었습니다.");
             AddTransactions(amount, $"입금 발생:\t잔액: {Balance}\t입금액: {amount}");
         }
         public void CheckBalance() => Console.WriteLine($"{Number}-{Owner}\t잔액은 {Balance}원 입니다.");
-        public void Withdraw(decimal amount)
+        public void Withdraw(int amount)
         {
             if (Balance < amount)
             {
