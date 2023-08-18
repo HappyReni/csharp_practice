@@ -11,21 +11,18 @@ namespace BankingApp
 {
     public class BankAccount
     {
+        private const int MAXIMUM_ACCOUNTS_NUMBER = 10000;
+
         #region Constructor
-        private BankAccount(int number, string owner, decimal balance)
+        public BankAccount(string owner, int balance)
         {
-            Number = number;
+            Number = 0;
             Owner = owner;
             Balance = Math.Max(balance, 0);
 
-            if (_accountNumbers.Count == 0)
-            {
-                Console.WriteLine("Notification!\t아직 생성된 계좌가 없습니다.");
-            }
-
             if (CheckUniqueNumber(number))
             {
-                throw new InvalidOperationException("중복된 계좌 번호가 있어 계좌 생성이 불가능합니다.");
+                throw new InvalidOperationException("Can't create an account due to a duplicate number.");
             }
             else
             {
@@ -36,31 +33,23 @@ namespace BankingApp
         }
         #endregion
 
-        #region variables
-        private int Number { get; }
+        #region fields
+        private int number;
+        private int Number
+        {
+            get => number;
+
+            set
+            {
+                Random rand = new();
+                number = rand.Next(MAXIMUM_ACCOUNTS_NUMBER);
+            }
+        }
         private string Owner { get; set; }
         private decimal Balance { get; set; }
         private static List<int> _accountNumbers = new();
         private static List<Transaction> _transactions = new();
         #endregion
-
-        public static BankAccount CreateBankAccount(int number, string owner, decimal balance)
-        {
-            try
-            {
-                if (CheckUniqueNumber(number))
-                {
-                    throw new InvalidOperationException("중복된 계좌 번호가 있어 계좌 생성이 불가능합니다.");
-                }
-
-                return new BankAccount(number, owner, balance);
-            }
-            catch (InvalidOperationException ex)
-            {
-                Console.WriteLine(ex.Message); // 예외 메시지 출력
-                return null;
-            }
-        }
 
         private void AddNumbers(int number) => _accountNumbers.Add(number);
         private static bool CheckUniqueNumber(int number)
@@ -106,12 +95,9 @@ namespace BankingApp
             }
         }
 
-        public void ShowAllAccounts()
+        public void DisplayInfo()
         {
-            foreach (var tr in _accountNumbers)
-            {
-                Console.WriteLine(tr);
-            }
+            Console.WriteLine($"{Number,-10}{Owner,-10}{Balance,-10}");
         }
     }
 
