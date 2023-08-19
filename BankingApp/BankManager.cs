@@ -27,6 +27,7 @@ namespace BankingApp
             Console.WriteLine("2. Check Balance"); 
             Console.WriteLine("3. Transfer");
             Console.WriteLine("4. View All Accounts");
+            Console.WriteLine("5. View All Transactions");
 
             Console.Write(">> ");
             _service = Console.ReadLine();
@@ -60,6 +61,9 @@ namespace BankingApp
                     break;
                 case "4":
                     ViewAllAccounts();
+                    break;
+                case "5":
+                    ViewAllTransactions();
                     break;
                 default:
                     Console.WriteLine("Invalid input. Please try again.");
@@ -180,6 +184,18 @@ namespace BankingApp
             foreach (var acc in _accounts)
             {
                 acc.DisplayInfo();
+            }
+            GoBack("Main");
+        }
+        private void ViewAllTransactions()
+        {
+            Console.WriteLine("5. View All Transactions\n\n");
+            Console.WriteLine($"{"Time",-10}{"Note",-10}{"Amount",-10}");
+            Console.WriteLine("".PadLeft(24, '='));
+
+            foreach (var acc in _accounts)
+            {
+                acc.showHistory();
             }
             GoBack("Main");
         }

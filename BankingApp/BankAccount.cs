@@ -68,14 +68,14 @@ namespace BankingApp
         {
             if (Balance < amount)
             {
-                Console.WriteLine($"{Number}-{Owner}\tA request for withdraw has been cancelled due to a lack of balance.");
+                Console.WriteLine($"{Number} - {Owner}\tA request for withdraw has been cancelled due to a lack of balance.");
                 AddTransactions(amount, $"A cancelled request with a lack of balance:\tBalance: {Balance}\tAmount: {amount}");
                 return false;
             }
             else
             {
                 Balance -= amount;
-                Console.WriteLine($"{Number}-{Owner}\t{amount} has been withdrawn.");
+                Console.WriteLine($"{Number} - {Owner}\t{amount} has been withdrawn.");
 
                 AddTransactions(amount, $"Withdraw:\tBalance: {Balance}\tAmount: {amount}");
                 return true;
