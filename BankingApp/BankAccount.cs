@@ -60,23 +60,25 @@ namespace BankingApp
         public void MakeDeposit(int amount)
         {
             Balance += amount;
-            Console.WriteLine($"{Number}-{Owner}\t입금 되었습니다.");
-            AddTransactions(amount, $"입금 발생:\t잔액: {Balance}\t입금액: {amount}");
+            Console.WriteLine($"{Number} - {Owner}\t{amount} has been deposited.");
+            AddTransactions(amount, $"Deposit:\tBalance: {Balance}\tAmount: {amount}");
         }
-        public void CheckBalance() => Console.WriteLine($"{Number}-{Owner}\t잔액은 {Balance}원 입니다.");
-        public void Withdraw(int amount)
+        public void CheckBalance() => Console.WriteLine($"{Number,-10}{Owner}\tBalance : {Balance}");
+        public bool Withdraw(int amount)
         {
             if (Balance < amount)
             {
-                Console.WriteLine($"{Number}-{Owner}\t잔액 부족으로 출금 취소 되었습니다.");
-                AddTransactions(amount, $"잔액 부족으로 출금 요청 취소:\t잔액: {Balance}\t출금요청액: {amount}");
+                Console.WriteLine($"{Number}-{Owner}\tA request for withdraw has been cancelled due to a lack of balance.");
+                AddTransactions(amount, $"A cancelled request with a lack of balance:\tBalance: {Balance}\tAmount: {amount}");
+                return false;
             }
             else
             {
                 Balance -= amount;
-                Console.WriteLine($"{Number}-{Owner}\t출금 되었습니다.");
+                Console.WriteLine($"{Number}-{Owner}\t{amount} has been withdrawn.");
 
-                AddTransactions(amount, $"출금 발생:\t잔액: {Balance}\t출금액: {amount}");
+                AddTransactions(amount, $"Withdraw:\tBalance: {Balance}\tAmount: {amount}");
+                return true;
             }
         }
         private void AddTransactions(decimal amount, string note)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace BankingApp
 {
@@ -10,11 +11,11 @@ namespace BankingApp
     {
         public BankManager()
         {
-            _serviceSelector = "";
+            _service = "";
             MainMenu();
         }
 
-        private string _serviceSelector { get; set; }
+        private string _service { get; set; }
         private List<BankAccount> _accounts = new();
 
         private void MainMenu()
@@ -28,8 +29,17 @@ namespace BankingApp
             Console.WriteLine("4. View All Accounts");
 
             Console.Write(">> ");
-            _serviceSelector = Console.ReadLine();
-            BeginService(_serviceSelector);
+            _service = Console.ReadLine();
+            BeginService(_service);
+        }
+
+
+        private void GoBack(string s)
+        {
+            Console.ReadLine();
+            if (s=="Main") MainMenu();
+            else CheckBalance();
+
         }
 
         private void BeginService(string service)
@@ -46,15 +56,14 @@ namespace BankingApp
                     CheckBalance();
                     break;
                 case "3":
-                    Console.WriteLine("3. 계좌 이체");
+                    Transfer();
                     break;
                 case "4":
                     ViewAllAccounts();
                     break;
                 default:
                     Console.WriteLine("Invalid input. Please try again.");
-                    Console.ReadLine();
-                    MainMenu();
+                    GoBack("Main");
                     break;
             }
         }
@@ -62,16 +71,12 @@ namespace BankingApp
         private void CreateAccount()
         {
             Console.WriteLine("1. Create New Account\n\n");
-            Console.WriteLine("Please type your name.");
-            Console.Write(">> ");
-            var name = Console.ReadLine();
-            Console.WriteLine("Please input the amount of money to deposit.");
-            Console.Write(">> ");
-            var res = int.TryParse(Console.ReadLine(), out int money);
+            var input_name = GetInput("Please type your name.");
+            var input_money = GetInput("Please input the amount of money to deposit.");
 
-            if (res)
+            if (input_money.res)
             {
-                var acc = new BankAccount(name, money);
+                var acc = new BankAccount(input_name.str, input_money.val);
                 _accounts.Add(acc);
             }
             else 
@@ -79,38 +84,79 @@ namespace BankingApp
                 Console.WriteLine("Please input an integer value only for the initial balance."); 
             }
 
-            Console.ReadLine();
-            MainMenu();
+            GoBack("Main");
         }
 
         private void CheckBalance()
         {
             Console.Clear();
             Console.WriteLine("2. Check Balance\n\n");
-            Console.WriteLine("Please type your account number.");
-            Console.Write(">> ");
-            var res = int.TryParse(Console.ReadLine(), out int number);
+            var input_number = GetInput("Please type your account number. Press \"Exit\" if you want to go back to the main menu");
 
-            if (res)
+            if (input_number.res)
             {
-                var acc = SearchAccount(number);
+                var acc = SearchAccount(input_number.val);
 
                 if (acc != null) acc.CheckBalance();
                 else
                 {
                     Console.WriteLine("Invalid Account Number. Please Try Again.");
-                    Console.ReadLine();
-                    CheckBalance();
+                    GoBack("Balance");
                 }
             }
             else
             {
+                if (input_number.str == "Exit") GoBack("Main");
                 Console.WriteLine("Invalid Input. Please Try Again.");
-                Console.ReadLine();
-                CheckBalance();
+                GoBack("Balance");
             }
-            Console.ReadLine();
-            MainMenu();
+            GoBack("Main");
+        }
+
+        private void Transfer()
+        {
+            Console.Clear();
+            Console.WriteLine("3. Transfer\n\n");
+
+            var input_number = GetInput("Please type your account number.");
+
+            if (input_number.res)
+            {
+                var input_money = GetInput("Type the amount of money you would like to transfer.");
+                var transfer_number = GetInput("Please type the account number that you would transfer.");
+
+                var acc = SearchAccount(input_number.val);
+                var acc_transfer = SearchAccount(transfer_number.val);
+
+                if (acc != null && acc_transfer != null)
+                {
+                    if(acc.Withdraw(input_money.val)) acc_transfer.MakeDeposit(input_money.val);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Account Number. Please Try Again.");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Invalid Account Number. Please Try Again.");
+            }
+            GoBack("Main");
+
+        }
+
+        private static (bool res, string str, int val) GetInput(string s)
+        {
+
+            int number;
+            Console.WriteLine(s);
+            Console.Write(">> ");
+            string str = Console.ReadLine();
+            var res = int.TryParse(str , out number);
+
+            str = str == null ? "" : str;
+            return (res, str, number);
         }
 
         private BankAccount SearchAccount(int n)
@@ -124,6 +170,7 @@ namespace BankingApp
             }
             return null;
         }
+
         private void ViewAllAccounts()
         {
             Console.WriteLine("4. Create New Account\n\n");
@@ -134,8 +181,7 @@ namespace BankingApp
             {
                 acc.DisplayInfo();
             }
-            Console.ReadLine();
-            MainMenu();
+            GoBack("Main");
         }
     }
 }

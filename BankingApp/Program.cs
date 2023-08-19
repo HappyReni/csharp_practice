@@ -5,6 +5,6 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-        BankManager bankManager = new BankManager();
+        BankManager bankManager = new();
     }
 }
