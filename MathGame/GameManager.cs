@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MathGame
+﻿namespace MathGame
 {
+
     internal class GameManager
     {
-        private const int ROUND_COUNT = 5;
+        private int _round_count = 5;
+        private SELECTOR _selector { get; set; }
+        private int _point { get; set; }
+        private List<History> _history;
+
         public GameManager()
         {
             _selector = SELECTOR.INVALID_SELECT;
@@ -16,10 +15,6 @@ namespace MathGame
             _history = new();
             MainMenu();
         }
-
-        private SELECTOR _selector { get; set; }
-        private int _point { get; set; }
-        private List<History> _history;
 
         private void MainMenu()
         {
@@ -34,19 +29,35 @@ namespace MathGame
             Console.WriteLine("9. Exit The Program");
             Console.WriteLine("".PadRight(24, '='));
             _selector = (SELECTOR)GetInput("").val;
-            BeginGames(_selector);
+            Begin(_selector);
         }
 
-        private void BeginGames(SELECTOR s)
+        private void Begin(SELECTOR s)
         {
             Console.Clear();
-            for(int i=0; i< ROUND_COUNT; i++) 
+            if (s == SELECTOR.ViewPreviousGames)
             {
-                Operation(s);
+                ShowHistory();
+                WaitForInput($"Press any button to go back to the main menu.");
+                MainMenu();
             }
-            Console.WriteLine($"Your final score is {_point}.");
-            WaitForInput($"Press any button to go back to the main menu.");
-            MainMenu();
+            else if (s == SELECTOR.EXIT)
+            {
+                WaitForInput($"Bye Bye");
+                Environment.Exit(0);
+            }
+            else
+            {
+                _round_count = GetInput("Enter the number of questions.").val;
+                Console.Clear();
+                for (int i = 0; i < _round_count; i++)
+                {
+                    Operation(s);
+                }
+                Console.WriteLine($"Your final score is {_point}.");
+                WaitForInput($"Press any button to go back to the main menu.");
+                MainMenu();
+            }
         }
 
         private void WaitForInput(string s) 
@@ -66,26 +77,24 @@ namespace MathGame
 
             switch (s)
             {
-                case SELECTOR.ViewPreviousGames:
-                    ShowHistory();
-                    WaitForInput($"Press any button to go back to the main menu.");
-                    MainMenu();
-                    break;
                 case SELECTOR.Addition:
                     Console.WriteLine("Addition Game");
                     question = $"{x} + {y}";
                     answer = x + y;
                     break;
+
                 case SELECTOR.Substraction:
                     Console.WriteLine("Substraction Game");
                     question = $"{x} - {y}";
                     answer = x - y;
                     break;
+
                 case SELECTOR.Multiplication:
                     Console.WriteLine("Multiplication Game");
                     question = $"{x} * {y}";
                     answer = x * y;
                     break;
+
                 case SELECTOR.Division:
                     var _division_numbers = GetDivisionNumbers(x, y);
                     var x_div = _division_numbers.x;
@@ -95,10 +104,7 @@ namespace MathGame
                     question = $"{x_div} / {y_div}";
                     answer = x_div / y_div;
                     break;
-                case SELECTOR.EXIT:
-                    WaitForInput($"Bye Bye");
-                    Environment.Exit(0);
-                    break;
+
                 default:
                     WaitForInput($"Invalid input. Try again.");
                     MainMenu();
@@ -107,19 +113,16 @@ namespace MathGame
             Console.WriteLine(question);
             var input = GetInput("").val;
 
-            if (answer == input)
-            {
-                _point++;
-                WaitForInput("Your answer was correct!");
-                AddHistory(question, answer, input, "CORRECT");
-            }
-            else 
-            {
-                WaitForInput("Your answer was wrong!");
-                AddHistory(question, answer, input, "WRONG");
-            }
+            string resultMessage = (answer == input) ? "Your answer was correct!" : "Your answer was wrong!";
+            string resultType = (answer == input) ? "CORRECT" : "WRONG";
+
+            _point += (answer == input) ? 1 : 0;
+            WaitForInput(resultMessage);
+            AddHistory(question, answer, input, resultType);
+
             Console.Clear();
         }
+
         private void AddHistory(string q, int ca, int a, string r)
         {
             DateTime dateTime = DateTime.Now;
@@ -128,19 +131,23 @@ namespace MathGame
 
         private void ShowHistory()
         {
-            Console.WriteLine($"Time\t\t\t\tQuestion\tCorrectAnswer\tAnswer\t\tResult");
-            Console.WriteLine("".PadRight(100, '='));
-
-            foreach (var h in _history)
+            if (_history.Count == 0) Console.WriteLine("There is no previous history !");
+            else
             {
-                Console.WriteLine($"{h.Time}\t\t{h.Question}\t\t{h.CorrectAnswer}\t\t{h.Answer}\t\t{h.Result}");
+                Console.WriteLine($"Time\t\t\t\tQuestion\tCorrectAnswer\tAnswer\t\tResult");
+                Console.WriteLine("".PadRight(100, '='));
+
+                foreach (var h in _history)
+                {
+                    Console.WriteLine($"{h.Time}\t\t{h.Question}\t\t{h.CorrectAnswer}\t\t{h.Answer}\t\t{h.Result}");
+                }
             }
             Console.WriteLine("".PadRight(100, '='));
         }
 
         private (bool res, string str, int val) GetInput(string s)
         {
-
+            // This function returns string input too in case you need it
             int number;
             Console.WriteLine(s);
             Console.Write(">> ");
