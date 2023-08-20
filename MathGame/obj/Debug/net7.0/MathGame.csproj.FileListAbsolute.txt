@@ -1,0 +1,14 @@
+E:\Workplace\c#\csharp_practice\MathGame\bin\Debug\net7.0\MathGame.exe
+E:\Workplace\c#\csharp_practice\MathGame\bin\Debug\net7.0\MathGame.deps.json
+E:\Workplace\c#\csharp_practice\MathGame\bin\Debug\net7.0\MathGame.runtimeconfig.json
+E:\Workplace\c#\csharp_practice\MathGame\bin\Debug\net7.0\MathGame.dll
+E:\Workplace\c#\csharp_practice\MathGame\bin\Debug\net7.0\MathGame.pdb
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.GeneratedMSBuildEditorConfig.editorconfig
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.AssemblyInfoInputs.cache
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.AssemblyInfo.cs
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.csproj.CoreCompileInputs.cache
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.dll
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\refint\MathGame.dll
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.pdb
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\MathGame.genruntimeconfig.cache
+E:\Workplace\c#\csharp_practice\MathGame\obj\Debug\net7.0\ref\MathGame.dll
