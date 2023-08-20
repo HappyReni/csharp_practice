@@ -8,17 +8,16 @@ namespace MathGame
 {
     internal class GameManager
     {
-        private const int INVALID_SELECT = -1;
         private const int ROUND_COUNT = 5;
         public GameManager()
         {
-            _selector = INVALID_SELECT;
+            _selector = SELECTOR.INVALID_SELECT;
             _point = 0;
             _history = new();
             MainMenu();
         }
 
-        private int _selector { get; set; }
+        private SELECTOR _selector { get; set; }
         private int _point { get; set; }
         private List<History> _history;
 
@@ -34,11 +33,11 @@ namespace MathGame
             Console.WriteLine("4. Division");
             Console.WriteLine("9. Exit The Program");
             Console.WriteLine("".PadRight(24, '='));
-            _selector = GetInput("").val;
+            _selector = (SELECTOR)GetInput("").val;
             BeginGames(_selector);
         }
 
-        private void BeginGames(int s)
+        private void BeginGames(SELECTOR s)
         {
             Console.Clear();
             for(int i=0; i< ROUND_COUNT; i++) 
@@ -56,13 +55,7 @@ namespace MathGame
             Console.ReadLine();
         }
 
-        private void AddHistory(string q, int ca, int a, string r)
-        {
-            DateTime dateTime = DateTime.Now;
-            _history.Add(new History(dateTime, q, ca, a, r));
-        }
-
-        private void Operation(int s)
+        private void Operation(SELECTOR s)
         {
             Random rand = new();
             int x = rand.Next(20);
@@ -73,27 +66,27 @@ namespace MathGame
 
             switch (s)
             {
-                case 0:
+                case SELECTOR.ViewPreviousGames:
                     ShowHistory();
                     WaitForInput($"Press any button to go back to the main menu.");
                     MainMenu();
                     break;
-                case 1:
+                case SELECTOR.Addition:
                     Console.WriteLine("Addition Game");
                     question = $"{x} + {y}";
                     answer = x + y;
                     break;
-                case 2:
+                case SELECTOR.Substraction:
                     Console.WriteLine("Substraction Game");
                     question = $"{x} - {y}";
                     answer = x - y;
                     break;
-                case 3:
+                case SELECTOR.Multiplication:
                     Console.WriteLine("Multiplication Game");
                     question = $"{x} * {y}";
                     answer = x * y;
                     break;
-                case 4:
+                case SELECTOR.Division:
                     var _division_numbers = GetDivisionNumbers(x, y);
                     var x_div = _division_numbers.x;
                     var y_div = _division_numbers.y;
@@ -102,7 +95,7 @@ namespace MathGame
                     question = $"{x_div} / {y_div}";
                     answer = x_div / y_div;
                     break;
-                case 9:
+                case SELECTOR.EXIT:
                     WaitForInput($"Bye Bye");
                     Environment.Exit(0);
                     break;
@@ -113,6 +106,7 @@ namespace MathGame
             }
             Console.WriteLine(question);
             var input = GetInput("").val;
+
             if (answer == input)
             {
                 _point++;
@@ -125,6 +119,11 @@ namespace MathGame
                 AddHistory(question, answer, input, "WRONG");
             }
             Console.Clear();
+        }
+        private void AddHistory(string q, int ca, int a, string r)
+        {
+            DateTime dateTime = DateTime.Now;
+            _history.Add(new History(dateTime, q, ca, a, r));
         }
 
         private void ShowHistory()
@@ -148,7 +147,7 @@ namespace MathGame
             string str = Console.ReadLine();
             var res = int.TryParse(str, out number);
 
-            number = res ? number : INVALID_SELECT;
+            number = res ? number : (int)SELECTOR.INVALID_SELECT;
             str = str == null ? "" : str;
 
             return (res, str, number);
