@@ -8,8 +8,13 @@ namespace MathGame
 {
     internal class History
     {
-        public History()
+        public History(DateTime time, string question, int correctAnswer, int answer, string result)
         {
+            Time = time;
+            Question = question;
+            CorrectAnswer = correctAnswer;
+            Answer = answer;
+            Result = result;
         }
 
         public DateTime Time { get; set; }

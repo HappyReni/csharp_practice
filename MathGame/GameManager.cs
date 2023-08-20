@@ -14,11 +14,13 @@ namespace MathGame
         {
             _selector = INVALID_SELECT;
             _point = 0;
+            _history = new();
             MainMenu();
         }
 
         private int _selector { get; set; }
         private int _point { get; set; }
+        private List<History> _history;
 
         private void MainMenu()
         {
@@ -44,9 +46,20 @@ namespace MathGame
                 Operation(s);
             }
             Console.WriteLine($"Your final score is {_point}.");
-            Console.WriteLine($"Press any button to go back to the main menu.");
-            Console.ReadLine();
+            WaitForInput($"Press any button to go back to the main menu.");
             MainMenu();
+        }
+
+        private void WaitForInput(string s) 
+        {
+            Console.WriteLine(s);
+            Console.ReadLine();
+        }
+
+        private void AddHistory(string q, int ca, int a, string r)
+        {
+            DateTime dateTime = DateTime.Now;
+            _history.Add(new History(dateTime, q, ca, a, r));
         }
 
         private void Operation(int s)
@@ -56,56 +69,74 @@ namespace MathGame
             int y = rand.Next(20);
 
             int answer = 0;
+            string question = "";
 
             switch (s)
             {
+                case 0:
+                    ShowHistory();
+                    WaitForInput($"Press any button to go back to the main menu.");
+                    MainMenu();
+                    break;
                 case 1:
                     Console.WriteLine("Addition Game");
-                    Console.WriteLine($"{x} + {y}");
+                    question = $"{x} + {y}";
                     answer = x + y;
                     break;
                 case 2:
                     Console.WriteLine("Substraction Game");
-                    Console.WriteLine($"{x} - {y}");
+                    question = $"{x} - {y}";
                     answer = x - y;
                     break;
                 case 3:
                     Console.WriteLine("Multiplication Game");
-                    Console.WriteLine($"{x} * {y}");
+                    question = $"{x} * {y}";
                     answer = x * y;
                     break;
                 case 4:
                     var _division_numbers = GetDivisionNumbers(x, y);
                     var x_div = _division_numbers.x;
                     var y_div = _division_numbers.y;
+
                     Console.WriteLine("Division Game");
-                    Console.WriteLine($"{x_div} / {y_div}");
+                    question = $"{x_div} / {y_div}";
                     answer = x_div / y_div;
                     break;
                 case 9:
-                    Console.WriteLine("Bye Bye");
-                    Console.ReadLine();
-                    Environment.Exit( answer );
+                    WaitForInput($"Bye Bye");
+                    Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid input. Try again.");
-                    Console.ReadLine();
+                    WaitForInput($"Invalid input. Try again.");
                     MainMenu();
                     break;
             }
+            Console.WriteLine(question);
             var input = GetInput("").val;
             if (answer == input)
             {
                 _point++;
-                Console.WriteLine("Your answer was correct!");
-                Console.ReadLine();
+                WaitForInput("Your answer was correct!");
+                AddHistory(question, answer, input, "CORRECT");
             }
             else 
             {
-                Console.WriteLine("Your answer was wrong!");
-                Console.ReadLine();
+                WaitForInput("Your answer was wrong!");
+                AddHistory(question, answer, input, "WRONG");
             }
             Console.Clear();
+        }
+
+        private void ShowHistory()
+        {
+            Console.WriteLine($"Time\t\t\t\tQuestion\tCorrectAnswer\tAnswer\t\tResult");
+            Console.WriteLine("".PadRight(100, '='));
+
+            foreach (var h in _history)
+            {
+                Console.WriteLine($"{h.Time}\t\t{h.Question}\t\t{h.CorrectAnswer}\t\t{h.Answer}\t\t{h.Result}");
+            }
+            Console.WriteLine("".PadRight(100, '='));
         }
 
         private (bool res, string str, int val) GetInput(string s)
