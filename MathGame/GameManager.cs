@@ -4,14 +4,16 @@
     internal class GameManager
     {
         private int _round_count = 5;
-        private SELECTOR _selector { get; set; }
         private int _point { get; set; }
+        private bool _isDifficult { get; set; }
+        private SELECTOR _selector { get; set; }
         private List<History> _history;
 
         public GameManager()
         {
             _selector = SELECTOR.INVALID_SELECT;
             _point = 0;
+            _isDifficult = false;
             _history = new();
             MainMenu();
         }
@@ -41,12 +43,18 @@
             {
                 ShowHistory();
                 WaitForInput($"Press any button to go back to the main menu.");
-                MainMenu();
             }
             else if (s == SELECTOR.EXIT)
             {
                 WaitForInput($"Bye Bye");
                 Environment.Exit(0);
+            }
+            else if (s == SELECTOR.Difficulty)
+            {
+                string level = _isDifficult ? "DIFFICULT" : "EASY";
+                var diff = GetInput($"Current Difficulty : {level}\nWould you want to change it ? (Y)").str;
+                _isDifficult = diff == "Y"? !_isDifficult : _isDifficult;
+                WaitForInput($"Difficulty has changed");
             }
             else
             {
@@ -63,8 +71,8 @@
                 }
                 Console.WriteLine($"Your final score is {_point}.");
                 WaitForInput($"Press any button to go back to the main menu.");
-                MainMenu();
             }
+            MainMenu();
         }
 
         private void WaitForInput(string s) 
@@ -75,65 +83,21 @@
 
         private void Operation(SELECTOR s)
         {
-            Random rand = new();
-            int x = rand.Next(20);
-            int y = rand.Next(20);
-
-            int answer = 0;
-            string question = "";
-
-            switch (s)
-            {
-                case SELECTOR.Addition:
-                    Console.WriteLine("Addition Game");
-                    question = $"{x} + {y}";
-                    answer = x + y;
-                    break;
-
-                case SELECTOR.Substraction:
-                    Console.WriteLine("Substraction Game");
-                    question = $"{x} - {y}";
-                    answer = x - y;
-                    break;
-
-                case SELECTOR.Multiplication:
-                    Console.WriteLine("Multiplication Game");
-                    question = $"{x} * {y}";
-                    answer = x * y;
-                    break;
-
-                case SELECTOR.Division:
-                    var _division_numbers = GetDivisionNumbers(x, y);
-                    var x_div = _division_numbers.x;
-                    var y_div = _division_numbers.y;
-
-                    Console.WriteLine("Division Game");
-                    question = $"{x_div} / {y_div}";
-                    answer = x_div / y_div;
-                    break;
-
-                default:
-                    WaitForInput($"Invalid input. Try again.");
-                    MainMenu();
-                    break;
-            }
-            Console.WriteLine(question);
-            var input = GetInput("").val;
-
-            string resultMessage = (answer == input) ? "Your answer was correct!" : "Your answer was wrong!";
-            string resultType = (answer == input) ? "CORRECT" : "WRONG";
-
-            _point += (answer == input) ? 1 : 0;
-            WaitForInput(resultMessage);
-            AddHistory(question, answer, input, resultType);
+            Game game = new(s,_isDifficult);
+            Console.WriteLine(game.Question);
+            game.Input = GetInput("").val;
+            var result = game.GetResult();
+            _point += (result.resultType == "CORRECT") ? 1 : 0;
+            WaitForInput(result.resultMessage);
+            AddHistory(result);
 
             Console.Clear();
         }
 
-        private void AddHistory(string q, int ca, int a, string r)
+        private void AddHistory((string question, int answer, int input, string resultMessage, string resultType) r)
         {
             DateTime dateTime = DateTime.Now;
-            _history.Add(new History(dateTime, q, ca, a, r));
+            _history.Add(new History(dateTime, r.question, r.answer, r.input, r.resultType));
         }
 
         private void ShowHistory()
@@ -141,12 +105,12 @@
             if (_history.Count == 0) Console.WriteLine("There is no previous history !");
             else
             {
-                Console.WriteLine($"Time\t\t\t\tQuestion\tCorrectAnswer\tAnswer\t\tResult");
+                Console.WriteLine($"{"Time",-25}{"Question",-20}{"CorrectAnswer",-20}{"Answer",-20}{"Result",-5}");
                 Console.WriteLine("".PadRight(100, '='));
 
                 foreach (var h in _history)
                 {
-                    Console.WriteLine($"{h.Time}\t\t{h.Question}\t\t{h.CorrectAnswer}\t\t{h.Answer}\t\t{h.Result}");
+                    Console.WriteLine($"{h.Time,-25}{h.Question,-20}{h.CorrectAnswer,-20}{h.Answer,-20}{h.Result,-5}");
                 }
             }
             Console.WriteLine("".PadRight(100, '='));
@@ -166,19 +130,5 @@
 
             return (res, str, number);
         }
-
-        private (int x,int y) GetDivisionNumbers(int x, int y)
-        {
-            Random rand = new();
-
-            while (x % y != 0)
-            {
-                x = rand.Next(1, 99);
-                y = rand.Next(1, 99);
-            }
-            return (x, y);
-        }
     }
-
-
 }
