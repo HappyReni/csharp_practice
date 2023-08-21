@@ -26,6 +26,8 @@
             Console.WriteLine("2. Substraction");
             Console.WriteLine("3. Multiplication");
             Console.WriteLine("4. Division");
+            Console.WriteLine("5. Random Game");
+            Console.WriteLine("6. Levels of Difficulty");
             Console.WriteLine("9. Exit The Program");
             Console.WriteLine("".PadRight(24, '='));
             _selector = (SELECTOR)GetInput("").val;
@@ -50,8 +52,13 @@
             {
                 _round_count = GetInput("Enter the number of questions.").val;
                 Console.Clear();
+
+                Random rand = new();
+                var isRandom = s == SELECTOR.RandomGame;
+
                 for (int i = 0; i < _round_count; i++)
                 {
+                    s = isRandom ? (SELECTOR)rand.Next(1, 5) : s;
                     Operation(s);
                 }
                 Console.WriteLine($"Your final score is {_point}.");

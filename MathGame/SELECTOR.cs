@@ -6,5 +6,7 @@
     Substraction,
     Multiplication,
     Division,
+    RandomGame,
+    Difficulty,
     EXIT = 9,
 }
