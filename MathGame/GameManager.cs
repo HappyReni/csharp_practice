@@ -63,13 +63,15 @@
 
                 Random rand = new();
                 var isRandom = s == SELECTOR.RandomGame;
-
+                var startTime = DateTime.Now;
                 for (int i = 0; i < _round_count; i++)
                 {
                     s = isRandom ? (SELECTOR)rand.Next(1, 5) : s;
                     Operation(s);
                 }
+                var playTime = DateTime.Now - startTime;
                 Console.WriteLine($"Your final score is {_point}.");
+                Console.WriteLine($"Your play time is {playTime.ToString("ss")} seconds.");
                 WaitForInput($"Press any button to go back to the main menu.");
             }
             MainMenu();
