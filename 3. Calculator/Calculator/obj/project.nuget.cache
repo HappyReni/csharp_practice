@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "M3hGWlZcdsDeMVinmcUEjv78OJXiu/NDV0jf8gRXA2DsWrbGqRV7K6zFotHK+evUi9vMCmFQ0US64xmKbL97fQ==",
+  "dgSpecHash": "E9irSLtpGvs5wjWvhmFV0wDqZh4CtDWZC0M3qJ0GmL4OdRFwykQuHEe4QDG7mM1/kqlm43EEyk1WqfP1m8SPWA==",
   "success": true,
-  "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\3. Calculator\\Calculator\\Calculator.csproj",
+  "projectFilePath": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\Calculator\\Calculator.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

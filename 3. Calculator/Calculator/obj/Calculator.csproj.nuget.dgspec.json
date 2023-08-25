@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Workplace\\c#\\csharp_practice\\3. Calculator\\Calculator\\Calculator.csproj": {}
+    "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\Calculator\\Calculator.csproj": {}
   },
   "projects": {
-    "E:\\Workplace\\c#\\csharp_practice\\3. Calculator\\Calculator\\Calculator.csproj": {
+    "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\CalculatorLibrary\\CalculatorLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Workplace\\c#\\csharp_practice\\3. Calculator\\Calculator\\Calculator.csproj",
-        "projectName": "Calculator",
-        "projectPath": "E:\\Workplace\\c#\\csharp_practice\\3. Calculator\\Calculator\\Calculator.csproj",
+        "projectUniqueName": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\CalculatorLibrary\\CalculatorLibrary.csproj",
+        "projectName": "CalculatorLibrary",
+        "projectPath": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\CalculatorLibrary\\CalculatorLibrary.csproj",
         "packagesPath": "C:\\Users\\dnjsv\\.nuget\\packages\\",
-        "outputPath": "E:\\Workplace\\c#\\csharp_practice\\3. Calculator\\Calculator\\obj\\",
+        "outputPath": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\CalculatorLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dnjsv\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -27,6 +27,64 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net7.0": {
+          "targetAlias": "net7.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\Calculator\\Calculator.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\Calculator\\Calculator.csproj",
+        "projectName": "Calculator",
+        "projectPath": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\Calculator\\Calculator.csproj",
+        "packagesPath": "C:\\Users\\dnjsv\\.nuget\\packages\\",
+        "outputPath": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\Calculator\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\dnjsv\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net7.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {}
+        },
+        "frameworks": {
+          "net7.0": {
+            "targetAlias": "net7.0",
+            "projectReferences": {
+              "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\CalculatorLibrary\\CalculatorLibrary.csproj": {
+                "projectPath": "E:\\Workplace\\c#\\code review\\CodeReviews.Console.Calculator\\Calculator.HappyReni\\CalculatorLibrary\\CalculatorLibrary.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
