@@ -9,3 +9,4 @@ E:\Workplace\c#\code review\CodeReviews.Console.Calculator\Calculator.HappyReni\
 E:\Workplace\c#\code review\CodeReviews.Console.Calculator\Calculator.HappyReni\CalculatorLibrary\obj\Debug\net7.0\refint\CalculatorLibrary.dll
 E:\Workplace\c#\code review\CodeReviews.Console.Calculator\Calculator.HappyReni\CalculatorLibrary\obj\Debug\net7.0\CalculatorLibrary.pdb
 E:\Workplace\c#\code review\CodeReviews.Console.Calculator\Calculator.HappyReni\CalculatorLibrary\obj\Debug\net7.0\ref\CalculatorLibrary.dll
+E:\Workplace\c#\code review\CodeReviews.Console.Calculator\Calculator.HappyReni\CalculatorLibrary\obj\Debug\net7.0\CalculatorLibrary.csproj.AssemblyReference.cache
