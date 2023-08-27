@@ -1,0 +1,14 @@
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\bin\Debug\net7.0\HabitLogger.exe
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\bin\Debug\net7.0\HabitLogger.deps.json
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\bin\Debug\net7.0\HabitLogger.runtimeconfig.json
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\bin\Debug\net7.0\HabitLogger.dll
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\bin\Debug\net7.0\HabitLogger.pdb
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.GeneratedMSBuildEditorConfig.editorconfig
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.AssemblyInfoInputs.cache
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.AssemblyInfo.cs
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.csproj.CoreCompileInputs.cache
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.dll
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\refint\HabitLogger.dll
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.pdb
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\HabitLogger.genruntimeconfig.cache
+E:\Workplace\c#\csharp_practice\4. HabitLogger\HabitLogger\obj\Debug\net7.0\ref\HabitLogger.dll
