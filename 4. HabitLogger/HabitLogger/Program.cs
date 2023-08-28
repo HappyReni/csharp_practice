@@ -1,4 +1,5 @@
 ﻿using HabitLogger;
+using Microsoft.Data.Sqlite;
 
 internal class Program
 {
@@ -10,29 +11,31 @@ internal class Program
 
 public class Manager
 {
+    private List<Habit> Habits { get; set; }
+    private SELECTOR Selector { get; set; }
+    private SQLite SQL { get; set; }
     public Manager()
     {
         Habits = new();
+        SQL = new();
         MainMenu();
     }
 
-    private List<Habit> Habits { get; set; }
-    private SELECTOR Selector { get; set; }
-
     private void MainMenu()
     {
-        Console.WriteLine("".PadRight(24));
+        Console.Clear();
+        Console.WriteLine("Habit Logger");
+        Console.WriteLine("".PadRight(24, '='));
         Console.WriteLine("1. Register your habit.");
         Console.WriteLine("2. Insert a log");
         Console.WriteLine("3. Delete a log");
         Console.WriteLine("4. Update a log");
         Console.WriteLine("5. View habbits");
-        Console.WriteLine("0. Exit");
+        Console.WriteLine("0. Exit\n");
         Selector = (SELECTOR)GetInput("Select ").val;
         Action(Selector);
         Console.Clear();
     }
-
     private void Action(SELECTOR selector)
     {
         switch (selector)
@@ -63,8 +66,10 @@ public class Manager
 
     private void Register()
     {
+        Console.Clear();
         var name = GetInput("Input the name of the habit.").str;
         Habits.Add(new Habit(name));
+        SQL.CreateTable($"\"{name}\"");
         WaitForInput("Register Completed.");
         MainMenu();
     }
@@ -82,7 +87,10 @@ public class Manager
     }
     private void ViewTheHabits()
     {
-
+        Console.Clear();
+        SQL.ViewTables();
+        WaitForInput("Type any keys to continue.");
+        MainMenu();
     }
 
     private (bool res, string str, int val) GetInput(string message)
@@ -99,7 +107,7 @@ public class Manager
 
         return (res, str, number);
     }
-    private void WaitForInput(string message)
+    private void WaitForInput(string message = "")
     {
         Console.WriteLine(message);
         Console.ReadLine();
