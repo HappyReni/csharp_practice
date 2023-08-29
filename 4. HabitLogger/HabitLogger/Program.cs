@@ -17,8 +17,8 @@ public class Manager
     private SQLite SQL { get; set; }
     public Manager()
     {
-        Habits = new();
         SQL = new();
+        Habits = SQL.ToDictionary();
         MainMenu();
     }
 
@@ -68,6 +68,10 @@ public class Manager
                 break;
         }
     }
+    private void LoadDatabase() 
+    {
+
+    }
 
     private void Register()
     {
@@ -86,11 +90,12 @@ public class Manager
         SQL.ViewTables();
         Console.WriteLine("".PadRight(24, '='));
 
-        var table = GetInput("Input the name of the habit to insert a log.").str;
+        var table = GetInput("Input the name of the table to insert a log.").str;
         var log = GetInput("Write the log.").str;
+        var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-        Habits[table].InsertLog(log);
-        SQL.Insert($"\"{table}\"", $"\"{log}\"");
+        Habits[table].InsertLog(time,log);
+        SQL.Insert($"\"{table}\"", $"\"{time}\"", $"\"{log}\"");
 
         WaitForInput("Type any keys to continue.");
         MainMenu();

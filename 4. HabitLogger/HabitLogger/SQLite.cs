@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Reflection.Metadata.Ecma335;
+using System.Reflection.PortableExecutable;
 
 namespace HabitLogger
 {
@@ -45,12 +46,11 @@ namespace HabitLogger
             createTableCommand.ExecuteNonQuery();
         }
 
-        public void Insert(string table, string log)
+        public void Insert(string table, string time, string log)
         {
             var conn = GetConnection();
             conn.Open();
 
-            var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             string insertQuery = $"INSERT INTO {table} (Time, Log) VALUES (@time, @log)";
             using var insertCommand = new SqliteCommand(insertQuery, conn);
             insertCommand.Parameters.AddWithValue("@time", time);
@@ -96,7 +96,47 @@ namespace HabitLogger
             {
                 string tableName = tableReader.GetString(0);
                 Console.WriteLine($"Table Name: {tableName}");
+
+                string selectQuery = $"SELECT * From \"{tableName}\"";
+                using var selectCommand = new SqliteCommand(selectQuery, conn);
+                using var dataReader = selectCommand.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    string date = dataReader.GetString(1);
+                    string log = dataReader.GetString(2);
+                    Console.WriteLine($"\t>{date}\t{log}");
+                }
             }
+        }
+        
+        public Dictionary<string,Habit> ToDictionary()
+        {
+            var conn = GetConnection();
+            conn.Open();
+
+            Dictionary<string, Habit> dict = new();
+            string viewTableQuery = $"SELECT name FROM sqlite_master WHERE type='table'";
+            using var viewTableCommand = new SqliteCommand(viewTableQuery, conn);
+            using var tableReader = viewTableCommand.ExecuteReader();
+
+            while (tableReader.Read())
+            {
+                string tableName = tableReader.GetString(0);
+                string selectQuery = $"SELECT * From \"{tableName}\"";
+                using var selectCommand = new SqliteCommand(selectQuery, conn);
+                using var dataReader = selectCommand.ExecuteReader();
+                Habit habit = new(tableName);
+
+                while (dataReader.Read())
+                {
+                    string date = dataReader.GetString(1);
+                    string log = dataReader.GetString(2);
+                    habit.InsertLog(date,log);
+                }
+                dict.Add(tableName, habit);
+            }
+            return dict;
         }
     }
 
