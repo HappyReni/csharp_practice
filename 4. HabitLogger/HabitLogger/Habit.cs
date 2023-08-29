@@ -10,9 +10,6 @@ namespace HabitLogger
             Name = name;
             Logs = new();
         }
-        public void InsertLog(string log)
-        {
-
-        }
+        public void InsertLog(string log) => Logs.Add(log);
     }
 }

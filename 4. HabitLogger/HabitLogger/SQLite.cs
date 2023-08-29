@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Reflection.Metadata.Ecma335;
 
 namespace HabitLogger
 {
@@ -39,9 +40,24 @@ namespace HabitLogger
             var conn = GetConnection();
             conn.Open();
 
-            string createTableQuery = $"CREATE TABLE IF NOT EXISTS {table} (Id INTEGER PRIMARY KEY, Habit TEXT, Log TEXT)";
+            string createTableQuery = $"CREATE TABLE IF NOT EXISTS {table} (Id INTEGER PRIMARY KEY, Time TEXT, Log TEXT)";
             using var createTableCommand = new SqliteCommand(createTableQuery, conn);
             createTableCommand.ExecuteNonQuery();
+        }
+
+        public void Insert(string table, string log)
+        {
+            var conn = GetConnection();
+            conn.Open();
+
+            var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string insertQuery = $"INSERT INTO {table} (Time, Log) VALUES (@time, @log)";
+            using var insertCommand = new SqliteCommand(insertQuery, conn);
+            insertCommand.Parameters.AddWithValue("@time", time);
+            insertCommand.Parameters.AddWithValue("@log", log);
+            var res = insertCommand.ExecuteNonQuery();
+            var ret = res == 0 ? "Failed to log." : "Successfully logged.";
+            Console.WriteLine(ret);
         }
 
         public void DropTable(string table)
@@ -71,7 +87,12 @@ namespace HabitLogger
             using var viewTableCommand = new SqliteCommand(viewTableQuery, conn);
             using var tableReader = viewTableCommand.ExecuteReader();
 
-            while(tableReader.Read())
+            if( tableReader.HasRows != true )
+            {
+                Console.WriteLine($"There is no table!");
+                return;
+            }
+            while (tableReader.Read())
             {
                 string tableName = tableReader.GetString(0);
                 Console.WriteLine($"Table Name: {tableName}");

@@ -12,7 +12,7 @@ internal class Program
 
 public class Manager
 {
-    private List<Habit> Habits { get; set; }
+    private Dictionary<string,Habit> Habits { get; set; }
     private SELECTOR Selector { get; set; }
     private SQLite SQL { get; set; }
     public Manager()
@@ -31,7 +31,8 @@ public class Manager
         Console.WriteLine("2. Insert a log");
         Console.WriteLine("3. Delete a log");
         Console.WriteLine("4. Update a log");
-        Console.WriteLine("5. View habits");
+        Console.WriteLine("5. Drop a habit");
+        Console.WriteLine("6. View habits");
         Console.WriteLine("0. Exit\n");
         Selector = (SELECTOR)GetInput("Select ").val;
         Action(Selector);
@@ -56,6 +57,9 @@ public class Manager
             case SELECTOR.VIEW:
                 ViewTheHabits();
                 break;
+            case SELECTOR.DROP:
+                Drop();
+                break;
             case SELECTOR.EXIT:
                 Environment.Exit(0);
                 break;
@@ -69,26 +73,46 @@ public class Manager
     {
         Console.Clear();
         var name = GetInput("Input the name of the habit.").str;
-        Habits.Add(new Habit(name));
+        var habit = new Habit(name);
+
+        Habits.Add(name, habit);
         SQL.CreateTable($"\"{name}\"");
         WaitForInput("Register Completed.");
         MainMenu();
     }
     private void Insert()
     {
+        Console.Clear();
+        SQL.ViewTables();
+        Console.WriteLine("".PadRight(24, '='));
 
+        var table = GetInput("Input the name of the habit to insert a log.").str;
+        var log = GetInput("Write the log.").str;
+
+        Habits[table].InsertLog(log);
+        SQL.Insert($"\"{table}\"", $"\"{log}\"");
+
+        WaitForInput("Type any keys to continue.");
+        MainMenu();
     }
     private void Delete()
+    {
+
+    }
+
+    private void Drop()
     {
         Console.Clear();
         SQL.ViewTables();
         Console.WriteLine("".PadRight(24, '='));
 
         var table = GetInput("Input the name of the table to drop.").str;
+        Habits.Remove(table);
         SQL.DropTable($"\"{table}\"");
         WaitForInput();
         MainMenu();
     }
+
     private void Update()
     {
 
@@ -97,6 +121,8 @@ public class Manager
     {
         Console.Clear();
         SQL.ViewTables();
+        Console.WriteLine("".PadRight(24, '='));
+
         WaitForInput("Type any keys to continue.");
         MainMenu();
     }

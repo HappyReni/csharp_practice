@@ -6,5 +6,6 @@
     INSERT,
     DELETE,
     UPDATE,
+    DROP,
     VIEW,
 }
