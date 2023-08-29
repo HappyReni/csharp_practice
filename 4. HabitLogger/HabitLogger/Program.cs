@@ -1,5 +1,6 @@
 ﻿using HabitLogger;
 using Microsoft.Data.Sqlite;
+using System.Xml.Linq;
 
 internal class Program
 {
@@ -30,7 +31,7 @@ public class Manager
         Console.WriteLine("2. Insert a log");
         Console.WriteLine("3. Delete a log");
         Console.WriteLine("4. Update a log");
-        Console.WriteLine("5. View habbits");
+        Console.WriteLine("5. View habits");
         Console.WriteLine("0. Exit\n");
         Selector = (SELECTOR)GetInput("Select ").val;
         Action(Selector);
@@ -79,7 +80,14 @@ public class Manager
     }
     private void Delete()
     {
+        Console.Clear();
+        SQL.ViewTables();
+        Console.WriteLine("".PadRight(24, '='));
 
+        var table = GetInput("Input the name of the table to drop.").str;
+        SQL.DropTable($"\"{table}\"");
+        WaitForInput();
+        MainMenu();
     }
     private void Update()
     {

@@ -44,6 +44,24 @@ namespace HabitLogger
             createTableCommand.ExecuteNonQuery();
         }
 
+        public void DropTable(string table)
+        {
+            var conn = GetConnection();
+            conn.Open();
+
+            try
+            {
+                string dropTableQuery = $"DROP TABLE {table}";
+                using var dropTableCommand = new SqliteCommand(dropTableQuery, conn);
+                dropTableCommand.ExecuteNonQuery();
+                Console.WriteLine("Successfully dropped.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public void ViewTables()
         {
             var conn = GetConnection();
