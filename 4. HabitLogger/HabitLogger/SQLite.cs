@@ -1,6 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using System.Reflection.Metadata.Ecma335;
-using System.Reflection.PortableExecutable;
 
 namespace HabitLogger
 {
@@ -44,10 +42,26 @@ namespace HabitLogger
             var conn = GetConnection();
             conn.Open();
 
-            string deleteQuery = $"DELETE FROM {table} where Id = {idx}";
+            string deleteQuery = $"DELETE FROM {table} WHERE Id = {idx}";
             using var deleteCommand = new SqliteCommand(deleteQuery, conn);
             var res = deleteCommand.ExecuteNonQuery();
             var ret = res == 0 ? "Failed to delete." : "Successfully deleted.";
+            Console.WriteLine(ret);
+        }
+
+        public void Update(string table, string time, string log, int idx)
+        {
+            var conn = GetConnection();
+            conn.Open();
+
+            string updateQuery = $"UPDATE {table} SET Time = @time, Log = @log WHERE Id = @idx";
+            using var updateCommand = new SqliteCommand(updateQuery, conn);
+            updateCommand.Parameters.AddWithValue("@time", time);
+            updateCommand.Parameters.AddWithValue("@log", log);
+            updateCommand.Parameters.AddWithValue("@idx", idx);
+
+            var res = updateCommand.ExecuteNonQuery();
+            var ret = res == 0 ? "Failed to update." : "Successfully updated.";
             Console.WriteLine(ret);
         }
 
@@ -78,7 +92,7 @@ namespace HabitLogger
             using var viewTableCommand = new SqliteCommand(viewTableQuery, conn);
             using var tableReader = viewTableCommand.ExecuteReader();
 
-            if( tableReader.HasRows != true )
+            if ( tableReader.HasRows != true )
             {
                 Console.WriteLine($"There is no table!");
                 return;
@@ -95,41 +109,30 @@ namespace HabitLogger
                 int idx = 0 ;
                 while (dataReader.Read())
                 {
+                    int id = dataReader.GetInt32(0);
                     string date = dataReader.GetString(1);
                     string log = dataReader.GetString(2);
-                    Console.WriteLine($"\t>{idx}:\t{date}\t{log}");
+                    Console.WriteLine($"\t>{id}:\t{date}\t{log}");
                     idx++;
                 }
             }
         }
-        
-        public Dictionary<string,Habit> ToDictionary()
+
+        public bool IsTable(string table)
         {
             var conn = GetConnection();
             conn.Open();
 
-            Dictionary<string, Habit> dict = new();
             string viewTableQuery = $"SELECT name FROM sqlite_master WHERE type='table'";
             using var viewTableCommand = new SqliteCommand(viewTableQuery, conn);
             using var tableReader = viewTableCommand.ExecuteReader();
 
             while (tableReader.Read())
             {
-                string tableName = tableReader.GetString(0);
-                string selectQuery = $"SELECT * From \"{tableName}\"";
-                using var selectCommand = new SqliteCommand(selectQuery, conn);
-                using var dataReader = selectCommand.ExecuteReader();
-                Habit habit = new(tableName);
-
-                while (dataReader.Read())
-                {
-                    string date = dataReader.GetString(1);
-                    string log = dataReader.GetString(2);
-                    habit.InsertLog(date,log);
-                }
-                dict.Add(tableName, habit);
+                if (table == tableReader.GetString(0))
+                    return true;
             }
-            return dict;
+            return false;
         }
     }
 
