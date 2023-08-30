@@ -36,7 +36,6 @@ public class Manager
         Console.WriteLine("0. Exit\n");
         Selector = (SELECTOR)GetInput("Select ").val;
         Action(Selector);
-        Console.Clear();
     }
     private void Action(SELECTOR selector)
     {
@@ -68,11 +67,6 @@ public class Manager
                 break;
         }
     }
-    private void LoadDatabase() 
-    {
-
-    }
-
     private void Register()
     {
         Console.Clear();
@@ -102,7 +96,23 @@ public class Manager
     }
     private void Delete()
     {
+        Console.Clear();
+        SQL.ViewTables();
+        Console.WriteLine("".PadRight(24, '='));
 
+        var table = GetInput("Input the name of the table to delete a log.").str;
+        var input = GetInput("Select the index of the log to delete");
+        if (input.res)
+        {
+            Habits[table].DeleteLog(input.val);
+            SQL.Delete($"\"{table}\"", input.val);
+        }
+        else 
+        {
+            Console.WriteLine("Invalid Input. Try again.");
+        }
+        WaitForInput("Type any keys to continue.");
+        MainMenu();
     }
 
     private void Drop()

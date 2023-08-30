@@ -13,5 +13,6 @@ namespace HabitLogger
             Logs = new();
         }
         public void InsertLog(string time, string log) => Logs.Add((time, log));
+        public void DeleteLog(int idx) => Logs.RemoveAt(idx);
     }
 }

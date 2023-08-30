@@ -6,10 +6,7 @@ namespace HabitLogger
 {
     internal class SQLite
     {
-        public SQLite()
-        {
-            ConnectDatabase();
-        }
+        public SQLite(){}
 
         private SqliteConnection GetConnection()
         {
@@ -17,25 +14,7 @@ namespace HabitLogger
             using var conn = new SqliteConnection(connStr);
             return conn;
         }
-
-        private void ConnectDatabase()
-        {
-            try
-            {
-                var conn = GetConnection();
-                conn.Open();
-
-                string select_version = "SELECT SQLITE_VERSION()";
-                using SqliteCommand getSQLiteVersion = new SqliteCommand(select_version, conn);
-                var version = getSQLiteVersion.ExecuteScalar().ToString();
-                Console.WriteLine($"SQLite Version : {version}");
-            }
-            catch 
-            {
-                Console.WriteLine($"Failed to connect Database.");
-            }
-        }
-
+        
         public void CreateTable(string table)
         {
             var conn = GetConnection();
@@ -57,6 +36,18 @@ namespace HabitLogger
             insertCommand.Parameters.AddWithValue("@log", log);
             var res = insertCommand.ExecuteNonQuery();
             var ret = res == 0 ? "Failed to log." : "Successfully logged.";
+            Console.WriteLine(ret);
+        }
+
+        public void Delete(string table, int idx)
+        {
+            var conn = GetConnection();
+            conn.Open();
+
+            string deleteQuery = $"DELETE FROM {table} where Id = {idx}";
+            using var deleteCommand = new SqliteCommand(deleteQuery, conn);
+            var res = deleteCommand.ExecuteNonQuery();
+            var ret = res == 0 ? "Failed to delete." : "Successfully deleted.";
             Console.WriteLine(ret);
         }
 
@@ -101,11 +92,13 @@ namespace HabitLogger
                 using var selectCommand = new SqliteCommand(selectQuery, conn);
                 using var dataReader = selectCommand.ExecuteReader();
 
+                int idx = 0 ;
                 while (dataReader.Read())
                 {
                     string date = dataReader.GetString(1);
                     string log = dataReader.GetString(2);
-                    Console.WriteLine($"\t>{date}\t{log}");
+                    Console.WriteLine($"\t>{idx}:\t{date}\t{log}");
+                    idx++;
                 }
             }
         }
