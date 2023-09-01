@@ -1,24 +1,26 @@
 ﻿using Microsoft.Data.Sqlite;
+using System.Configuration;
+using System.Collections.Specialized;
 
 namespace CodeTracker
 {
     internal class SQLite
     {
-        public SQLite(){}
+        public SQLite() { CreateTable(); }
 
         private SqliteConnection GetConnection()
         {
-            string connStr = @"Data Source=habit_tracker.db";
+            string connStr = ConfigurationManager.AppSettings.Get("DatabasePath");
             using var conn = new SqliteConnection(connStr);
             return conn;
         }
         
-        public void CreateTable(string table)
+        public void CreateTable()
         {
             var conn = GetConnection();
             conn.Open();
 
-            string createTableQuery = $"CREATE TABLE IF NOT EXISTS {table} (Id INTEGER PRIMARY KEY, Time TEXT, Log TEXT)";
+            string createTableQuery = $"CREATE TABLE IF NOT EXISTS CODING (Id INTEGER PRIMARY KEY, Time TEXT, Log TEXT)";
             using var createTableCommand = new SqliteCommand(createTableQuery, conn);
             createTableCommand.ExecuteNonQuery();
         }

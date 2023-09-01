@@ -15,14 +15,12 @@ namespace CodeTracker
         private void MainMenu()
         {
             Console.Clear();
-            Console.WriteLine("Habit Logger");
+            Console.WriteLine("Coding Tracker");
             Console.WriteLine("".PadRight(24, '='));
-            Console.WriteLine("1. Register your habit.");
-            Console.WriteLine("2. Insert a log");
-            Console.WriteLine("3. Delete a log");
-            Console.WriteLine("4. Update a log");
-            Console.WriteLine("5. Drop a habit");
-            Console.WriteLine("6. View habits");
+            Console.WriteLine("1. Insert a log");
+            Console.WriteLine("2. Delete a log");
+            Console.WriteLine("3. Update a log");
+            Console.WriteLine("5. View Logs");
             Console.WriteLine("0. Exit\n");
             Selector = (SELECTOR)GetInput("Select ").val;
             Action(Selector);
@@ -31,9 +29,6 @@ namespace CodeTracker
         {
             switch (selector)
             {
-                case SELECTOR.REGISTER:
-                    Register();
-                    break;
                 case SELECTOR.INSERT:
                     Insert();
                     break;
@@ -57,18 +52,9 @@ namespace CodeTracker
                     break;
             }
         }
-        private void Register()
-        {
-            Console.Clear();
-            var name = GetInput("Input the name of the habit.").str;
-
-            SQL.CreateTable($"\"{name}\"");
-            GoToMainMenu("Register Completed.");
-        }
         private void Insert()
         {
             ViewTables();
-
             try
             {
                 var table = IsTable(GetInput("Input the name of the table to delete a log.").str);

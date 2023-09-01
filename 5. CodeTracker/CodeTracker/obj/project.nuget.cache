@@ -1,17 +1,24 @@
 {
   "version": 2,
-  "dgSpecHash": "AQT5qGHGxD5C/GLVimxhMeBM+B1tKgr0bdEZsrU7+rHIdz3UpyLmVTiIyEXXvGdqMWFJcXk4aw6MLPwJSRC8jw==",
+  "dgSpecHash": "+qYEBvhVYI6+ToOLi17HVge3lS42UOLBIAueSMd4R3+O3R89i+KllEnSZaVLA47uLM5hmdC5x7RFDUBFa6pC3A==",
   "success": true,
   "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\5. CodeTracker\\CodeTracker\\CodeTracker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dnjsv\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.data.sqlite\\7.0.10\\microsoft.data.sqlite.7.0.10.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.10\\microsoft.data.sqlite.core.7.0.10.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.4\\sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.core\\2.1.4\\sqlitepclraw.core.2.1.4.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.4\\sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.4\\sqlitepclraw.provider.e_sqlite3.2.1.4.nupkg.sha512",
-    "C:\\Users\\dnjsv\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.configuration.configurationmanager\\7.0.0\\system.configuration.configurationmanager.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.diagnostics.eventlog\\7.0.0\\system.diagnostics.eventlog.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.security.cryptography.protecteddata\\7.0.0\\system.security.cryptography.protecteddata.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.security.permissions\\7.0.0\\system.security.permissions.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.windows.extensions\\7.0.0\\system.windows.extensions.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

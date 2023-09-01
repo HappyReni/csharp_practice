@@ -47,6 +47,10 @@
             "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[7.0.10, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             }
           },
           "imports": [
