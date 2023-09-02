@@ -11,7 +11,7 @@ namespace CodeTracker
         public Manager()
         {
             SQL = new();
-            SessionData = new();
+            SessionData = SQL.GetSQLData();
             MainMenu();
         }
 
@@ -43,7 +43,7 @@ namespace CodeTracker
                     Update();
                     break;
                 case SELECTOR.VIEW:
-                    ViewTheHabits();
+                    ViewLogs();
                     break;
                 case SELECTOR.DROP:
                     Drop();
@@ -124,7 +124,7 @@ namespace CodeTracker
 
             GoToMainMenu("Type any keys to continue.");
         }
-        private void ViewTheHabits()
+        private void ViewLogs()
         {
             ViewTables();
             GoToMainMenu("Type any keys to continue.");
@@ -139,7 +139,6 @@ namespace CodeTracker
         private void ViewTables()
         {
             Console.Clear();
-            //SQL.ViewTables();
             ConsoleTableBuilder
                 .From(SessionData)
                 .WithTitle("Logs", ConsoleColor.Green)

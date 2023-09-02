@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.Sqlite;
 using System.Configuration;
 using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace CodeTracker
 {
@@ -130,6 +131,26 @@ namespace CodeTracker
                     idx++;
                 }
             }
+        }
+        public List<List<object>> GetSQLData()
+        {
+            var conn = GetConnection();
+            conn.Open();
+
+            string selectQuery = $"SELECT * From \"{TableName}\"";
+            using var selectCommand = new SqliteCommand(selectQuery, conn);
+            using var dataReader = selectCommand.ExecuteReader();
+
+            List<List<object>> ret = new();
+            while (dataReader.Read())
+            {
+                int id = dataReader.GetInt32(0);
+                var start = DateTime.Parse(dataReader.GetString(1));
+                var end = DateTime.Parse(dataReader.GetString(1));
+                string duration = dataReader.GetString(2);
+                ret.Add(new List<object> { id, start, end, duration });
+            }
+            return ret;
         }
     }
 
