@@ -6,7 +6,12 @@ namespace CodeTracker
 {
     internal class SQLite
     {
-        public SQLite() { CreateTable(); }
+        public SQLite() 
+        {
+            TableName = ConfigurationManager.AppSettings.Get("TableName");
+            CreateTable();
+        }
+        public string TableName { get; set; }
 
         private SqliteConnection GetConnection()
         {
@@ -20,17 +25,17 @@ namespace CodeTracker
             var conn = GetConnection();
             conn.Open();
 
-            string createTableQuery = $"CREATE TABLE IF NOT EXISTS CODING (Id INTEGER PRIMARY KEY, Time TEXT, Log TEXT)";
+            string createTableQuery = $"CREATE TABLE IF NOT EXISTS {TableName} (Id INTEGER PRIMARY KEY, Start TEXT, End TEXT, Log TEXT)";
             using var createTableCommand = new SqliteCommand(createTableQuery, conn);
             createTableCommand.ExecuteNonQuery();
         }
 
-        public void Insert(string table, string time, string log)
+        public void Insert(string time, string log)
         {
             var conn = GetConnection();
             conn.Open();
 
-            string insertQuery = $"INSERT INTO {table} (Time, Log) VALUES (@time, @log)";
+            string insertQuery = $"INSERT INTO {TableName} (Time, Log) VALUES (@time, @log)";
             using var insertCommand = new SqliteCommand(insertQuery, conn);
             insertCommand.Parameters.AddWithValue("@time", time);
             insertCommand.Parameters.AddWithValue("@log", log);
@@ -39,24 +44,24 @@ namespace CodeTracker
             Console.WriteLine(ret);
         }
 
-        public void Delete(string table, int idx)
+        public void Delete(int idx)
         {
             var conn = GetConnection();
             conn.Open();
 
-            string deleteQuery = $"DELETE FROM {table} WHERE Id = {idx}";
+            string deleteQuery = $"DELETE FROM {TableName} WHERE Id = {idx}";
             using var deleteCommand = new SqliteCommand(deleteQuery, conn);
             var res = deleteCommand.ExecuteNonQuery();
             var ret = res == 0 ? "Failed to delete." : "Successfully deleted.";
             Console.WriteLine(ret);
         }
 
-        public void Update(string table, string time, string log, int idx)
+        public void Update(string time, string log, int idx)
         {
             var conn = GetConnection();
             conn.Open();
 
-            string updateQuery = $"UPDATE {table} SET Time = @time, Log = @log WHERE Id = @idx";
+            string updateQuery = $"UPDATE {TableName} SET Time = @time, Log = @log WHERE Id = @idx";
             using var updateCommand = new SqliteCommand(updateQuery, conn);
             updateCommand.Parameters.AddWithValue("@time", time);
             updateCommand.Parameters.AddWithValue("@log", log);
@@ -67,14 +72,14 @@ namespace CodeTracker
             Console.WriteLine(ret);
         }
 
-        public void DropTable(string table)
+        public void DropTable()
         {
             var conn = GetConnection();
             conn.Open();
 
             try
             {
-                string dropTableQuery = $"DROP TABLE {table}";
+                string dropTableQuery = $"DROP TABLE {TableName}";
                 using var dropTableCommand = new SqliteCommand(dropTableQuery, conn);
                 dropTableCommand.ExecuteNonQuery();
                 Console.WriteLine("Successfully dropped.");
@@ -118,23 +123,6 @@ namespace CodeTracker
                     idx++;
                 }
             }
-        }
-
-        public bool IsTable(string table)
-        {
-            var conn = GetConnection();
-            conn.Open();
-
-            string viewTableQuery = $"SELECT name FROM sqlite_master WHERE type='table'";
-            using var viewTableCommand = new SqliteCommand(viewTableQuery, conn);
-            using var tableReader = viewTableCommand.ExecuteReader();
-
-            while (tableReader.Read())
-            {
-                if (table == tableReader.GetString(0))
-                    return true;
-            }
-            return false;
         }
     }
 

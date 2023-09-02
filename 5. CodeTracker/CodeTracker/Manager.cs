@@ -1,4 +1,5 @@
-﻿using System.Data.SqlTypes;
+﻿using ConsoleTableExt;
+using System.Data.SqlTypes;
 
 namespace CodeTracker
 {
@@ -41,9 +42,6 @@ namespace CodeTracker
                 case SELECTOR.VIEW:
                     ViewTheHabits();
                     break;
-                case SELECTOR.DROP:
-                    Drop();
-                    break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
                     break;
@@ -57,29 +55,30 @@ namespace CodeTracker
             ViewTables();
             try
             {
-                var table = IsTable(GetInput("Input the name of the table to delete a log.").str);
-                if (table == null) throw new Exception();
-                var log = GetInput("Write the log.").str;
+                var tableData = new List<List<object>>
+                {
+                    new List<object>{ "Sakura Yamamoto", "Support Engineer", "London", 46},
+                    new List<object>{ "Serge Baldwin", "Data Coordinator", "San Francisco", 28, "something else" },
+                    new List<object>{ "Shad Decker", "Regional Director", "Edinburgh"},
+                };
+                ConsoleTableBuilder.From(tableData).ExportAndWriteLine();
+                var log = GetInput("Write the log with start time and end time.").str;
                 var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                SQL.Insert($"\"{table}\"", $"\"{time}\"", $"\"{log}\"");
+                SQL.Insert($"\"{time}\"", $"\"{log}\"");
             }
             catch
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
-
             GoToMainMenu("Type any keys to continue.");
         }
         private void Delete()
         {
-            ViewTables();
-
+            //ViewTables();
             try
             {
-                var table = IsTable(GetInput("Input the name of the table to delete a log.").str);
-                if (table == null) throw new Exception();
                 var input = GetInput("Select the index of the log to delete");
-                SQL.Delete($"\"{table}\"", input.val);
+                SQL.Delete(input.val);
             }
             catch
             {
@@ -88,29 +87,15 @@ namespace CodeTracker
 
             GoToMainMenu("Type any keys to continue.");
         }
-
-        private void Drop()
-        {
-            ViewTables();
-
-            var table = GetInput("Input the name of the table to drop.").str;
-            SQL.DropTable($"\"{table}\"");
-            GoToMainMenu();
-        }
-
         private void Update()
         {
-            ViewTables();
-
             try
             {
-                var table = IsTable(GetInput("Input the name of the table to update a log.").str);
-                if (table == null) throw new Exception();
                 var idx = GetInput("Select the index of the log to update");
                 var input = GetInput("Input the new log");
                 var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-                SQL.Update($"\"{table}\"", $"\"{time}\"", $"\"{input.str}\"", idx.val);
+                SQL.Update($"\"{time}\"", $"\"{input.str}\"", idx.val);
             }
             catch
             {
@@ -157,8 +142,5 @@ namespace CodeTracker
             Console.WriteLine(message);
             Console.ReadLine();
         }
-
-        private string? IsTable(string table) => SQL.IsTable(table) ? table : null;
-
     }
 }
