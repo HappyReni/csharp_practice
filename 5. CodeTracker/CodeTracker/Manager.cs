@@ -89,16 +89,24 @@ namespace CodeTracker
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
-            Console.WriteLine(CodingSession.Count);
             GoToMainMenu("Type any keys to continue.");
         }
         private void Delete()
         {
-            //ViewTables();
+            Console.Clear();
+            ViewTables();
             try
             {
-                var input = GetInput("Select the index of the log to delete");
+                var input = GetInput("Select the ID of log to delete.");
                 SQL.Delete(input.val);
+                for (int i = 0; i < SessionData.Count; i++)
+                {
+                    if ((int)SessionData[i][0] == input.val)
+                    {
+                        SessionData.RemoveAt(i);
+                        break;
+                    }
+                }
             }
             catch
             {

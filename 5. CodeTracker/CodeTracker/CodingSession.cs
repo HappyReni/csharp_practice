@@ -15,9 +15,7 @@ namespace CodeTracker
             StartTime = start;
             EndTime = end;
             Duration = CalculateDuration();
-            Count++;
         }
-        public static int Count { get; set;}
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
