@@ -25,20 +25,27 @@ namespace CodeTracker
             var conn = GetConnection();
             conn.Open();
 
-            string createTableQuery = $"CREATE TABLE IF NOT EXISTS {TableName} (Id INTEGER PRIMARY KEY, Start TEXT, End TEXT, Log TEXT)";
+            string createTableQuery = $"CREATE TABLE IF NOT EXISTS {TableName} (Id INTEGER PRIMARY KEY, Start TEXT, End TEXT, Duration TEXT)";
             using var createTableCommand = new SqliteCommand(createTableQuery, conn);
             createTableCommand.ExecuteNonQuery();
         }
 
-        public void Insert(string time, string log)
+        public void Insert(CodingSession code)
         {
+            var id = code.Id;
+            var start = code.StartTime.ToString();
+            var end = code.EndTime.ToString();
+            var duration = code.Duration.ToString();
+
             var conn = GetConnection();
             conn.Open();
 
-            string insertQuery = $"INSERT INTO {TableName} (Time, Log) VALUES (@time, @log)";
+            string insertQuery = $"INSERT INTO {TableName} (Id, Start, End, Duration) VALUES (@id, @start, @end, @duration)";
             using var insertCommand = new SqliteCommand(insertQuery, conn);
-            insertCommand.Parameters.AddWithValue("@time", time);
-            insertCommand.Parameters.AddWithValue("@log", log);
+            insertCommand.Parameters.AddWithValue("@id", id);
+            insertCommand.Parameters.AddWithValue("@start", start);
+            insertCommand.Parameters.AddWithValue("@end", end);
+            insertCommand.Parameters.AddWithValue("@duration", duration);
             var res = insertCommand.ExecuteNonQuery();
             var ret = res == 0 ? "Failed to log." : "Successfully logged.";
             Console.WriteLine(ret);

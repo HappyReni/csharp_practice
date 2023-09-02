@@ -8,11 +8,22 @@ namespace CodeTracker
 {
     internal class CodingSession
     {
+        public CodingSession(DateTime start, DateTime end) 
+        {
+            Random rand = new();
+            Id = rand.Next(90000);
+            StartTime = start;
+            EndTime = end;
+            Duration = CalculateDuration();
+            Count++;
+        }
+        public static int Count { get; set;}
         public int Id { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public double Duration { get; set; }
 
-        private double CalculateDuration(DateTime start, DateTime end) => (end - start).TotalSeconds;
+        private double CalculateDuration() => (EndTime - StartTime).TotalSeconds;
+        public List<object> GetField() => new List<object> { Id, StartTime, EndTime, Duration };
     }
 }

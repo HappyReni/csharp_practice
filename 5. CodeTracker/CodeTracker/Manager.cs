@@ -7,9 +7,11 @@ namespace CodeTracker
     {
         private SELECTOR Selector { get; set; }
         private SQLite SQL { get; set; }
+        private List<List<object>> SessionData { get; set; }
         public Manager()
         {
             SQL = new();
+            SessionData = new();
             MainMenu();
         }
 
@@ -21,6 +23,7 @@ namespace CodeTracker
             Console.WriteLine("1. Insert a log");
             Console.WriteLine("2. Delete a log");
             Console.WriteLine("3. Update a log");
+            Console.WriteLine("4. DROP");
             Console.WriteLine("5. View Logs");
             Console.WriteLine("0. Exit\n");
             Selector = (SELECTOR)GetInput("Select ").val;
@@ -42,6 +45,9 @@ namespace CodeTracker
                 case SELECTOR.VIEW:
                     ViewTheHabits();
                     break;
+                case SELECTOR.DROP:
+                    Drop();
+                    break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
                     break;
@@ -50,26 +56,40 @@ namespace CodeTracker
                     break;
             }
         }
+        private void Drop()
+        {
+            ViewTables();
+
+            var table = GetInput("Input the name of the table to drop.").str;
+            SQL.DropTable();
+            GoToMainMenu();
+        }
         private void Insert()
         {
+            Console.Clear();
             ViewTables();
             try
             {
-                var tableData = new List<List<object>>
-                {
-                    new List<object>{ "Sakura Yamamoto", "Support Engineer", "London", 46},
-                    new List<object>{ "Serge Baldwin", "Data Coordinator", "San Francisco", 28, "something else" },
-                    new List<object>{ "Shad Decker", "Regional Director", "Edinburgh"},
-                };
-                ConsoleTableBuilder.From(tableData).ExportAndWriteLine();
-                var log = GetInput("Write the log with start time and end time.").str;
-                var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                SQL.Insert($"\"{time}\"", $"\"{log}\"");
+                Console.WriteLine("Track coding time.");
+                Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
+                var start_str = GetInput("Input start time first.").str;
+                var end_str = GetInput("Input end time.").str;
+                var start = DateTime.Parse(start_str);
+                var end = DateTime.Parse(end_str);
+                var code = new CodingSession(start, end);
+                SessionData.Add(code.GetField());
+                SQL.Insert(code);
+                ConsoleTableBuilder
+                    .From(SessionData)
+                    .WithTitle("Logs",ConsoleColor.Green)
+                    .WithColumn("ID","Start Time","End Time","Duration")
+                    .ExportAndWriteLine();
             }
             catch
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
+            Console.WriteLine(CodingSession.Count);
             GoToMainMenu("Type any keys to continue.");
         }
         private void Delete()
@@ -119,7 +139,12 @@ namespace CodeTracker
         private void ViewTables()
         {
             Console.Clear();
-            SQL.ViewTables();
+            //SQL.ViewTables();
+            ConsoleTableBuilder
+                .From(SessionData)
+                .WithTitle("Logs", ConsoleColor.Green)
+                .WithColumn("ID", "Start Time", "End Time", "Duration")
+                .ExportAndWriteLine();
             Console.WriteLine("".PadRight(24, '='));
         }
 
