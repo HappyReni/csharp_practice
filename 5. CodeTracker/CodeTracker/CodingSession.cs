@@ -18,7 +18,6 @@ namespace CodeTracker
         }
         public CodingSession(List<object> data)
         {
-            Random rand = new();
             Id = (int)data[0];
             StartTime = (DateTime)data[1];
             EndTime = (DateTime)data[2];

@@ -7,7 +7,7 @@ namespace CodeTracker
     {
         private SELECTOR Selector { get; set; }
         private SQLite SQL { get; set; }
-        private List<List<object>> SessionData { get; set; }
+        private List<CodingSession> SessionData { get; set; }
         public Manager()
         {
             SQL = new();
@@ -43,7 +43,7 @@ namespace CodeTracker
                     Update();
                     break;
                 case SELECTOR.VIEW:
-                    ViewLogs();
+                    ViewTable();
                     break;
                 case SELECTOR.DROP:
                     Drop();
@@ -58,7 +58,7 @@ namespace CodeTracker
         }
         private void Drop()
         {
-            ViewTables();
+            ViewTable();
 
             var table = GetInput("Input the name of the table to drop.").str;
             SQL.DropTable();
@@ -66,24 +66,18 @@ namespace CodeTracker
         }
         private void Insert()
         {
-            Console.Clear();
-            ViewTables();
+            ViewTable();
             try
             {
                 Console.WriteLine("Track coding time.");
                 Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
-                var start_str = GetInput("Input start time first.").str;
-                var end_str = GetInput("Input end time.").str;
-                var start = DateTime.Parse(start_str);
-                var end = DateTime.Parse(end_str);
+                var start = Validation.ValidDateFormat(GetInput("Input start time first.").str);
+                var end = Validation.ValidDateFormat(GetInput("Input end time.").str);
+                
                 var code = new CodingSession(start, end);
-                SessionData.Add(code.GetField());
+                SessionData.Add(code);
                 SQL.Insert(code);
-                ConsoleTableBuilder
-                    .From(SessionData)
-                    .WithTitle("Logs",ConsoleColor.Green)
-                    .WithColumn("ID","Start Time","End Time","Duration")
-                    .ExportAndWriteLine();
+                ViewTable();
             }
             catch
             {
@@ -93,15 +87,14 @@ namespace CodeTracker
         }
         private void Delete()
         {
-            Console.Clear();
-            ViewTables();
+            ViewTable();
             try
             {
                 var input = GetInput("Select the ID of log to delete.");
                 SQL.Delete(input.val);
                 for (int i = 0; i < SessionData.Count; i++)
                 {
-                    if ((int)SessionData[i][0] == input.val)
+                    if ((int)SessionData[i].Id == input.val)
                     {
                         SessionData.RemoveAt(i);
                         break;
@@ -117,23 +110,21 @@ namespace CodeTracker
         }
         private void Update()
         {
-            Console.Clear();
-            ViewTables();
+            ViewTable();
             try
             {
                 var id = GetInput("Select the ID of the log to update").val;
                 Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
-                var start_str = GetInput("Input start time first.").str;
-                var end_str = GetInput("Input end time.").str;
-                var start = DateTime.Parse(start_str);
-                var end = DateTime.Parse(end_str);
+                var start = Validation.ValidDateFormat(GetInput("Input start time first.").str);
+                var end = Validation.ValidDateFormat(GetInput("Input end time.").str);
+
                 for (int i = 0; i < SessionData.Count; i++)
                 {
-                    if ((int)SessionData[i][0] == id)
+                    if ((int)SessionData[i].Id == id)
                     {
                         var code = new CodingSession(start, end);
                         code.Id = id;
-                        SessionData[i] = code.GetField();
+                        SessionData[i] = code;
                         SQL.Update(code);
                         break;
                     }
@@ -143,12 +134,6 @@ namespace CodeTracker
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
-
-            GoToMainMenu("Type any keys to continue.");
-        }
-        private void ViewLogs()
-        {
-            ViewTables();
             GoToMainMenu("Type any keys to continue.");
         }
         private void GoToMainMenu(string message = "")
@@ -157,11 +142,14 @@ namespace CodeTracker
             MainMenu();
         }
 
-        private void ViewTables()
+        private void ViewTable()
         {
+            List<List<object>> sessionList =
+                SessionData.Select(session => session.GetField()).ToList();
+
             Console.Clear();
             ConsoleTableBuilder
-                .From(SessionData)
+                .From(sessionList)
                 .WithTitle("Logs", ConsoleColor.Green)
                 .WithColumn("ID", "Start Time", "End Time", "Duration")
                 .ExportAndWriteLine();

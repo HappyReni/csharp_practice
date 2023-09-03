@@ -138,7 +138,7 @@ namespace CodeTracker
                 }
             }
         }
-        public List<List<object>> GetSQLData()
+        public List<CodingSession> GetSQLData()
         {
             var conn = GetConnection();
             conn.Open();
@@ -147,14 +147,14 @@ namespace CodeTracker
             using var selectCommand = new SqliteCommand(selectQuery, conn);
             using var dataReader = selectCommand.ExecuteReader();
 
-            List<List<object>> ret = new();
+            List<CodingSession> ret = new();
             while (dataReader.Read())
             {
                 int id = dataReader.GetInt32(0);
                 var start = DateTime.Parse(dataReader.GetString(1));
-                var end = DateTime.Parse(dataReader.GetString(1));
-                string duration = dataReader.GetString(2);
-                ret.Add(new List<object> { id, start, end, duration });
+                var end = DateTime.Parse(dataReader.GetString(2));
+                var duration = dataReader.GetDouble(3);
+                ret.Add(new CodingSession(new List<object> { id, start, end, duration }));
             }
             return ret;
         }
