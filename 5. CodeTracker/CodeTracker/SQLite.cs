@@ -64,16 +64,22 @@ namespace CodeTracker
             Console.WriteLine(ret);
         }
 
-        public void Update(string time, string log, int idx)
+        public void Update(CodingSession code)
         {
+            var id = code.Id;
+            var start = code.StartTime.ToString();
+            var end = code.EndTime.ToString();
+            var duration = code.Duration.ToString();
+
             var conn = GetConnection();
             conn.Open();
 
-            string updateQuery = $"UPDATE {TableName} SET Time = @time, Log = @log WHERE Id = @idx";
+            string updateQuery = $"UPDATE {TableName} SET Start = @start, End = @end, Duration= @duration WHERE Id = @idx";
             using var updateCommand = new SqliteCommand(updateQuery, conn);
-            updateCommand.Parameters.AddWithValue("@time", time);
-            updateCommand.Parameters.AddWithValue("@log", log);
-            updateCommand.Parameters.AddWithValue("@idx", idx);
+            updateCommand.Parameters.AddWithValue("@start", start);
+            updateCommand.Parameters.AddWithValue("@end", end);
+            updateCommand.Parameters.AddWithValue("@duration", duration);
+            updateCommand.Parameters.AddWithValue("@idx", id);
 
             var res = updateCommand.ExecuteNonQuery();
             var ret = res == 0 ? "Failed to update." : "Successfully updated.";

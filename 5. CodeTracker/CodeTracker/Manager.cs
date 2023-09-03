@@ -117,13 +117,27 @@ namespace CodeTracker
         }
         private void Update()
         {
+            Console.Clear();
+            ViewTables();
             try
             {
-                var idx = GetInput("Select the index of the log to update");
-                var input = GetInput("Input the new log");
-                var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-
-                SQL.Update($"\"{time}\"", $"\"{input.str}\"", idx.val);
+                var id = GetInput("Select the ID of the log to update").val;
+                Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
+                var start_str = GetInput("Input start time first.").str;
+                var end_str = GetInput("Input end time.").str;
+                var start = DateTime.Parse(start_str);
+                var end = DateTime.Parse(end_str);
+                for (int i = 0; i < SessionData.Count; i++)
+                {
+                    if ((int)SessionData[i][0] == id)
+                    {
+                        var code = new CodingSession(start, end);
+                        code.Id = id;
+                        SessionData[i] = code.GetField();
+                        SQL.Update(code);
+                        break;
+                    }
+                }
             }
             catch
             {
@@ -137,7 +151,6 @@ namespace CodeTracker
             ViewTables();
             GoToMainMenu("Type any keys to continue.");
         }
-
         private void GoToMainMenu(string message = "")
         {
             WaitForInput(message);
