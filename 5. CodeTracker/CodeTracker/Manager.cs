@@ -1,5 +1,6 @@
 ﻿using ConsoleTableExt;
 using System.Data.SqlTypes;
+using System.Globalization;
 
 namespace CodeTracker
 {
@@ -25,6 +26,7 @@ namespace CodeTracker
             Console.WriteLine("3. Update a log");
             Console.WriteLine("4. DROP");
             Console.WriteLine("5. View Logs");
+            Console.WriteLine("6. Read Report");
             Console.WriteLine("0. Exit\n");
             Selector = (SELECTOR)GetInput("Select ").val;
             Action(Selector);
@@ -42,11 +44,15 @@ namespace CodeTracker
                 case SELECTOR.UPDATE:
                     Update();
                     break;
-                case SELECTOR.VIEW:
-                    ViewTable();
-                    break;
                 case SELECTOR.DROP:
                     Drop();
+                    break;
+                case SELECTOR.VIEW:
+                    ViewTable();
+                    GoToMainMenu("Type any keys to continue.");
+                    break;
+                case SELECTOR.REPORT:
+                    Report();
                     break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
@@ -59,9 +65,8 @@ namespace CodeTracker
         private void Drop()
         {
             ViewTable();
-
-            var table = GetInput("Input the name of the table to drop.").str;
             SQL.DropTable();
+            SessionData.Clear();
             GoToMainMenu();
         }
         private void Insert()
@@ -151,9 +156,18 @@ namespace CodeTracker
             ConsoleTableBuilder
                 .From(sessionList)
                 .WithTitle("Logs", ConsoleColor.Green)
-                .WithColumn("ID", "Start Time", "End Time", "Duration")
+                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
                 .ExportAndWriteLine();
             Console.WriteLine("".PadRight(24, '='));
+        }
+
+        private void Report()
+        {
+            foreach(var session in SessionData)
+            {
+                foreach(var y in CodingSession.Years) { Console.WriteLine($"year : {y}"); }
+                foreach(var w in CodingSession.Weeks) { Console.WriteLine($"year : {w}"); }
+            }
         }
 
         private (bool res, string str, int val) GetInput(string message)

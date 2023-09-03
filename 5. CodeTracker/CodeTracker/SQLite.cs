@@ -120,10 +120,7 @@ namespace CodeTracker
             }
             while (tableReader.Read())
             {
-                string tableName = tableReader.GetString(0);
-                Console.WriteLine($"Table Name: {tableName}");
-
-                string selectQuery = $"SELECT * From \"{tableName}\"";
+                string selectQuery = $"SELECT * From {TableName}";
                 using var selectCommand = new SqliteCommand(selectQuery, conn);
                 using var dataReader = selectCommand.ExecuteReader();
 

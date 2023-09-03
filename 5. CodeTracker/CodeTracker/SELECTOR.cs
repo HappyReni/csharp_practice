@@ -7,4 +7,5 @@
     UPDATE,
     DROP,
     VIEW,
+    REPORT,
 }
