@@ -67,6 +67,7 @@ namespace CodeTracker
             ViewTable();
             SQL.DropTable();
             SessionData.Clear();
+            SQL.CreateTable();
             GoToMainMenu();
         }
         private void Insert()
@@ -76,12 +77,23 @@ namespace CodeTracker
             {
                 Console.WriteLine("Track coding time.");
                 Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
-                var start = Validation.ValidDateFormat(GetInput("Input start time first.").str);
-                var end = Validation.ValidDateFormat(GetInput("Input end time.").str);
-                
-                var code = new CodingSession(start, end);
-                SessionData.Add(code);
-                SQL.Insert(code);
+
+                var input = GetInput("Input start time first.").str;
+
+                if (input == "r")
+                {
+                    DemoInsert();
+                }
+                else
+                {
+                    var start = Validation.ValidDateFormat(input);
+                    var end = Validation.ValidDateFormat(GetInput("Input end time.").str);
+
+                    var code = new CodingSession(start, end);
+                    SessionData.Add(code);
+                    SQL.Insert(code);
+                }
+
                 ViewTable();
             }
             catch
@@ -90,6 +102,27 @@ namespace CodeTracker
             }
             GoToMainMenu("Type any keys to continue.");
         }
+
+        private void DemoInsert()
+        {
+            Random rand = new();
+            for (int i = 0; i < 10; i++)
+            {
+                var start_year = rand.Next(1, 9999);
+                var end_year = rand.Next(start_year, 9999);
+                var month = rand.Next(1, 13);
+                var day = rand.Next(1, 31);
+                var hour = rand.Next(0, 13);
+                var min = rand.Next(1, 60);
+                var sec = rand.Next(1, 60);
+                var start = new DateTime(start_year, month, day, hour, min, sec);
+                var end = new DateTime(end_year, month, day, hour, min, sec);
+                var code_debug = new CodingSession(start, end);
+                SessionData.Add(code_debug);
+                SQL.Insert(code_debug);
+            }
+        }
+
         private void Delete()
         {
             ViewTable();
@@ -163,11 +196,62 @@ namespace CodeTracker
 
         private void Report()
         {
-            foreach(var session in SessionData)
+            Console.Clear();
+            Console.WriteLine("Report");
+            Console.WriteLine("".PadRight(24, '='));
+            Console.WriteLine("1. Yearly");
+            Console.WriteLine("2. Weekly");
+            Console.WriteLine("0. Main Menu\n");
+            var select = GetInput("Select ").val;
+
+            switch (select)
             {
-                foreach(var y in CodingSession.Years) { Console.WriteLine($"year : {y}"); }
-                foreach(var w in CodingSession.Weeks) { Console.WriteLine($"year : {w}"); }
+                case 1:
+                    ReportYearlySession();
+                    break;
+                case 2:
+                    ReportWeeklySession();
+                    break;
+                case 0:
+                    GoToMainMenu("Type any keys to continue.");
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input");
+                    break;
             }
+        }
+
+        private void ReportYearlySession()
+        {
+            var input = GetInput("Input the year").val;
+            double duration = 0;
+            var count = 0;
+
+            foreach (var session in SessionData)
+            {
+                if (session.YearDuration.ContainsKey(input))
+                {
+                    duration += session.YearDuration[input];
+                    count++;
+                }
+            }
+            GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
+        }
+
+        private void ReportWeeklySession()
+        {
+            var input = GetInput("Input the week").str;
+            double duration = 0;
+            var count = 0;
+            foreach (var session in SessionData)
+            {
+                if (session.WeekDuration.ContainsKey(input))
+                {
+                    duration += session.WeekDuration[input];
+                    count++;
+                }
+            }
+            GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
         }
 
         private (bool res, string str, int val) GetInput(string message)
