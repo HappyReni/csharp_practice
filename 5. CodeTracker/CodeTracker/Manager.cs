@@ -253,7 +253,39 @@ namespace CodeTracker
             }
             GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
         }
+        
+        private void FilterDate()
+        {
+            Console.Clear();
+            Console.WriteLine("Filter");
+            Console.WriteLine("".PadRight(24, '='));
+            Console.WriteLine("1. Years");
+            Console.WriteLine("2. Weeks");
+            Console.WriteLine("3. Days");
+            Console.WriteLine("0. Main Menu\n");
+            var select = GetInput("Select ").val;
 
+            switch (select)
+            {
+                case 1:
+                    ReportYearlySession();
+                    break;
+                case 2:
+                    ReportWeeklySession();
+                    break;
+                case 0:
+                    GoToMainMenu("Type any keys to continue.");
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input");
+                    break;
+            }
+        }
+
+        private void SelectOrder()
+        {
+
+        }
         private (bool res, string str, int val) GetInput(string message)
         {
             // This function returns string input too in case you need it
