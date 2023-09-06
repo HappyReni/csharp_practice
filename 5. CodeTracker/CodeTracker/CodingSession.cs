@@ -31,6 +31,7 @@ namespace CodeTracker
         public double Duration { get; set; }
         public Dictionary<int, double> YearDuration { get; set; } = new();
         public Dictionary<string, double> WeekDuration { get; set; } = new();
+        public List<string> Weeks { get; set; } = new();
 
         private double CalculateDuration() => (EndTime - StartTime).TotalHours;
         public List<object> GetField() => new List<object> { Id, StartTime, EndTime, Duration };
@@ -72,7 +73,7 @@ namespace CodeTracker
             while (current <= EndTime) 
             {
                 int year = calendar.GetYear(current);
-                int week = calendar.GetWeekOfYear(current, weekRule, firstDayOfWeek);
+                int week = calendar.GetWeekOfYear(current, weekRule, firstDayOfWeek)-1;
                 var day = calendar.GetDayOfWeek(current);
 
                 if(day == DayOfWeek.Sunday)
@@ -91,6 +92,7 @@ namespace CodeTracker
                     WeekDuration[year + "-" + week] = (EndTime - current).TotalHours;
                     current = current.AddDays(7);
                 }
+                Weeks.Add(year + "-" + week);
             }
         }
     }

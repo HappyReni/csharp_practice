@@ -52,7 +52,10 @@ namespace CodeTracker
                     GoToMainMenu("Type any keys to continue.");
                     break;
                 case SELECTOR.REPORT:
-                    Report();
+                    FilterDate();
+                    GoToMainMenu("Type any keys to continue.");
+
+                    //Report();
                     break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
@@ -264,14 +267,20 @@ namespace CodeTracker
             Console.WriteLine("3. Days");
             Console.WriteLine("0. Main Menu\n");
             var select = GetInput("Select ").val;
+            Console.Clear();
+            var order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
 
             switch (select)
             {
                 case 1:
-                    ReportYearlySession();
+                    var startDate = GetInput("Start Year :").val;
+                    var endDate = GetInput("End Year :").val;
+                    FilterByYear(startDate, endDate, order);
                     break;
                 case 2:
-                    ReportWeeklySession();
+                    var startWeek = GetInput("Start Week :").str;
+                    var endWeek = GetInput("End Week :").str;
+                    FilterByWeek(startWeek, endWeek, order);
                     break;
                 case 0:
                     GoToMainMenu("Type any keys to continue.");
@@ -282,10 +291,125 @@ namespace CodeTracker
             }
         }
 
-        private void SelectOrder()
+        private void FilterByYear(int startYear, int endYear, int order)
         {
+            List<List<object>> sessionList = new();
+            IOrderedEnumerable<CodingSession> sortedList;
+
+            if (order == 0)
+            {
+                sortedList = 
+                    from session in SessionData
+                    where session.StartTime.Year > startYear && session.EndTime.Year < endYear
+                    orderby session.StartTime.Year ascending
+                    select session;
+            }
+            else
+            {
+                sortedList =
+                    from session in SessionData
+                    where session.StartTime.Year > startYear && session.EndTime.Year < endYear
+                    orderby session.StartTime.Year descending
+                    select session;
+            }
+            foreach (var session in sortedList)
+            {
+                sessionList.Add(session.GetField());
+            }
+            Console.Clear();
+            ConsoleTableBuilder
+                .From(sessionList)
+                .WithTitle("Filter by Years", ConsoleColor.Green)
+                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
+                .ExportAndWriteLine();
+            Console.WriteLine("".PadRight(24, '='));
+        }
+        private void FilterByWeek(string startWeek, string endWeek, int order)
+        {
+            List<List<object>> sessionList = new();
+            int idx = 0;
+            int gap = 0;
+            foreach (var session in SessionData)
+            {
+                if (IsWeek1Older(endWeek, session.Weeks[0]) || IsWeek1Older(session.Weeks[^1],startWeek)) continue;
+                if (IsWeek1Older(startWeek, session.Weeks[0]))
+                {
+                    idx = 0;
+                }
+                else
+                {
+                    for(int i = 0;i<session.Weeks.Count;i++)
+                    {
+                        var ss = session.Weeks[i];
+
+                        if (session.Weeks[i] == startWeek)
+                        {
+                            idx = i; break;
+                        }
+                    }
+                }
+
+                for (int i = idx; i < session.Weeks.Count; i++)
+                {
+                    var list = new List<object>() { session.Weeks[i] };
+                    list.AddRange(session.GetField());
+                    sessionList.Add(list);
+                    if (session.Weeks[i] == endWeek)
+                    {
+                        break;
+                    }
+                }
+            }
+            Console.Clear();
+
+            var sortedList = 
+                from session in sessionList
+                orderby session[0] descending
+                select session;
+
+            sessionList = new();
+            foreach (var session in sortedList)
+            {
+                sessionList.Add(session);
+            }
+            ConsoleTableBuilder
+                .From(sessionList)
+                .WithTitle("Filter by Years", ConsoleColor.Green)
+                .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
+                .ExportAndWriteLine();
+            Console.WriteLine("".PadRight(24, '='));
+        }
+        private bool IsWeek1Older(string week1, string week2)
+        {
+            string[] w1 = week1.Split('-');
+            string[] w2 = week2.Split('-');
+
+            var w1_year = Int32.Parse(w1[0]);
+            var w1_week = Int32.Parse(w1[1]);
+            var w2_year = Int32.Parse(w2[0]);
+            var w2_week = Int32.Parse(w2[1]);
+
+            if (w1_year < w2_year) return true;
+            else if(w1_year == w2_year && w1_week <= w2_week) return true;
+            else return false;
 
         }
+
+        private int GetWeekGap(string week1, string week2) 
+        {
+            string[] w1 = week1.Split('-');
+            string[] w2 = week2.Split('-');
+
+            var w1_year = Int32.Parse(w1[0]);
+            var w1_week = Int32.Parse(w1[1]);
+            var w2_year = Int32.Parse(w1[0]);
+            var w2_week = Int32.Parse(w1[1]);
+
+            if (w1_year == w2_year) return w2_week - w1_week;
+            else if (w1_year + 1 == w2_year) return (52 - w1_week) + w2_week;
+            else return (52 - w1_week) + ((w2_year - 1) - (w1_year + 1)) + w2_week;
+        }
+
         private (bool res, string str, int val) GetInput(string message)
         {
             // This function returns string input too in case you need it
