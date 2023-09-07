@@ -327,57 +327,71 @@ namespace CodeTracker
         private void FilterByWeek(string startWeek, string endWeek, int order)
         {
             List<List<object>> sessionList = new();
-            int idx = 0;
-            int gap = 0;
+
             foreach (var session in SessionData)
             {
-                if (IsWeek1Older(endWeek, session.Weeks[0]) || IsWeek1Older(session.Weeks[^1],startWeek)) continue;
-                if (IsWeek1Older(startWeek, session.Weeks[0]))
-                {
-                    idx = 0;
-                }
-                else
-                {
-                    for(int i = 0;i<session.Weeks.Count;i++)
-                    {
-                        var ss = session.Weeks[i];
-
-                        if (session.Weeks[i] == startWeek)
-                        {
-                            idx = i; break;
-                        }
-                    }
-                }
-
-                for (int i = idx; i < session.Weeks.Count; i++)
-                {
-                    var list = new List<object>() { session.Weeks[i] };
-                    list.AddRange(session.GetField());
-                    sessionList.Add(list);
-                    if (session.Weeks[i] == endWeek)
-                    {
-                        break;
-                    }
-                }
+                sessionList.AddRange(GetWeeks(session));
             }
-            Console.Clear();
 
-            var sortedList = 
-                from session in sessionList
-                orderby session[0] descending
-                select session;
-
-            sessionList = new();
-            foreach (var session in sortedList)
-            {
-                sessionList.Add(session);
-            }
             ConsoleTableBuilder
                 .From(sessionList)
                 .WithTitle("Filter by Years", ConsoleColor.Green)
                 .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
                 .ExportAndWriteLine();
             Console.WriteLine("".PadRight(24, '='));
+            //List<List<object>> sessionList = GetWeeks();
+            //List<List<object>> sessionList = new();
+            //int idx = 0;
+            //int gap = 0;
+            //foreach (var session in SessionData)
+            //{
+            //    if (IsWeek1Older(endWeek, session.Weeks[0]) || IsWeek1Older(session.Weeks[^1],startWeek)) continue;
+            //    if (IsWeek1Older(startWeek, session.Weeks[0]))
+            //    {
+            //        idx = 0;
+            //    }
+            //    else
+            //    {
+            //        for(int i = 0;i<session.Weeks.Count;i++)
+            //        {
+            //            var ss = session.Weeks[i];
+
+            //            if (session.Weeks[i] == startWeek)
+            //            {
+            //                idx = i; break;
+            //            }
+            //        }
+            //    }
+
+            //    for (int i = idx; i < session.Weeks.Count; i++)
+            //    {
+            //        var list = new List<object>() { session.Weeks[i] };
+            //        list.AddRange(session.GetField());
+            //        sessionList.Add(list);
+            //        if (session.Weeks[i] == endWeek)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
+            //Console.Clear();
+
+            //var sortedList = 
+            //    from session in sessionList
+            //    orderby session[0] descending
+            //    select session;
+
+            //sessionList = new();
+            //foreach (var session in sortedList)
+            //{
+            //    sessionList.Add(session);
+            //}
+            //ConsoleTableBuilder
+            //    .From(sessionList)
+            //    .WithTitle("Filter by Years", ConsoleColor.Green)
+            //    .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
+            //    .ExportAndWriteLine();
+            //Console.WriteLine("".PadRight(24, '='));
         }
         private bool IsWeek1Older(string week1, string week2)
         {
@@ -409,7 +423,51 @@ namespace CodeTracker
             else if (w1_year + 1 == w2_year) return (52 - w1_week) + w2_week;
             else return (52 - w1_week) + ((w2_year - 1) - (w1_year + 1)) + w2_week;
         }
+        private List<List<object>> GetWeeks(CodingSession session)
+        {
+            var StartTime = session.StartTime;
+            var EndTime = session.EndTime;
+            List<List<object>> sessionList = new();
+            CultureInfo cultureInfo = new CultureInfo("en-US");
+            Calendar calendar = cultureInfo.Calendar;
+            CalendarWeekRule weekRule = cultureInfo.DateTimeFormat.CalendarWeekRule;
+            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
 
+            var current = StartTime;
+            while (current < EndTime)
+            {
+                int year = calendar.GetYear(current);
+                int week = calendar.GetWeekOfYear(current, weekRule, firstDayOfWeek) - 1;
+                var day = calendar.GetDayOfWeek(current);
+                var list = new List<object>() { $"{year}-{week}" };
+
+                //if (day == DayOfWeek.Sunday)
+                //{
+                //    list.AddRange(new CodingSession(current, current.AddDays(7)).GetField());
+                //    current = current.AddDays(7);
+                //}
+                if (current == StartTime)
+                {
+                    int move = (int)(7 - day);
+                    var endDate = new DateTime(StartTime.Year, StartTime.Month, StartTime.Day + move, 0, 0, 0);
+                    list.AddRange(new CodingSession(current, endDate).GetField());
+
+                    current = endDate;
+                }
+                else if (DateTime.Compare(current.AddDays(7), EndTime) == 1)
+                {
+                    list.AddRange(new CodingSession(current, EndTime).GetField());
+                    current = current.AddDays(7);
+                }
+                else
+                {
+                    list.AddRange(new CodingSession(current, current.AddDays(7)).GetField());
+                    current = current.AddDays(7);
+                }
+                sessionList.Add(list);
+            }
+            return sessionList;
+        }
         private (bool res, string str, int val) GetInput(string message)
         {
             // This function returns string input too in case you need it
