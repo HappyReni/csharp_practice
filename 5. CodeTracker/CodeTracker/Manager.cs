@@ -8,32 +8,25 @@ namespace CodeTracker
     {
         private SELECTOR Selector { get; set; }
         private SQLite SQL { get; set; }
-        private List<CodingSession> SessionData { get; set; }
+        private List<CodingSession> SessionData { get; set; } = new();
+        private Filter Filter { get; set; }
+        private UI UI { get; set; }
         public Manager()
         {
             SQL = new();
-            SessionData = SQL.GetSQLData();
-            MainMenu();
-        }
+            Filter = new(SessionData);
+            UI = new UI();
 
-        private void MainMenu()
-        {
-            Console.Clear();
-            Console.WriteLine("Coding Tracker");
-            Console.WriteLine("".PadRight(24, '='));
-            Console.WriteLine("1. Insert a log");
-            Console.WriteLine("2. Delete a log");
-            Console.WriteLine("3. Update a log");
-            Console.WriteLine("4. DROP");
-            Console.WriteLine("5. View Logs");
-            Console.WriteLine("6. Read Report");
-            Console.WriteLine("0. Exit\n");
-            Selector = (SELECTOR)GetInput("Select ").val;
-            Action(Selector);
+            SessionData = SQL.GetSQLData();
+            Selector = UI.MainMenu();
+            while (true)
+            {
+                Action();
+            }
         }
-        private void Action(SELECTOR selector)
+        private void Action()
         {
-            switch (selector)
+            switch (Selector)
             {
                 case SELECTOR.INSERT:
                     Insert();
@@ -49,12 +42,10 @@ namespace CodeTracker
                     break;
                 case SELECTOR.VIEW:
                     ViewTable();
-                    GoToMainMenu("Type any keys to continue.");
                     break;
                 case SELECTOR.REPORT:
-                    FilterDate();
-                    GoToMainMenu("Type any keys to continue.");
-
+                    UI.FilterMenu();
+                    Filter.Action();
                     //Report();
                     break;
                 case SELECTOR.EXIT:
@@ -64,6 +55,7 @@ namespace CodeTracker
                     Console.WriteLine("Invalid Input");
                     break;
             }
+            Selector = UI.GoToMainMenu("Type any keys to continue.");
         }
         private void Drop()
         {
@@ -71,7 +63,7 @@ namespace CodeTracker
             SQL.DropTable();
             SessionData.Clear();
             SQL.CreateTable();
-            GoToMainMenu();
+            UI.GoToMainMenu();
         }
         private void Insert()
         {
@@ -81,7 +73,7 @@ namespace CodeTracker
                 Console.WriteLine("Track coding time.");
                 Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
 
-                var input = GetInput("Input start time first.").str;
+                var input = UI.GetInput("Input start time first.").str;
 
                 if (input == "r")
                 {
@@ -90,7 +82,7 @@ namespace CodeTracker
                 else
                 {
                     var start = Validation.ValidDateFormat(input);
-                    var end = Validation.ValidDateFormat(GetInput("Input end time.").str);
+                    var end = Validation.ValidDateFormat(UI.GetInput("Input end time.").str);
 
                     var code = new CodingSession(start, end);
                     SessionData.Add(code);
@@ -103,7 +95,6 @@ namespace CodeTracker
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
-            GoToMainMenu("Type any keys to continue.");
         }
 
         private void DemoInsert()
@@ -131,7 +122,7 @@ namespace CodeTracker
             ViewTable();
             try
             {
-                var input = GetInput("Select the ID of log to delete.");
+                var input = UI.GetInput("Select the ID of log to delete.");
                 SQL.Delete(input.val);
                 for (int i = 0; i < SessionData.Count; i++)
                 {
@@ -146,18 +137,16 @@ namespace CodeTracker
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
-
-            GoToMainMenu("Type any keys to continue.");
         }
         private void Update()
         {
             ViewTable();
             try
             {
-                var id = GetInput("Select the ID of the log to update").val;
+                var id = UI.GetInput("Select the ID of the log to update").val;
                 Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
-                var start = Validation.ValidDateFormat(GetInput("Input start time first.").str);
-                var end = Validation.ValidDateFormat(GetInput("Input end time.").str);
+                var start = Validation.ValidDateFormat(UI.GetInput("Input start time first.").str);
+                var end = Validation.ValidDateFormat(UI.GetInput("Input end time.").str);
 
                 for (int i = 0; i < SessionData.Count; i++)
                 {
@@ -175,14 +164,7 @@ namespace CodeTracker
             {
                 Console.WriteLine("Invalid Input. Try again.");
             }
-            GoToMainMenu("Type any keys to continue.");
         }
-        private void GoToMainMenu(string message = "")
-        {
-            WaitForInput(message);
-            MainMenu();
-        }
-
         private void ViewTable()
         {
             List<List<object>> sessionList =
@@ -205,7 +187,7 @@ namespace CodeTracker
             Console.WriteLine("1. Yearly");
             Console.WriteLine("2. Weekly");
             Console.WriteLine("0. Main Menu\n");
-            var select = GetInput("Select ").val;
+            var select = UI.GetInput("Select ").val;
 
             switch (select)
             {
@@ -216,7 +198,7 @@ namespace CodeTracker
                     ReportWeeklySession();
                     break;
                 case 0:
-                    GoToMainMenu("Type any keys to continue.");
+                    UI.GoToMainMenu("Type any keys to continue.");
                     break;
                 default:
                     Console.WriteLine("Invalid Input");
@@ -226,7 +208,7 @@ namespace CodeTracker
 
         private void ReportYearlySession()
         {
-            var input = GetInput("Input the year").val;
+            var input = UI.GetInput("Input the year").val;
             double duration = 0;
             var count = 0;
 
@@ -238,12 +220,12 @@ namespace CodeTracker
                     count++;
                 }
             }
-            GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
+            UI.GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
         }
 
         private void ReportWeeklySession()
         {
-            var input = GetInput("Input the week").str;
+            var input = UI.GetInput("Input the week").str;
             double duration = 0;
             var count = 0;
             foreach (var session in SessionData)
@@ -254,206 +236,7 @@ namespace CodeTracker
                     count++;
                 }
             }
-            GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
-        }
-        
-        private void FilterDate()
-        {
-            Console.Clear();
-            Console.WriteLine("Filter");
-            Console.WriteLine("".PadRight(24, '='));
-            Console.WriteLine("1. Years");
-            Console.WriteLine("2. Weeks");
-            Console.WriteLine("3. Days");
-            Console.WriteLine("0. Main Menu\n");
-            var select = GetInput("Select ").val;
-            Console.Clear();
-            var order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
-
-            switch (select)
-            {
-                case 1:
-                    var startDate = GetInput("Start Year :").val;
-                    var endDate = GetInput("End Year :").val;
-                    FilterByYear(startDate, endDate, order);
-                    break;
-                case 2:
-                    var startWeek = GetInput("Start Week :").str;
-                    var endWeek = GetInput("End Week :").str;
-                    FilterByWeek(startWeek, endWeek, order);
-                    break;
-                case 0:
-                    GoToMainMenu("Type any keys to continue.");
-                    break;
-                default:
-                    Console.WriteLine("Invalid Input");
-                    break;
-            }
-        }
-
-        private void FilterByYear(int startYear, int endYear, int order)
-        {
-            List<List<object>> sessionList = new();
-            IOrderedEnumerable<CodingSession> sortedList;
-
-            if (order == 0)
-            {
-                sortedList = 
-                    from session in SessionData
-                    where session.StartTime.Year > startYear && session.EndTime.Year < endYear
-                    orderby session.StartTime.Year ascending
-                    select session;
-            }
-            else
-            {
-                sortedList =
-                    from session in SessionData
-                    where session.StartTime.Year > startYear && session.EndTime.Year < endYear
-                    orderby session.StartTime.Year descending
-                    select session;
-            }
-            foreach (var session in sortedList)
-            {
-                sessionList.Add(session.GetField());
-            }
-            Console.Clear();
-            ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle("Filter by Years", ConsoleColor.Green)
-                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
-                .ExportAndWriteLine();
-            Console.WriteLine("".PadRight(24, '='));
-        }
-        private void FilterByWeek(string startWeek, string endWeek, int order)
-        {
-            List<List<object>> sessionList = new();
-
-            foreach (var session in SessionData)
-            {
-                sessionList.AddRange(DivideByWeek(session));
-            }
-
-            sessionList = CheckFiltedWeek(sessionList,startWeek, endWeek);
-            ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle("Filter by Weeks", ConsoleColor.Green)
-                .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
-                .ExportAndWriteLine();
-            Console.WriteLine("".PadRight(24, '='));
-        }
-
-        private List<List<object>> CheckFiltedWeek(List<List<object>> sessions,string startWeek, string endWeek)
-        {
-            List<List<object>> ret = new();
-            for (int i = 0; i < sessions.Count; i++)
-            {
-                List<object>? session = sessions[i];
-                var week = (string)session[0];
-
-                if(IsWeekValid(startWeek, endWeek, week))
-                {
-                    ret.Add(sessions[i]);
-                }
-            }
-            return ret;
-        }
-        private bool IsWeekValid(string week1, string week2, string week3)
-        {
-            string[] w1 = week1.Split('-');
-            string[] w2 = week2.Split('-');
-            string[] w3 = week3.Split('-');
-
-            var w1_year = Int32.Parse(w1[0]);
-            var w1_week = Int32.Parse(w1[1]);
-            var w2_year = Int32.Parse(w2[0]);
-            var w2_week = Int32.Parse(w2[1]); 
-            var w3_year = Int32.Parse(w3[0]);
-            var w3_week = Int32.Parse(w3[1]);
-
-            if (w1_year > w3_year) return false;
-            else if (w3_year > w2_year) return false;
-            else if (w1_year == w3_year && w1_week > w3_week) return false;
-            else if (w2_year == w3_year && w2_week < w3_week) return false;
-            else return true;
-        }
-
-        private int GetWeekGap(string week1, string week2) 
-        {
-            string[] w1 = week1.Split('-');
-            string[] w2 = week2.Split('-');
-
-            var w1_year = Int32.Parse(w1[0]);
-            var w1_week = Int32.Parse(w1[1]);
-            var w2_year = Int32.Parse(w1[0]);
-            var w2_week = Int32.Parse(w1[1]);
-
-            if (w1_year == w2_year) return w2_week - w1_week;
-            else if (w1_year + 1 == w2_year) return (52 - w1_week) + w2_week;
-            else return (52 - w1_week) + ((w2_year - 1) - (w1_year + 1)) + w2_week;
-        }
-        private List<List<object>> DivideByWeek(CodingSession session)
-        {
-            var StartTime = session.StartTime;
-            var EndTime = session.EndTime;
-            List<List<object>> sessionList = new();
-            CultureInfo cultureInfo = new CultureInfo("en-US");
-            Calendar calendar = cultureInfo.Calendar;
-            CalendarWeekRule weekRule = cultureInfo.DateTimeFormat.CalendarWeekRule;
-            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
-
-            var current = StartTime;
-            while (current < EndTime)
-            {
-                int year = calendar.GetYear(current);
-                int week = calendar.GetWeekOfYear(current, weekRule, firstDayOfWeek) - 1;
-                var day = calendar.GetDayOfWeek(current);
-                var list = new List<object>() { $"{year}-{week}" };
-
-                //if (day == DayOfWeek.Sunday)
-                //{
-                //    list.AddRange(new CodingSession(current, current.AddDays(7)).GetField());
-                //    current = current.AddDays(7);
-                //}
-                if (current == StartTime)
-                {
-                    int move = (int)(7 - day);
-                    var endDate = new DateTime(StartTime.Year, StartTime.Month, StartTime.Day + move, 0, 0, 0);
-                    list.AddRange(new CodingSession(current, endDate).GetField());
-
-                    current = endDate;
-                }
-                else if (DateTime.Compare(current.AddDays(7), EndTime) == 1)
-                {
-                    list.AddRange(new CodingSession(current, EndTime).GetField());
-                    current = current.AddDays(7);
-                }
-                else
-                {
-                    list.AddRange(new CodingSession(current, current.AddDays(7)).GetField());
-                    current = current.AddDays(7);
-                }
-                sessionList.Add(list);
-            }
-            return sessionList;
-        }
-        private (bool res, string str, int val) GetInput(string message)
-        {
-            // This function returns string input too in case you need it
-            int number;
-            Console.WriteLine(message);
-            Console.Write(">> ");
-            string str = Console.ReadLine();
-            var res = int.TryParse(str, out number);
-
-            number = res ? number : (int)SELECTOR.INVALID_SELECT;
-            str = str == null ? "" : str;
-
-            return (res, str, number);
-        }
-        private void WaitForInput(string message = "")
-        {
-            Console.WriteLine(message);
-            Console.ReadLine();
+            UI.GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
         }
     }
 }
