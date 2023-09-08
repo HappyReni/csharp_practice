@@ -330,83 +330,51 @@ namespace CodeTracker
 
             foreach (var session in SessionData)
             {
-                sessionList.AddRange(GetWeeks(session));
+                sessionList.AddRange(DivideByWeek(session));
             }
 
+            sessionList = CheckFiltedWeek(sessionList,startWeek, endWeek);
             ConsoleTableBuilder
                 .From(sessionList)
-                .WithTitle("Filter by Years", ConsoleColor.Green)
+                .WithTitle("Filter by Weeks", ConsoleColor.Green)
                 .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
                 .ExportAndWriteLine();
             Console.WriteLine("".PadRight(24, '='));
-            //List<List<object>> sessionList = GetWeeks();
-            //List<List<object>> sessionList = new();
-            //int idx = 0;
-            //int gap = 0;
-            //foreach (var session in SessionData)
-            //{
-            //    if (IsWeek1Older(endWeek, session.Weeks[0]) || IsWeek1Older(session.Weeks[^1],startWeek)) continue;
-            //    if (IsWeek1Older(startWeek, session.Weeks[0]))
-            //    {
-            //        idx = 0;
-            //    }
-            //    else
-            //    {
-            //        for(int i = 0;i<session.Weeks.Count;i++)
-            //        {
-            //            var ss = session.Weeks[i];
-
-            //            if (session.Weeks[i] == startWeek)
-            //            {
-            //                idx = i; break;
-            //            }
-            //        }
-            //    }
-
-            //    for (int i = idx; i < session.Weeks.Count; i++)
-            //    {
-            //        var list = new List<object>() { session.Weeks[i] };
-            //        list.AddRange(session.GetField());
-            //        sessionList.Add(list);
-            //        if (session.Weeks[i] == endWeek)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //}
-            //Console.Clear();
-
-            //var sortedList = 
-            //    from session in sessionList
-            //    orderby session[0] descending
-            //    select session;
-
-            //sessionList = new();
-            //foreach (var session in sortedList)
-            //{
-            //    sessionList.Add(session);
-            //}
-            //ConsoleTableBuilder
-            //    .From(sessionList)
-            //    .WithTitle("Filter by Years", ConsoleColor.Green)
-            //    .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
-            //    .ExportAndWriteLine();
-            //Console.WriteLine("".PadRight(24, '='));
         }
-        private bool IsWeek1Older(string week1, string week2)
+
+        private List<List<object>> CheckFiltedWeek(List<List<object>> sessions,string startWeek, string endWeek)
+        {
+            List<List<object>> ret = new();
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                List<object>? session = sessions[i];
+                var week = (string)session[0];
+
+                if(IsWeekValid(startWeek, endWeek, week))
+                {
+                    ret.Add(sessions[i]);
+                }
+            }
+            return ret;
+        }
+        private bool IsWeekValid(string week1, string week2, string week3)
         {
             string[] w1 = week1.Split('-');
             string[] w2 = week2.Split('-');
+            string[] w3 = week3.Split('-');
 
             var w1_year = Int32.Parse(w1[0]);
             var w1_week = Int32.Parse(w1[1]);
             var w2_year = Int32.Parse(w2[0]);
-            var w2_week = Int32.Parse(w2[1]);
+            var w2_week = Int32.Parse(w2[1]); 
+            var w3_year = Int32.Parse(w3[0]);
+            var w3_week = Int32.Parse(w3[1]);
 
-            if (w1_year < w2_year) return true;
-            else if(w1_year == w2_year && w1_week <= w2_week) return true;
-            else return false;
-
+            if (w1_year > w3_year) return false;
+            else if (w3_year > w2_year) return false;
+            else if (w1_year == w3_year && w1_week > w3_week) return false;
+            else if (w2_year == w3_year && w2_week < w3_week) return false;
+            else return true;
         }
 
         private int GetWeekGap(string week1, string week2) 
@@ -423,7 +391,7 @@ namespace CodeTracker
             else if (w1_year + 1 == w2_year) return (52 - w1_week) + w2_week;
             else return (52 - w1_week) + ((w2_year - 1) - (w1_year + 1)) + w2_week;
         }
-        private List<List<object>> GetWeeks(CodingSession session)
+        private List<List<object>> DivideByWeek(CodingSession session)
         {
             var StartTime = session.StartTime;
             var EndTime = session.EndTime;
