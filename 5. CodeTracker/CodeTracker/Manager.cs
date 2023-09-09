@@ -14,10 +14,9 @@ namespace CodeTracker
         public Manager()
         {
             SQL = new();
-            Filter = new(SessionData);
             UI = new UI();
-
             SessionData = SQL.GetSQLData();
+            Filter = new(SessionData);
             Selector = UI.MainMenu();
             while (true)
             {
@@ -44,8 +43,8 @@ namespace CodeTracker
                     ViewTable();
                     break;
                 case SELECTOR.REPORT:
-                    UI.FilterMenu();
-                    Filter.Action();
+                    var param = UI.FilterMenu();
+                    Filter.SetParameters(param);
                     //Report();
                     break;
                 case SELECTOR.EXIT:

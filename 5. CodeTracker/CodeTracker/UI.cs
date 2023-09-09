@@ -23,7 +23,7 @@
 
             return selector;
         }
-        public (int startDate, int endDate,int order)? FilterMenu()
+        public List<object>? FilterMenu()
         {
             Console.Clear();
             Console.WriteLine("Filter");
@@ -32,21 +32,21 @@
             Console.WriteLine("2. Weeks");
             Console.WriteLine("3. Days");
             Console.WriteLine("0. Main Menu\n");
-            var select = GetInput("Select ").val;
+            var select = (FILTER_SELECTOR)GetInput("Select ").val;
             Console.Clear();
             var order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
 
             switch (select)
             {
-                case 1:
+                case FILTER_SELECTOR.YEAR:
                     var startDate = GetInput("Start Year :").val;
                     var endDate = GetInput("End Year :").val;
-                    return (startDate, endDate, order);
-                case 2:
+                    return new List<object>() { FILTER_SELECTOR.YEAR, startDate, endDate, order };
+                case FILTER_SELECTOR.WEEK:
                     var startWeek = GetInput("Start Week :").str;
                     var endWeek = GetInput("End Week :").str;
-                    return (startWeek, endWeek, order);
-                case 0:
+                    return new List<object>() { FILTER_SELECTOR.WEEK, startWeek, endWeek, order };
+                case FILTER_SELECTOR.DAY:
                     GoToMainMenu("Type any keys to continue.");
                     return null;
                 default:
