@@ -40,32 +40,10 @@ namespace CodeTracker
                     Drop();
                     break;
                 case SELECTOR.VIEW:
-                    ViewTable();
+                    View();
                     break;
                 case SELECTOR.REPORT:
-                    var param = UI.FilterMenu();
-                    var sessionList = new List<List<object>>();
-                    Filter.SetParameters(param);
-                    var period = "";
-
-                    if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.YEAR)
-                    {
-                        sessionList = Filter.FilterByYear();
-                        period = "Years";
-                    }
-                    else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.WEEK)
-                    {
-                        sessionList = Filter.FilterByWeek();
-                        period = "Weeks";
-                    }
-                    else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.DAY)
-                    {
-                        sessionList = Filter.FilterByDays();
-                        period = "Days";
-                    }
-                    else break;
-                    UI.MakeTable(sessionList,period);
-                    //Report();
+                    Report();
                     break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
@@ -78,15 +56,14 @@ namespace CodeTracker
         }
         private void Drop()
         {
-            ViewTable();
+            ViewAllRecords();
             SQL.DropTable();
             SessionData.Clear();
             SQL.CreateTable();
-            UI.GoToMainMenu();
         }
         private void Insert()
         {
-            ViewTable();
+            ViewAllRecords();
             try
             {
                 UI.Write("Track coding time.");
@@ -108,7 +85,7 @@ namespace CodeTracker
                     SQL.Insert(code);
                 }
 
-                ViewTable();
+                ViewAllRecords();
             }
             catch
             {
@@ -138,7 +115,7 @@ namespace CodeTracker
 
         private void Delete()
         {
-            ViewTable();
+            ViewAllRecords();
             try
             {
                 var input = UI.GetInput("Select the ID of log to delete.");
@@ -159,7 +136,7 @@ namespace CodeTracker
         }
         private void Update()
         {
-            ViewTable();
+            ViewAllRecords();
             try
             {
                 var id = UI.GetInput("Select the ID of the log to update").val;
@@ -184,30 +161,51 @@ namespace CodeTracker
                 UI.Write("Invalid Input. Try again.");
             }
         }
-        private void ViewTable()
+
+        private void ViewAllRecords()
+        {
+            var sessionList = SessionData.Select(session => session.GetField()).ToList();
+            var period = "Records";
+            UI.MakeTable(sessionList, period);
+        }
+        private void View()
         {
             List<List<object>> sessionList =
                 SessionData.Select(session => session.GetField()).ToList();
 
-            Console.Clear();
-            ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle("Logs", ConsoleColor.Green)
-                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
-                .ExportAndWriteLine();
-            Console.WriteLine("".PadRight(24, '='));
+            var param = UI.FilterMenu();
+            Filter.SetParameters(param);
+            var period = "";
+
+            if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.YEAR)
+            {
+                sessionList = Filter.FilterByYear();
+                period = "Years";
+            }
+            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.WEEK)
+            {
+                sessionList = Filter.FilterByWeek();
+                period = "Weeks";
+            }
+            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.DAY)
+            {
+                sessionList = Filter.FilterByDays();
+                period = "Days";
+            }
+            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.ALL)
+            {
+                ViewAllRecords();
+                return;
+            }
+            else return;
+
+            UI.MakeTable(sessionList, period);
         }
 
         private void Report()
         {
+            var select = UI.ReportMenu();
             Console.Clear();
-            Console.WriteLine("Report");
-            Console.WriteLine("".PadRight(24, '='));
-            Console.WriteLine("1. Yearly");
-            Console.WriteLine("2. Weekly");
-            Console.WriteLine("0. Main Menu\n");
-            var select = UI.GetInput("Select ").val;
-
             switch (select)
             {
                 case 1:
@@ -217,10 +215,9 @@ namespace CodeTracker
                     ReportWeeklySession();
                     break;
                 case 0:
-                    UI.GoToMainMenu("Type any keys to continue.");
                     break;
                 default:
-                    Console.WriteLine("Invalid Input");
+                    UI.Write("Invalid Input");
                     break;
             }
         }
@@ -239,7 +236,7 @@ namespace CodeTracker
                     count++;
                 }
             }
-            UI.GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
+            UI.Write($"{input} \n======================\n total sessions : {count} \n total duration : {duration} \n average time : {duration / count}");
         }
 
         private void ReportWeeklySession()
@@ -255,7 +252,7 @@ namespace CodeTracker
                     count++;
                 }
             }
-            UI.GoToMainMenu($"{input} => total sessions : {count} total duration : {duration} average time : {duration / count}");
+            UI.Write($"{input} \n======================\n total sessions : {count} \n total duration : {duration} \n average time : {duration / count}");
         }
     }
 }

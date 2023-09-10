@@ -9,8 +9,8 @@ namespace CodeTracker
         private List<CodingSession> SessionData { get; set; }
         private FILTER_SELECTOR Selector { get; set; }
         private int? order {  get; set; }
-        private int? StartYear { get; set; }
-        private int? EndYear { get; set; }
+        private int StartYear { get; set; }
+        private int EndYear { get; set; }
         private string? StartWeek { get; set; }
         private string? EndWeek { get; set; }
         private DateTime StartDate { get; set; }
@@ -49,29 +49,81 @@ namespace CodeTracker
         public List<List<object>> FilterByYear()
         {
             List<List<object>> sessionList = new();
-            IOrderedEnumerable<CodingSession> sortedList;
 
+            foreach(var session in SessionData)
+            {
+                sessionList.AddRange(DivideByYear(session));
+            }
+
+            IOrderedEnumerable<List<object>> sortedList;
             if (order == 0)
             {
                 sortedList =
-                    from session in SessionData
-                    where session.StartTime.Year >= StartYear && session.EndTime.Year <= EndYear
-                    orderby session.StartTime.Year ascending
+                    from session in sessionList
+                    orderby session[0] ascending
                     select session;
             }
             else
             {
                 sortedList =
-                    from session in SessionData
-                    where session.StartTime.Year >= StartYear && session.EndTime.Year <= EndYear
-                    orderby session.StartTime.Year descending
+                    from session in sessionList
+                    orderby session[0] descending
                     select session;
             }
             foreach (var session in sortedList)
             {
-                sessionList.Add(session.GetField());
+                sessionList.Add(session);
             }
 
+            return sessionList;
+        }
+        private List<List<object>> DivideByYear(CodingSession session)
+        {
+            var StartTime = session.StartTime;
+            var EndTime = session.EndTime;
+            List<List<object>> sessionList = new();
+
+            var current = 0;
+            var end = 0;
+
+            if (StartYear >= StartTime.Year)
+            {
+                current = StartYear;
+            }
+            else
+            {
+                current = StartTime.Year;
+            }
+
+            if (EndYear < EndTime.Year)
+            {
+                end = EndYear;
+            }
+            while (current < end)
+            {
+                var list = new List<object>() { current };
+
+                if (current == StartTime.Year)
+                {
+                    var endDate = new DateTime(StartTime.Year, 12, 31, 0, 0, 0);
+                    list.AddRange(new CodingSession(StartTime, endDate).GetField());
+
+                    current = current + 1;
+                }
+                else if (current == EndTime.Year)
+                {
+                    var begin = new DateTime(current, 01, 01, 0, 0, 0);
+                    list.AddRange(new CodingSession(begin, EndTime).GetField());
+                    current = current + 1;
+                }
+                else
+                {
+                    var begin = new DateTime(current, 01, 01, 0, 0, 0);
+                    list.AddRange(new CodingSession(begin, begin.AddYears(1)).GetField());
+                    current = current + 1;
+                }
+                sessionList.Add(list);
+            }
             return sessionList;
         }
         public List<List<object>> FilterByWeek()

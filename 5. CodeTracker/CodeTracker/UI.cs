@@ -22,7 +22,6 @@ namespace CodeTracker
             Write("0. Exit\n");
             var selector = (SELECTOR)GetInput("Select ").val;
 
-
             return selector;
         }
         public void Write(string text)
@@ -32,43 +31,71 @@ namespace CodeTracker
         public List<object>? FilterMenu()
         {
             Console.Clear();
-            Write("Filter");
+            Write("View records");
             Write("".PadRight(24, '='));
             Write("1. Years");
             Write("2. Weeks");
             Write("3. Days");
+            Write("4. All Data");
             Write("0. Main Menu\n");
             var select = (FILTER_SELECTOR)GetInput("Select ").val;
             Console.Clear();
-            var order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
+            var order = -1;
             switch (select)
             {
                 case FILTER_SELECTOR.YEAR:
+                    order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
                     var startYear = GetInput("Start Year :").val;
                     var endYear = GetInput("End Year :").val;
                     return new List<object>() { FILTER_SELECTOR.YEAR, startYear, endYear, order };
                 case FILTER_SELECTOR.WEEK:
+                    order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
                     var startWeek = GetInput("Start Week :").str;
                     var endWeek = GetInput("End Week :").str;
                     return new List<object>() { FILTER_SELECTOR.WEEK, startWeek, endWeek, order };
                 case FILTER_SELECTOR.DAY:
+                    order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
                     var startDate = GetInput("Start Date :").str;
                     var endDate = GetInput("End Date :").str;
                     return new List<object>() { FILTER_SELECTOR.DAY, startDate, endDate, order };
+                case FILTER_SELECTOR.ALL:
+                    return new List<object>() { FILTER_SELECTOR.ALL, null, null, -1};
                 default:
                     Write("Invalid Input");
                     return new List<object>() { FILTER_SELECTOR.INVALID_SELECT, null, null, order };
             }
         }
+        public int ReportMenu()
+        {
+            Console.Clear();
+            Write("Report");
+            Write("".PadRight(24, '='));
+            Write("1. Yearly");
+            Write("2. Weekly");
+            Write("0. Main Menu\n");
+
+            return GetInput("Select ").val;
+        }
         public void MakeTable(List<List<object>> sessionList, string period)
         {
+            Console.Clear();
+            if (period == "Records")
+            {
+                ConsoleTableBuilder
+                .From(sessionList)
+                .WithTitle("Records", ConsoleColor.Green)
+                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
+                .ExportAndWriteLine();
+                Write("".PadRight(24, '='));
+                return;
+            }
             ConsoleTableBuilder
                 .From(sessionList)
                 .WithTitle($"Filter by {period}", ConsoleColor.Green)
                 .WithColumn($"{period}","ID", "Start Time", "End Time", "Duration(Hours)")
                 .ExportAndWriteLine();
-            
             Write("".PadRight(24, '='));
+
         }
 
         public SELECTOR GoToMainMenu(string message = "")

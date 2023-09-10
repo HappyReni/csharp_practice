@@ -59,7 +59,7 @@ namespace CodeTracker
                 YearDuration[syear] = (newyear - StartTime).TotalHours;
                 for(int i=newyear.Year; i<=newyear2.Year-1; i++) 
                 { 
-                    YearDuration[syear+i] = 8760; 
+                    YearDuration[++syear] = 8760; 
                 }
                 YearDuration[eyear] = (EndTime-newyear2).TotalHours;
             }

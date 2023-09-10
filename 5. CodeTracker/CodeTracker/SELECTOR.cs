@@ -16,4 +16,5 @@ enum FILTER_SELECTOR
     YEAR = 1,
     WEEK,
     DAY,
+    ALL,
 }
