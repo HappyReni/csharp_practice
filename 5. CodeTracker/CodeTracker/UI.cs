@@ -41,7 +41,6 @@ namespace CodeTracker
             var select = (FILTER_SELECTOR)GetInput("Select ").val;
             Console.Clear();
             var order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
-
             switch (select)
             {
                 case FILTER_SELECTOR.YEAR:
@@ -53,33 +52,22 @@ namespace CodeTracker
                     var endWeek = GetInput("End Week :").str;
                     return new List<object>() { FILTER_SELECTOR.WEEK, startWeek, endWeek, order };
                 case FILTER_SELECTOR.DAY:
-                    GoToMainMenu("Type any keys to continue.");
-                    return null;
+                    var startDate = GetInput("Start Date :").str;
+                    var endDate = GetInput("End Date :").str;
+                    return new List<object>() { FILTER_SELECTOR.DAY, startDate, endDate, order };
                 default:
                     Write("Invalid Input");
-                    return null;
+                    return new List<object>() { FILTER_SELECTOR.INVALID_SELECT, null, null, order };
             }
         }
-
-        public void MakeTable(List<List<object>> sessionList,FILTER_SELECTOR selector)
+        public void MakeTable(List<List<object>> sessionList, string period)
         {
-            if (selector == FILTER_SELECTOR.YEAR)
-            {
-                ConsoleTableBuilder
-                    .From(sessionList)
-                    .WithTitle("Filter by Years", ConsoleColor.Green)
-                    .WithColumn("Years","ID", "Start Time", "End Time", "Duration(Hours)")
-                    .ExportAndWriteLine();
-            }
-            else if(selector == FILTER_SELECTOR.WEEK)
-            {
-                ConsoleTableBuilder
-                    .From(sessionList)
-                    .WithTitle("Filter by Weeks", ConsoleColor.Green)
-                    .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
-                    .ExportAndWriteLine();
-            }
-
+            ConsoleTableBuilder
+                .From(sessionList)
+                .WithTitle($"Filter by {period}", ConsoleColor.Green)
+                .WithColumn($"{period}","ID", "Start Time", "End Time", "Duration(Hours)")
+                .ExportAndWriteLine();
+            
             Write("".PadRight(24, '='));
         }
 

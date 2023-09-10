@@ -46,16 +46,25 @@ namespace CodeTracker
                     var param = UI.FilterMenu();
                     var sessionList = new List<List<object>>();
                     Filter.SetParameters(param);
+                    var period = "";
 
                     if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.YEAR)
                     {
                         sessionList = Filter.FilterByYear();
+                        period = "Years";
                     }
-                    else
+                    else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.WEEK)
                     {
                         sessionList = Filter.FilterByWeek();
+                        period = "Weeks";
                     }
-                    UI.MakeTable(sessionList, (FILTER_SELECTOR)param[0]);
+                    else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.DAY)
+                    {
+                        sessionList = Filter.FilterByDays();
+                        period = "Days";
+                    }
+                    else break;
+                    UI.MakeTable(sessionList,period);
                     //Report();
                     break;
                 case SELECTOR.EXIT:

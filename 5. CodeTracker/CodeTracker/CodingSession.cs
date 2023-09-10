@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Configuration;
+using System.Globalization;
 
 namespace CodeTracker
 {
@@ -7,8 +8,9 @@ namespace CodeTracker
         public CodingSession() { }
         public CodingSession(DateTime start, DateTime end) 
         {
+            int number = Int32.Parse(ConfigurationManager.AppSettings.Get("RECORDNUMBER"));
             Random rand = new();
-            Id = rand.Next(90000);
+            Id = rand.Next(number);
             StartTime = start;
             EndTime = end;
             Duration = CalculateDuration();
@@ -86,7 +88,7 @@ namespace CodeTracker
                 else if(current == StartTime)
                 {
                     int move = (int)(7-day);
-                    WeekDuration[year + "-" + week_str] = (new DateTime(StartTime.Year, StartTime.Month, StartTime.Day+move, 0, 0, 0) - current).TotalHours;
+                    WeekDuration[year + "-" + week_str] = (StartTime.AddDays(7) - current).TotalHours;
                     current = current.AddDays(move);
                 }
                 else

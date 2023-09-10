@@ -13,13 +13,14 @@ namespace CodeTracker
         private int? EndYear { get; set; }
         private string? StartWeek { get; set; }
         private string? EndWeek { get; set; }
+        private DateTime StartDate { get; set; }
+        private DateTime EndDate { get; set; }
         public Filter(List<CodingSession> sessionData) 
         { 
             SessionData = sessionData;
         }
         public void SetParameters(List<object> param)
         {
-            if (param == null) { return; }
             order = (int?)param[3];
             if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.YEAR)
             {
@@ -32,6 +33,16 @@ namespace CodeTracker
                 StartWeek = (string)param[1];   
                 EndWeek = (string)param[2];
                 FilterByWeek();
+            }
+            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.DAY)
+            {
+                StartDate = DateTime.Parse((string)param[1]);
+                EndDate = DateTime.Parse((string)param[2]);
+                FilterByDays();
+            }
+            else
+            {
+                return;
             }
             
         }
@@ -73,10 +84,22 @@ namespace CodeTracker
             }
 
             sessionList = CheckFilterdWeek(sessionList);
-            var sortedList =
+            IOrderedEnumerable<List<object>> sortedList;
+
+            if (order == 0)
+            {
+                sortedList =
+                    from session in sessionList
+                    orderby session[0] ascending
+                    select session;
+            }
+            else
+            {
+                sortedList =
                     from session in sessionList
                     orderby session[0] descending
                     select session;
+            }
             var ret = new List<List<object>>();
             foreach (var session in sortedList)
             {
@@ -159,6 +182,82 @@ namespace CodeTracker
             else if (w2_year == w3_year && w2_week < w3_week) return false;
             else return true;
         }
-       
+        public List<List<object>> FilterByDays()
+        {
+            List<List<object>> sessionList = new();
+
+            foreach (var session in SessionData)
+            {
+                sessionList.AddRange(DivideByDays(session));
+            }
+
+            IOrderedEnumerable<List<object>> sortedList;
+
+            if (order == 0)
+            {
+                sortedList =
+                    from session in sessionList
+                    orderby session[0] ascending
+                    select session;
+            }
+            else
+            {
+                sortedList =
+                    from session in sessionList
+                    orderby session[0] descending
+                    select session;
+            }
+            var ret = new List<List<object>>();
+            foreach (var session in sortedList)
+            {
+                ret.Add(session);
+            }
+            return ret;
+        }
+        private List<List<object>> DivideByDays(CodingSession session)
+        {
+            var StartTime = session.StartTime;
+            var EndTime = session.EndTime;
+            List<List<object>> sessionList = new();
+            var current = new DateTime();
+
+            if (StartDate >= StartTime)
+            {
+                current = StartDate;
+            }
+            else
+            {
+                current = StartTime;
+            }
+
+            if (EndDate < EndTime)
+            {
+                EndTime = EndDate;
+            }
+
+            while (current < EndTime)
+            {
+                var list = new List<object>() { $"{current.Date}" };
+
+                if (current.Date == StartTime.Date)
+                {
+                    var endDate = new DateTime(StartTime.Year, StartTime.Month, StartTime.Day + 1, 0, 0, 0);
+                    list.AddRange(new CodingSession(current, endDate).GetField());
+
+                    current = endDate;
+                }
+                else if (current.Date == EndTime.Date)
+                {
+                    list.AddRange(new CodingSession(current, EndTime).GetField());
+                }
+                else
+                {
+                    list.AddRange(new CodingSession(current, current.AddDays(1)).GetField());
+                }
+                current = current.AddDays(1);
+                sessionList.Add(list);
+            }
+            return sessionList;
+        }
     }
 }
