@@ -35,7 +35,7 @@ namespace CodeTracker
             }
             
         }
-        private void FilterByYear()
+        public List<List<object>> FilterByYear()
         {
             List<List<object>> sessionList = new();
             IOrderedEnumerable<CodingSession> sortedList;
@@ -44,7 +44,7 @@ namespace CodeTracker
             {
                 sortedList =
                     from session in SessionData
-                    where session.StartTime.Year > StartYear && session.EndTime.Year < EndYear
+                    where session.StartTime.Year >= StartYear && session.EndTime.Year <= EndYear
                     orderby session.StartTime.Year ascending
                     select session;
             }
@@ -52,7 +52,7 @@ namespace CodeTracker
             {
                 sortedList =
                     from session in SessionData
-                    where session.StartTime.Year > StartYear && session.EndTime.Year < EndYear
+                    where session.StartTime.Year >= StartYear && session.EndTime.Year <= EndYear
                     orderby session.StartTime.Year descending
                     select session;
             }
@@ -60,15 +60,10 @@ namespace CodeTracker
             {
                 sessionList.Add(session.GetField());
             }
-            Console.Clear();
-            ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle("Filter by Years", ConsoleColor.Green)
-                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
-                .ExportAndWriteLine();
-            Console.WriteLine("".PadRight(24, '='));
+
+            return sessionList;
         }
-        private void FilterByWeek()
+        public List<List<object>> FilterByWeek()
         {
             List<List<object>> sessionList = new();
 
@@ -78,12 +73,16 @@ namespace CodeTracker
             }
 
             sessionList = CheckFilterdWeek(sessionList);
-            ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle("Filter by Weeks", ConsoleColor.Green)
-                .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
-                .ExportAndWriteLine();
-            Console.WriteLine("".PadRight(24, '='));
+            var sortedList =
+                    from session in sessionList
+                    orderby session[0] descending
+                    select session;
+            var ret = new List<List<object>>();
+            foreach (var session in sortedList)
+            {
+                ret.Add(session);
+            }
+            return ret;
         }
         private List<List<object>> DivideByWeek(CodingSession session)
         {
@@ -101,7 +100,8 @@ namespace CodeTracker
                 int year = calendar.GetYear(current);
                 int week = calendar.GetWeekOfYear(current, weekRule, firstDayOfWeek) - 1;
                 var day = calendar.GetDayOfWeek(current);
-                var list = new List<object>() { $"{year}-{week}" };
+                string week_str = week < 10 ? $"0{week}" : week.ToString();
+                var list = new List<object>() { $"{year}-{week_str}" };
 
                 if (current == StartTime)
                 {

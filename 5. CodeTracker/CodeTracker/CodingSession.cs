@@ -76,23 +76,25 @@ namespace CodeTracker
                 int week = calendar.GetWeekOfYear(current, weekRule, firstDayOfWeek)-1;
                 var day = calendar.GetDayOfWeek(current);
 
+                string week_str = week < 10 ? $"0{week}" : week.ToString();
+
                 if(day == DayOfWeek.Sunday)
                 {
-                    WeekDuration[year + "-" + week] = 168;
+                    WeekDuration[year + "-" + week_str] = 168;
                     current = current.AddDays(7);
                 }
                 else if(current == StartTime)
                 {
                     int move = (int)(7-day);
-                    WeekDuration[year + "-" + week] = (new DateTime(StartTime.Year, StartTime.Month, StartTime.Day+move, 0, 0, 0) - current).TotalHours;
+                    WeekDuration[year + "-" + week_str] = (new DateTime(StartTime.Year, StartTime.Month, StartTime.Day+move, 0, 0, 0) - current).TotalHours;
                     current = current.AddDays(move);
                 }
                 else
                 {
-                    WeekDuration[year + "-" + week] = (EndTime - current).TotalHours;
+                    WeekDuration[year + "-" + week_str] = (EndTime - current).TotalHours;
                     current = current.AddDays(7);
                 }
-                Weeks.Add(year + "-" + week);
+                Weeks.Add(year + "-" + week_str);
             }
         }
     }

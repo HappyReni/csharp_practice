@@ -44,14 +44,25 @@ namespace CodeTracker
                     break;
                 case SELECTOR.REPORT:
                     var param = UI.FilterMenu();
+                    var sessionList = new List<List<object>>();
                     Filter.SetParameters(param);
+
+                    if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.YEAR)
+                    {
+                        sessionList = Filter.FilterByYear();
+                    }
+                    else
+                    {
+                        sessionList = Filter.FilterByWeek();
+                    }
+                    UI.MakeTable(sessionList, (FILTER_SELECTOR)param[0]);
                     //Report();
                     break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
                     break;
                 default:
-                    Console.WriteLine("Invalid Input");
+                    UI.Write("Invalid Input");
                     break;
             }
             Selector = UI.GoToMainMenu("Type any keys to continue.");
@@ -69,8 +80,8 @@ namespace CodeTracker
             ViewTable();
             try
             {
-                Console.WriteLine("Track coding time.");
-                Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
+                UI.Write("Track coding time.");
+                UI.Write("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
 
                 var input = UI.GetInput("Input start time first.").str;
 
@@ -92,7 +103,7 @@ namespace CodeTracker
             }
             catch
             {
-                Console.WriteLine("Invalid Input. Try again.");
+                UI.Write("Invalid Input. Try again.");
             }
         }
 
@@ -134,7 +145,7 @@ namespace CodeTracker
             }
             catch
             {
-                Console.WriteLine("Invalid Input. Try again.");
+                UI.Write("Invalid Input. Try again.");
             }
         }
         private void Update()
@@ -143,7 +154,7 @@ namespace CodeTracker
             try
             {
                 var id = UI.GetInput("Select the ID of the log to update").val;
-                Console.WriteLine("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
+                UI.Write("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
                 var start = Validation.ValidDateFormat(UI.GetInput("Input start time first.").str);
                 var end = Validation.ValidDateFormat(UI.GetInput("Input end time.").str);
 
@@ -161,7 +172,7 @@ namespace CodeTracker
             }
             catch
             {
-                Console.WriteLine("Invalid Input. Try again.");
+                UI.Write("Invalid Input. Try again.");
             }
         }
         private void ViewTable()

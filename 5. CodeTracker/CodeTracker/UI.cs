@@ -1,4 +1,6 @@
-﻿namespace CodeTracker
+﻿using ConsoleTableExt;
+
+namespace CodeTracker
 {
     internal class UI
     {
@@ -9,29 +11,33 @@
         public SELECTOR MainMenu()
         {
             Console.Clear();
-            Console.WriteLine("Coding Tracker");
-            Console.WriteLine("".PadRight(24, '='));
-            Console.WriteLine("1. Insert a log");
-            Console.WriteLine("2. Delete a log");
-            Console.WriteLine("3. Update a log");
-            Console.WriteLine("4. DROP");
-            Console.WriteLine("5. View Logs");
-            Console.WriteLine("6. Read Report");
-            Console.WriteLine("0. Exit\n");
+            Write("Coding Tracker");
+            Write("".PadRight(24, '='));
+            Write("1. Insert a log");
+            Write("2. Delete a log");
+            Write("3. Update a log");
+            Write("4. DROP");
+            Write("5. View Logs");
+            Write("6. Read Report");
+            Write("0. Exit\n");
             var selector = (SELECTOR)GetInput("Select ").val;
 
 
             return selector;
         }
+        public void Write(string text)
+        {
+            Console.WriteLine(text);
+        }
         public List<object>? FilterMenu()
         {
             Console.Clear();
-            Console.WriteLine("Filter");
-            Console.WriteLine("".PadRight(24, '='));
-            Console.WriteLine("1. Years");
-            Console.WriteLine("2. Weeks");
-            Console.WriteLine("3. Days");
-            Console.WriteLine("0. Main Menu\n");
+            Write("Filter");
+            Write("".PadRight(24, '='));
+            Write("1. Years");
+            Write("2. Weeks");
+            Write("3. Days");
+            Write("0. Main Menu\n");
             var select = (FILTER_SELECTOR)GetInput("Select ").val;
             Console.Clear();
             var order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
@@ -39,9 +45,9 @@
             switch (select)
             {
                 case FILTER_SELECTOR.YEAR:
-                    var startDate = GetInput("Start Year :").val;
-                    var endDate = GetInput("End Year :").val;
-                    return new List<object>() { FILTER_SELECTOR.YEAR, startDate, endDate, order };
+                    var startYear = GetInput("Start Year :").val;
+                    var endYear = GetInput("End Year :").val;
+                    return new List<object>() { FILTER_SELECTOR.YEAR, startYear, endYear, order };
                 case FILTER_SELECTOR.WEEK:
                     var startWeek = GetInput("Start Week :").str;
                     var endWeek = GetInput("End Week :").str;
@@ -50,9 +56,31 @@
                     GoToMainMenu("Type any keys to continue.");
                     return null;
                 default:
-                    Console.WriteLine("Invalid Input");
+                    Write("Invalid Input");
                     return null;
             }
+        }
+
+        public void MakeTable(List<List<object>> sessionList,FILTER_SELECTOR selector)
+        {
+            if (selector == FILTER_SELECTOR.YEAR)
+            {
+                ConsoleTableBuilder
+                    .From(sessionList)
+                    .WithTitle("Filter by Years", ConsoleColor.Green)
+                    .WithColumn("Years","ID", "Start Time", "End Time", "Duration(Hours)")
+                    .ExportAndWriteLine();
+            }
+            else if(selector == FILTER_SELECTOR.WEEK)
+            {
+                ConsoleTableBuilder
+                    .From(sessionList)
+                    .WithTitle("Filter by Weeks", ConsoleColor.Green)
+                    .WithColumn("Weeks", "ID", "Start Time", "End Time", "Duration(Hours)")
+                    .ExportAndWriteLine();
+            }
+
+            Write("".PadRight(24, '='));
         }
 
         public SELECTOR GoToMainMenu(string message = "")
@@ -64,7 +92,7 @@
         {
             // This function returns string input too in case you need it
             int number;
-            Console.WriteLine(message);
+            Write(message);
             Console.Write(">> ");
             string str = Console.ReadLine();
             var res = int.TryParse(str, out number);
@@ -76,7 +104,7 @@
         }
         public void WaitForInput(string message = "")
         {
-            Console.WriteLine(message);
+            Write(message);
             Console.ReadLine();
         }
     }
