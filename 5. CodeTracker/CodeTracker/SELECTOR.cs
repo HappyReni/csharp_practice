@@ -8,6 +8,7 @@
     DROP,
     VIEW,
     REPORT,
+    SET,
 }
 
 enum FILTER_SELECTOR

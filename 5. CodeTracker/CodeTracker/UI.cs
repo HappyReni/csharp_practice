@@ -19,6 +19,7 @@ namespace CodeTracker
             Write("4. DROP");
             Write("5. View Logs");
             Write("6. Read Report");
+            Write("7. Set the goal");
             Write("0. Exit\n");
             var selector = (SELECTOR)GetInput("Select ").val;
 
@@ -72,6 +73,7 @@ namespace CodeTracker
             Write("".PadRight(24, '='));
             Write("1. Yearly");
             Write("2. Weekly");
+            Write("3. Check the goal");
             Write("0. Main Menu\n");
 
             return GetInput("Select ").val;

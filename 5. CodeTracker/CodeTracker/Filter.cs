@@ -182,8 +182,14 @@ namespace CodeTracker
                 {
                     int move = (int)(7 - day);
                     var endDate = new DateTime(StartTime.Year, StartTime.Month, StartTime.Day + move, 0, 0, 0);
-                    list.AddRange(new CodingSession(current, endDate).GetField());
-
+                    if (endDate > EndTime)
+                    {
+                        list.AddRange(new CodingSession(current, EndTime).GetField());
+                    }
+                    else
+                    {
+                        list.AddRange(new CodingSession(current, endDate).GetField());
+                    }
                     current = endDate;
                 }
                 else if (DateTime.Compare(current.AddDays(7), EndTime) == 1)

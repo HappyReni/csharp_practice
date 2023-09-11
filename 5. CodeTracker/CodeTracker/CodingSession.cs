@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 
 namespace CodeTracker
@@ -80,20 +81,28 @@ namespace CodeTracker
 
                 string week_str = week < 10 ? $"0{week}" : week.ToString();
 
-                if(day == DayOfWeek.Sunday)
+                if (current == StartTime)
                 {
-                    WeekDuration[year + "-" + week_str] = 168;
-                    current = current.AddDays(7);
+                    int move = (int)(7 - day);
+                    var endDate = new DateTime(StartTime.Year, StartTime.Month, StartTime.Day + move, 0, 0, 0);
+                    if (endDate > EndTime)
+                    {
+                        WeekDuration[year + "-" + week_str] = (EndTime - current).TotalHours;
+                    }
+                    else
+                    {
+                        WeekDuration[year + "-" + week_str] = (endDate - current).TotalHours;
+                    }
+                    current = endDate;
                 }
-                else if(current == StartTime)
+                else if (DateTime.Compare(current.AddDays(7), EndTime) == 1)
                 {
-                    int move = (int)(7-day);
-                    WeekDuration[year + "-" + week_str] = (StartTime.AddDays(7) - current).TotalHours;
-                    current = current.AddDays(move);
+                    WeekDuration[year + "-" + week_str] = (EndTime - current).TotalHours;
+                    current = current.AddDays(7);
                 }
                 else
                 {
-                    WeekDuration[year + "-" + week_str] = (EndTime - current).TotalHours;
+                    WeekDuration[year + "-" + week_str] = (current.AddDays(7) - current).TotalHours;
                     current = current.AddDays(7);
                 }
                 Weeks.Add(year + "-" + week_str);

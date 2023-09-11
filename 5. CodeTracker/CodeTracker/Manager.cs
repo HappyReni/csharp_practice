@@ -1,4 +1,5 @@
 ﻿using ConsoleTableExt;
+using Microsoft.VisualBasic;
 using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.Globalization;
@@ -12,6 +13,7 @@ namespace CodeTracker
         private List<CodingSession> SessionData { get; set; } = new();
         private Filter Filter { get; set; }
         private UI UI { get; set; }
+        private int Goal { get; set; }
         public Manager()
         {
             SQL = new();
@@ -46,6 +48,9 @@ namespace CodeTracker
                 case SELECTOR.REPORT:
                     Report();
                     break;
+                case SELECTOR.SET:
+                    SetTheGoal();
+                    break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
                     break;
@@ -69,6 +74,7 @@ namespace CodeTracker
             {
                 UI.Write("Track coding time.");
                 UI.Write("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
+                UI.Write("Or press S to use Stopwatch.");
 
                 var input = UI.GetInput("Input start time first.").str;
 
@@ -97,7 +103,6 @@ namespace CodeTracker
                 UI.Write("Invalid Input. Try again.");
             }
         }
-
         private void StopWatch()
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -124,7 +129,6 @@ namespace CodeTracker
                         break;
                     }
                 }
-
                 Console.Clear();
                 elapsed = stopwatch.Elapsed;
                 UI.Write($"Stopwatch is running. Elapsed Time: {elapsed}");
@@ -150,7 +154,6 @@ namespace CodeTracker
                 SQL.Insert(code_debug);
             }
         }
-
         private void Delete()
         {
             ViewAllRecords();
@@ -252,11 +255,49 @@ namespace CodeTracker
                 case 2:
                     ReportWeeklySession();
                     break;
+                case 3:
+                    CheckGoal();
+                    break;
                 case 0:
                     break;
                 default:
                     UI.Write("Invalid Input");
                     break;
+            }
+        }
+        private void SetTheGoal()
+        {
+            Console.Clear();
+            Goal = UI.GetInput("Set the coding goal for this week. (hour)").val;
+            UI.Write("Your goal is set.");
+        }
+
+        private void CheckGoal()
+        {
+            UI.Write($"Your weekly goal is {Goal} hours");
+
+            CultureInfo cultureInfo = new CultureInfo("en-US");
+            Calendar calendar = cultureInfo.Calendar;
+            CalendarWeekRule weekRule = cultureInfo.DateTimeFormat.CalendarWeekRule;
+            DayOfWeek firstDayOfWeek = cultureInfo.DateTimeFormat.FirstDayOfWeek;
+            int year = calendar.GetYear(DateTime.Now);
+            int week = calendar.GetWeekOfYear(DateTime.Now, weekRule, firstDayOfWeek) - 1;
+            var day = calendar.GetDayOfWeek(DateTime.Now);
+
+            double sum = 0;
+
+            foreach (var session in SessionData)
+            {
+                sum += session.WeekDuration[$"{year}-{week}"];
+            }
+
+            if (sum >= Goal)
+            {
+                UI.Write("Good job! You already have accomplished the goal of the week!");
+            }
+            else
+            {
+                UI.Write($"You need to code {(Goal - sum) / (int)(7 - day)} hours a day more");
             }
         }
 
