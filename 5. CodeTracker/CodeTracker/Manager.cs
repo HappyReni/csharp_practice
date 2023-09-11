@@ -1,5 +1,6 @@
 ﻿using ConsoleTableExt;
 using System.Data.SqlTypes;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace CodeTracker
@@ -75,6 +76,10 @@ namespace CodeTracker
                 {
                     DemoInsert();
                 }
+                else if(input == "s")
+                {
+                    StopWatch();
+                }
                 else
                 {
                     var start = Validation.ValidDateFormat(input);
@@ -93,6 +98,39 @@ namespace CodeTracker
             }
         }
 
+        private void StopWatch()
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            var elapsed = new TimeSpan();
+            var start = DateTime.Now;
+
+            stopwatch.Start();
+
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    var key = Console.ReadKey(intercept: true).Key;
+
+                    if (key == ConsoleKey.S)
+                    {
+                        stopwatch.Stop();
+                        UI.Write("Stopwatch stopped. Track recorded.");
+                        elapsed = stopwatch.Elapsed;
+                        var end = start + elapsed;
+                        var code = new CodingSession(start, end);
+                        SessionData.Add(code);
+                        SQL.Insert(code);
+                        break;
+                    }
+                }
+
+                Console.Clear();
+                elapsed = stopwatch.Elapsed;
+                UI.Write($"Stopwatch is running. Elapsed Time: {elapsed}");
+                Thread.Sleep(100);
+            }
+        }
         private void DemoInsert()
         {
             Random rand = new();
