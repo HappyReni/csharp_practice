@@ -46,18 +46,18 @@ namespace CodeTracker
             {
                 case FILTER_SELECTOR.YEAR:
                     order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
-                    var startYear = GetInput("Start Year :").val;
-                    var endYear = GetInput("End Year :").val;
+                    var startYear = Validation.ValidYear(GetInput("Start Year (YYYY) :").val);
+                    var endYear = Validation.ValidYear(GetInput("End Year (YYYY):").val);
                     return new List<object>() { FILTER_SELECTOR.YEAR, startYear, endYear, order };
                 case FILTER_SELECTOR.WEEK:
                     order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
-                    var startWeek = GetInput("Start Week :").str;
-                    var endWeek = GetInput("End Week :").str;
+                    var startWeek = Validation.ValidWeek(GetInput("Start Week (YYYY-WW):").str);
+                    var endWeek = Validation.ValidWeek((GetInput("End Week (YYYY-WW):").str));
                     return new List<object>() { FILTER_SELECTOR.WEEK, startWeek, endWeek, order };
                 case FILTER_SELECTOR.DAY:
                     order = GetInput("Select the order > 0:Ascending, 1:Descending").val;
-                    var startDate = GetInput("Start Date :").str;
-                    var endDate = GetInput("End Date :").str;
+                    var startDate = Validation.ValidDate(GetInput("Start Date :").str);
+                    var endDate = Validation.ValidDate(GetInput("End Date :").str);
                     return new List<object>() { FILTER_SELECTOR.DAY, startDate, endDate, order };
                 case FILTER_SELECTOR.ALL:
                     return new List<object>() { FILTER_SELECTOR.ALL, null, null, -1};

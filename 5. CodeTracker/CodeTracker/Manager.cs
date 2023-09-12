@@ -1,7 +1,4 @@
-﻿using ConsoleTableExt;
-using Microsoft.VisualBasic;
-using System.Data.SqlTypes;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
 
 namespace CodeTracker
@@ -77,19 +74,17 @@ namespace CodeTracker
                 UI.Write("Or press S to use Stopwatch.");
 
                 var input = UI.GetInput("Input start time first.").str;
-
-                if (input == "r")
-                {
-                    DemoInsert();
-                }
-                else if(input == "s")
+                
+                if(input == "s")
                 {
                     StopWatch();
                 }
                 else
                 {
-                    var start = Validation.ValidDateFormat(input);
-                    var end = Validation.ValidDateFormat(UI.GetInput("Input end time.").str);
+                    var start = Validation.ValidDateTime(input);
+                    var end = Validation.ValidDateTime(UI.GetInput("Input end time.").str);
+
+                    if (end < start) throw new Exception();
 
                     var code = new CodingSession(start, end);
                     SessionData.Add(code);
@@ -110,7 +105,6 @@ namespace CodeTracker
             var start = DateTime.Now;
 
             stopwatch.Start();
-
             while (true)
             {
                 if (Console.KeyAvailable)
@@ -135,35 +129,16 @@ namespace CodeTracker
                 Thread.Sleep(100);
             }
         }
-        private void DemoInsert()
-        {
-            Random rand = new();
-            for (int i = 0; i < 10; i++)
-            {
-                var start_year = rand.Next(1, 9999);
-                var end_year = rand.Next(start_year, 9999);
-                var month = rand.Next(1, 13);
-                var day = rand.Next(1, 31);
-                var hour = rand.Next(0, 13);
-                var min = rand.Next(1, 60);
-                var sec = rand.Next(1, 60);
-                var start = new DateTime(start_year, month, day, hour, min, sec);
-                var end = new DateTime(end_year, month, day, hour, min, sec);
-                var code_debug = new CodingSession(start, end);
-                SessionData.Add(code_debug);
-                SQL.Insert(code_debug);
-            }
-        }
         private void Delete()
         {
             ViewAllRecords();
             try
             {
-                var input = UI.GetInput("Select the ID of log to delete.");
-                SQL.Delete(input.val);
+                var input = UI.GetInput("Select the ID of log to delete.").val;
+                SQL.Delete(input);
                 for (int i = 0; i < SessionData.Count; i++)
                 {
-                    if ((int)SessionData[i].Id == input.val)
+                    if ((int)SessionData[i].Id == input)
                     {
                         SessionData.RemoveAt(i);
                         break;
@@ -182,8 +157,9 @@ namespace CodeTracker
             {
                 var id = UI.GetInput("Select the ID of the log to update").val;
                 UI.Write("The time input format should be like this : (yyyy-MM-dd HH:mm:ss)");
-                var start = Validation.ValidDateFormat(UI.GetInput("Input start time first.").str);
-                var end = Validation.ValidDateFormat(UI.GetInput("Input end time.").str);
+                var start = Validation.ValidDateTime(UI.GetInput("Input start time first.").str);
+                var end = Validation.ValidDateTime(UI.GetInput("Input end time.").str);
+                if (end < start) throw new Exception();
 
                 for (int i = 0; i < SessionData.Count; i++)
                 {
@@ -216,24 +192,25 @@ namespace CodeTracker
 
             var param = UI.FilterMenu();
             Filter.SetParameters(param);
+            var selector = (FILTER_SELECTOR)param[0];
             var period = "";
 
-            if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.YEAR)
+            if (selector == FILTER_SELECTOR.YEAR)
             {
                 sessionList = Filter.FilterByYear();
                 period = "Years";
             }
-            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.WEEK)
+            else if (selector == FILTER_SELECTOR.WEEK)
             {
                 sessionList = Filter.FilterByWeek();
                 period = "Weeks";
             }
-            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.DAY)
+            else if (selector == FILTER_SELECTOR.DAY)
             {
                 sessionList = Filter.FilterByDays();
                 period = "Days";
             }
-            else if ((FILTER_SELECTOR)param[0] == FILTER_SELECTOR.ALL)
+            else if (selector == FILTER_SELECTOR.ALL)
             {
                 ViewAllRecords();
                 return;
