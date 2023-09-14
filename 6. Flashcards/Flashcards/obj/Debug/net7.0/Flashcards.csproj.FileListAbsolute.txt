@@ -1,0 +1,17 @@
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\bin\Debug\net7.0\Flashcards.exe
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\bin\Debug\net7.0\Flashcards.deps.json
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\bin\Debug\net7.0\Flashcards.runtimeconfig.json
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\bin\Debug\net7.0\Flashcards.dll
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\bin\Debug\net7.0\Flashcards.pdb
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\bin\Debug\net7.0\ConsoleTableExt.dll
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.csproj.AssemblyReference.cache
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.GeneratedMSBuildEditorConfig.editorconfig
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.AssemblyInfoInputs.cache
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.AssemblyInfo.cs
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.csproj.CoreCompileInputs.cache
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.csproj.CopyComplete
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.dll
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\refint\Flashcards.dll
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.pdb
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\Flashcards.genruntimeconfig.cache
+E:\Workplace\c#\csharp_practice\6. Flashcards\Flashcards\obj\Debug\net7.0\ref\Flashcards.dll

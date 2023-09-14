@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "U9DMAT16OYsJmgLH28m7sHrWPDvIJngEKC0Mf2v1oRUulmoNxBFAtmGvrINAW8GCfzb5Y/59KWLYbJJmyVZP0g==",
+  "dgSpecHash": "+q07AQi66VWiGH2EjNs4KxVobW7p73HxbUMspqXhy71S9GoKEwX41bFMx2aiG1Wo5imR3nI9Jelz5irJ+fPU+g==",
   "success": true,
   "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\6. Flashcards\\Flashcards\\Flashcards.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\dnjsv\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512"
+  ],
   "logs": []
 }
