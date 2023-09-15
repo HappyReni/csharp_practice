@@ -2,20 +2,24 @@
 {
     internal class Controller
     {
-        private SELECTOR Selector { get; set; }
-        private UI UI { get; set; }
+        private UI ui;
+        private SELECTOR selector;
+
         public Controller()
         {
-            UI = new UI();
-            Selector = UI.MainMenu();
+            ui = new UI();
+            selector = ui.MainMenu();
             while (true)
             {
                 Action();
             }
         }
+
+        private List<Stack> Stacks { get; set; }
+      
         private void Action()
         {
-            switch (Selector)
+            switch (selector)
             {
                 case SELECTOR.CREATE:
                     CreateStack();
@@ -30,23 +34,23 @@
                     Environment.Exit(0);
                     break;
                 default:
-                    UI.Write("Invalid Input");
+                    ui.Write("Invalid Input");
                     break;
             }
-            Selector = UI.GoToMainMenu("Type any keys to continue.");
+            selector = ui.GoToMainMenu("Type any keys to continue.");
         }
-
-        private void Study()
+        private void CreateStack()
         {
-            throw new NotImplementedException();
+            var name = ui.CreateTable();
+            Stacks.Add(new Stack(name));
+            ui.Write($"{name} is created.");
+            ui.GoToMainMenu();
         }
-
         private void ManageStack()
         {
             throw new NotImplementedException();
         }
-
-        private void CreateStack()
+        private void Study()
         {
             throw new NotImplementedException();
         }
