@@ -19,12 +19,12 @@ namespace Flashcards
 
             return selector;
         }
-        public string CreateTable()
+        public string CreateStack()
         {
             Console.Clear();
-            Write("Create a Table");
+            Write("Create a stack");
             Write("".PadRight(24, '='));
-            var name = GetInput("Type a name of table.").str;
+            var name = GetInput("Type a name of stack.").str;
             return name;
         }
         public void Write(string text)

@@ -1,6 +1,4 @@
-﻿using CodeTracker;
-
-namespace Flashcards
+﻿namespace Flashcards
 {
     internal class Controller
     {
@@ -25,9 +23,7 @@ namespace Flashcards
                 Action();
             }
         }
-
         private List<Stack> Stacks { get; set; }
-      
         private void Action()
         {
             switch (selector)
@@ -52,8 +48,10 @@ namespace Flashcards
         }
         private void CreateStack()
         {
-            var name = ui.CreateTable();
-            Stacks.Add(new Stack(name));
+            var name = ui.CreateStack();
+            var stack = new Stack(name);
+            db.Insert(stack);
+            Stacks.Add(stack);
             ui.Write($"{name} is created.");
         }
         private void ManageStack()

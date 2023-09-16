@@ -10,7 +10,7 @@
             CardCount = Flashcards.Count;
         }
 
-        public static int Count { get; private set; }
+        public static int Count { get; private set; } = 1;
         public int Id { get; private set; }
         public string Name { get; set; }
         private List<Flashcard> Flashcards { get; set; }
