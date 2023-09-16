@@ -1,14 +1,25 @@
-﻿namespace Flashcards
+﻿using CodeTracker;
+
+namespace Flashcards
 {
     internal class Controller
     {
         private UI ui;
         private SELECTOR selector;
-
+        private Database db;
         public Controller()
         {
             ui = new UI();
+            db = new Database();
+
+            if(!db.isConnected)
+            {
+                ui.Write("Can't connect to DB. Check your connection again.");
+                ui.WaitForInput();
+                Environment.Exit(0);
+            }
             selector = ui.MainMenu();
+            Stacks = new();
             while (true)
             {
                 Action();
@@ -44,11 +55,14 @@
             var name = ui.CreateTable();
             Stacks.Add(new Stack(name));
             ui.Write($"{name} is created.");
-            ui.GoToMainMenu();
         }
         private void ManageStack()
         {
-            throw new NotImplementedException();
+            ui.Write(Stack.Count);
+            foreach (var stack in Stacks)
+            {
+                ui.Write($"{stack.Id} : {stack.Name}");
+            }
         }
         private void Study()
         {

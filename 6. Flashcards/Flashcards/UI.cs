@@ -31,6 +31,10 @@ namespace Flashcards
         {
             Console.WriteLine(text);
         }
+        public void Write(int text)
+        {
+            Console.WriteLine(text);
+        }
         public void MakeTable(List<List<object>> sessionList, string period)
         {
             Console.Clear();

@@ -11,8 +11,7 @@
         }
 
         public static int Count { get; private set; }
-        private int Id { get; set; }
-
+        public int Id { get; private set; }
         public string Name { get; set; }
         private List<Flashcard> Flashcards { get; set; }
         private int CardCount { get; set; }
