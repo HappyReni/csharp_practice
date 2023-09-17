@@ -9,6 +9,14 @@
             Flashcards = new List<Flashcard>();
             CardCount = Flashcards.Count;
         }
+        public Stack(int id, string name)
+        {
+            Id = id;
+            Name = name;
+            Flashcards = new List<Flashcard>();
+            CardCount = Flashcards.Count;
+            Count++;
+        }
 
         public static int Count { get; private set; } = 1;
         public int Id { get; private set; }

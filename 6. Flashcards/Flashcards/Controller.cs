@@ -2,9 +2,10 @@
 {
     internal class Controller
     {
-        private UI ui;
+        private readonly UI ui;
+        private readonly Database db;
         private SELECTOR selector;
-        private Database db;
+
         public Controller()
         {
             ui = new UI();
@@ -17,13 +18,17 @@
                 Environment.Exit(0);
             }
             selector = ui.MainMenu();
-            Stacks = new();
+            LoadData();
             while (true)
             {
                 Action();
             }
         }
-        private List<Stack> Stacks { get; set; }
+        private List<Stack> Stacks { get; set; } = new();
+        private void LoadData()
+        {
+            Stacks = db.GetStacksFromDatabase();
+        }
         private void Action()
         {
             switch (selector)
@@ -56,7 +61,6 @@
         }
         private void ManageStack()
         {
-            ui.Write(Stack.Count);
             foreach (var stack in Stacks)
             {
                 ui.Write($"{stack.Id} : {stack.Name}");

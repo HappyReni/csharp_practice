@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace Flashcards
 {
@@ -13,9 +14,9 @@ namespace Flashcards
         {
             currentDirectory = Path.GetFullPath(Path.Combine(System.AppContext.BaseDirectory, @"..\..\..\"));
             dbName = "MyDB.mdf";
-            connInfo = $@"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = ""{currentDirectory}{dbName}""; Integrated Security = True; Connect Timeout = 10;";
+            connInfo = $@"Data Source = (localdb)\MSSQLLocalDB; AttachDbFilename=""{currentDirectory}{dbName}""; Integrated Security = True; Connect Timeout = 10;";
             isConnected = Init();
-        }
+        } 
         public bool Init()
         {
             var res = Connect();
@@ -34,9 +35,41 @@ namespace Flashcards
                 }
                 return true;
             }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+        public List<Stack>? GetStacksFromDatabase()
+        {
+            List<Stack> stacks = new List<Stack>();
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+                    string selectQuery = "SELECT * FROM Stack";
+
+                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int id = reader.GetInt32("id");
+                                string name = reader.GetString("name");
+                                Stack stack = new(id, name);
+                                stacks.Add(stack);
+                            }
+                        }
+                    }
+                }
+                return stacks;
+            }
             catch
             {
-                return false;
+                return null;
             }
         }
 
@@ -85,6 +118,7 @@ namespace Flashcards
                 return false;
             }
         }
+
     }
 
 }
