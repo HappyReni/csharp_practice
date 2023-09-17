@@ -26,7 +26,7 @@
         public List<object> GetField() => new List<object> { Id, Name };
         private bool CreateTable() { throw new Exception(); }
         private void DeleteTable() { throw new Exception(); }
-        public bool InsertFlashCard() { throw new Exception(); }
+        public void InsertFlashCard(Flashcard card) { Flashcards.Add(card); }
         public bool DeleteFlashCard() { throw new Exception(); }
         public List<FlashcardDTO> ShowStack() { throw new Exception(); }
     }

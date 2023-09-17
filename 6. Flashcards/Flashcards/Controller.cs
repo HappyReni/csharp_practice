@@ -54,6 +54,7 @@ namespace Flashcards
             }
             selector = ui.GoToMainMenu("Type any keys to continue.");
         }
+
         private void CreateStack()
         {
             var name = ui.CreateStack();
@@ -63,18 +64,20 @@ namespace Flashcards
             else ui.Write($"failed to create.");
 
         }
+
         private void ManageStack()
         {
             ViewAllStacks();
-            int stackID = ui.GetInput("Choose an id of stack.").val;
-            int action = ui.ManageStack(Stacks[stackID-1].Name);
+            int stackId = ui.GetInput("Choose an id of stack.").val;
+            int action = ui.ManageStack(Stacks[stackId-1].Name);
 
             switch (action)
             {
                 case 1:
+                    ViewAllFlashcards(stackId);
                     break;
                 case 2:
-                    CreateFlashcard(stackID);
+                    CreateFlashcard(stackId);
                     break;
                 default:
                     ui.Write("Invalid Input");
@@ -82,12 +85,13 @@ namespace Flashcards
             }
         }
 
-        private void CreateFlashcard(int id)
+        private void CreateFlashcard(int stackId)
         {
             var front = ui.GetInput("Type a front word.").str;
             var back = ui.GetInput("Type a back word.").str;
-            var card = new Flashcard(id, front, back);
-            if(db.Insert(card)) ui.Write($"Successfully created.");
+            var card = new Flashcard(stackId, front, back);
+            Stacks[stackId - 1].InsertFlashCard(card);
+            if (db.Insert(card)) ui.Write($"Successfully created.");
             else ui.Write($"failed to create.");
         }
 
@@ -100,6 +104,19 @@ namespace Flashcards
             }
             ui.MakeTable(stackList, "stack");
         }
+
+        private void ViewAllFlashcards(int stackID)
+        {
+            var cards = db.GetFlashcardsInStack(stackID);
+            List<List<object>> cardList = new();
+
+            foreach (var card in cards)
+            {
+                cardList.Add(new List<object> { card.DTO.Front, card.DTO.Back });
+            }
+            ui.MakeTable(cardList, "Flashcard");
+        }
+
         private void Study()
         {
             throw new NotImplementedException();

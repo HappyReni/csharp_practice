@@ -58,8 +58,8 @@ namespace Flashcards
                         {
                             while (reader.Read())
                             {
-                                int id = reader.GetInt32("id");
-                                string name = reader.GetString("name");
+                                int id = reader.GetInt32("Id");
+                                string name = reader.GetString("Name");
                                 Stack stack = new(id, name);
                                 stacks.Add(stack);
                             }
@@ -148,6 +148,39 @@ namespace Flashcards
             catch
             {
                 return false;
+            }
+        }
+
+        public List<Flashcard>? GetFlashcardsInStack(int stackId)
+        {
+            List<Flashcard> cards = new List<Flashcard>();
+
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string selectQuery = $"SELECT * From Flashcards WHERE StackId = {stackId}";
+                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string front = reader.GetString("Front");
+                                string back = reader.GetString("Back");
+                                var card = new Flashcard(stackId, front, back);
+                                cards.Add(card);
+                            }
+                        }
+                    }
+                }
+                return cards;
+            }
+            catch
+            {
+                return null;
             }
         }
 

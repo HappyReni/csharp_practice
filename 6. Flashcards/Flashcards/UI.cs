@@ -61,8 +61,17 @@ namespace Flashcards
                 .WithColumn("ID", "Name")
                 .ExportAndWriteLine();
                 Write("".PadRight(24, '='));
-                return;
             }
+            else
+            {
+                ConsoleTableBuilder
+                .From(data)
+                .WithTitle("Flashcards", ConsoleColor.Green)
+                .WithColumn("Front", "Back")
+                .ExportAndWriteLine();
+                Write("".PadRight(24, '='));
+            }
+            return;
         }
 
         public SELECTOR GoToMainMenu(string message = "")
