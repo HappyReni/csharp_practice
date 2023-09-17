@@ -35,26 +35,19 @@ namespace Flashcards
         {
             Console.WriteLine(text);
         }
-        public void MakeTable(List<List<object>> sessionList, string period)
+        public void MakeTable(List<List<object>> data, string type)
         {
             Console.Clear();
-            if (period == "Records")
+            if (type == "stack")
             {
                 ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle("Records", ConsoleColor.Green)
-                .WithColumn("ID", "Start Time", "End Time", "Duration(Hours)")
+                .From(data)
+                .WithTitle("Stacks", ConsoleColor.Green)
+                .WithColumn("ID", "Name")
                 .ExportAndWriteLine();
                 Write("".PadRight(24, '='));
                 return;
             }
-            ConsoleTableBuilder
-                .From(sessionList)
-                .WithTitle($"Filter by {period}", ConsoleColor.Green)
-                .WithColumn($"{period}","ID", "Start Time", "End Time", "Duration(Hours)")
-                .ExportAndWriteLine();
-            Write("".PadRight(24, '='));
-
         }
 
         public SELECTOR GoToMainMenu(string message = "")

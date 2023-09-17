@@ -1,4 +1,6 @@
-﻿namespace Flashcards
+﻿using System.Xml;
+
+namespace Flashcards
 {
     internal class Controller
     {
@@ -61,10 +63,17 @@
         }
         private void ManageStack()
         {
+            ViewAllStacks();
+        }
+
+        private void ViewAllStacks()
+        {
+            List<List<object>> stackList = new();
             foreach (var stack in Stacks)
             {
-                ui.Write($"{stack.Id} : {stack.Name}");
+                stackList.Add(stack.GetField());
             }
+            ui.MakeTable(stackList, "stack");
         }
         private void Study()
         {

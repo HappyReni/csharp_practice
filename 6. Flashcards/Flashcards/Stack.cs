@@ -23,6 +23,7 @@
         public string Name { get; set; }
         private List<Flashcard> Flashcards { get; set; }
         private int CardCount { get; set; }
+        public List<object> GetField() => new List<object> { Id, Name };
         private bool CreateTable() { throw new Exception(); }
         private void DeleteTable() { throw new Exception(); }
         public bool InsertFlashCard() { throw new Exception(); }

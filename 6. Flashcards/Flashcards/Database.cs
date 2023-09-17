@@ -75,14 +75,22 @@ namespace Flashcards
 
         public bool CreateTable(string name)
         {
+            string createTableQuery = name == "Stack" ?
+                        $"CREATE TABLE {name} (" +
+                        $"ID INT PRIMARY KEY IDENTITY (1,1)," +
+                        $"Name NVARCHAR(20))" :
+                        $"CREATE TABLE {name} (" +
+                        $"ID INT PRIMARY KEY IDENTITY (1,1)," +
+                        $"Name NVARCHAR(20)," +
+                        $"StackId INT," +
+                        $"Front NVARCHAR(20)," +
+                        $"Back NVARCHAR(20))";
             try
             {
                 using (SqlConnection conn = new(connInfo))
                 {
                     conn.Open();
-                    string createTableQuery = $"CREATE TABLE {name} (" +
-                        $"ID INT PRIMARY KEY IDENTITY (1,1)," +
-                        $"Name NVARCHAR(20))";
+                    
                     
                     using (SqlCommand cmd = new SqlCommand(createTableQuery, conn))
                     {
