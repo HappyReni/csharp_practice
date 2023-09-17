@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using System.Xml.Linq;
 
 namespace Flashcards
 {
@@ -57,13 +58,37 @@ namespace Flashcards
         {
             var name = ui.CreateStack();
             var stack = new Stack(name);
-            db.Insert(stack);
             Stacks.Add(stack);
-            ui.Write($"{name} is created.");
+            if(db.Insert(stack)) ui.Write($"{name} is created.");
+            else ui.Write($"failed to create.");
+
         }
         private void ManageStack()
         {
             ViewAllStacks();
+            int stackID = ui.GetInput("Choose an id of stack.").val;
+            int action = ui.ManageStack(Stacks[stackID-1].Name);
+
+            switch (action)
+            {
+                case 1:
+                    break;
+                case 2:
+                    CreateFlashcard(stackID);
+                    break;
+                default:
+                    ui.Write("Invalid Input");
+                    break;
+            }
+        }
+
+        private void CreateFlashcard(int id)
+        {
+            var front = ui.GetInput("Type a front word.").str;
+            var back = ui.GetInput("Type a back word.").str;
+            var card = new Flashcard(id, front, back);
+            if(db.Insert(card)) ui.Write($"Successfully created.");
+            else ui.Write($"failed to create.");
         }
 
         private void ViewAllStacks()

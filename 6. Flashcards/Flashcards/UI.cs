@@ -27,6 +27,21 @@ namespace Flashcards
             var name = GetInput("Type a name of stack.").str;
             return name;
         }
+        public int ManageStack(string name)
+        {
+            Console.Clear();
+            Write($"Current Stack : {name}");
+            Write("Choose the number of action you want.\n");
+            Write("1. View all flashcards in stack.");
+            Write("2. Put a new flashcard into stack.");
+            Write("3. Edit a flashcard.");
+            Write("4. Delete a flashcard.");
+            Write("5. Change current stack.");
+            Write("0. Return to main menu\n");
+            Write("".PadRight(24, '='));
+
+            return GetInput("Select").val;
+        }
         public void Write(string text)
         {
             Console.WriteLine(text);

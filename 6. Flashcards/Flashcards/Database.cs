@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace Flashcards
 {
@@ -81,7 +82,6 @@ namespace Flashcards
                         $"Name NVARCHAR(20))" :
                         $"CREATE TABLE {name} (" +
                         $"ID INT PRIMARY KEY IDENTITY (1,1)," +
-                        $"Name NVARCHAR(20)," +
                         $"StackId INT," +
                         $"Front NVARCHAR(20)," +
                         $"Back NVARCHAR(20))";
@@ -112,8 +112,32 @@ namespace Flashcards
                 using (SqlConnection conn = new(connInfo))
                 {
                     conn.Open();
-                    string insertQuery = $"INSERT INTO Stack (Name) VALUES ('{name}')";
 
+                    string insertQuery = $"INSERT INTO Stack (Name) VALUES ('{name}')";
+                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool Insert(Flashcard card)
+        {
+            var stackId = card.StackId;
+            var Front = card.Front;
+            var Back = card.Back;
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string insertQuery = $"INSERT INTO Flashcards (StackId,Front,Back) VALUES ({stackId}, '{Front}','{Back}')";
                     using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
                     {
                         cmd.ExecuteNonQuery();

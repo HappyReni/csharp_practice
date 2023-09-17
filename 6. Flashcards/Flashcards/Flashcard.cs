@@ -2,16 +2,20 @@
 {
     internal class Flashcard
     {
-        public Flashcard(int id, string front, string back)
+        public Flashcard(int stackId, string front, string back)
         {
-            Id = id;
+            Id = Count++;
+            StackId = stackId;
             Front = front;
             Back = back;
         }
 
         public int Id { get; set; }
+        public int StackId { get; set; }
         public string Front { get; set; }
         public string Back { get; set; }
+        public static int Count { get; private set; } = 1;
+
     }
 
     internal class FlashcardDTO
