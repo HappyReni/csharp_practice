@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Flashcards
@@ -31,6 +32,11 @@ namespace Flashcards
         private void LoadData()
         {
             Stacks = db.GetStacksFromDatabase();
+            foreach(var stack in Stacks)
+            {
+                var cards = db.GetFlashcardsInStack(stack.Id);
+                stack.SetFlashcards(cards);
+            }
         }
         private void Action()
         {
@@ -40,7 +46,9 @@ namespace Flashcards
                     CreateStack();
                     break;
                 case SELECTOR.MANAGE:
-                    ManageStack();
+                    ViewAllStacks();
+                    int stackId = ui.GetInput("Choose an id of stack.").val;
+                    ManageStack(stackId);
                     break;
                 case SELECTOR.STUDY:
                     Study();
@@ -62,15 +70,11 @@ namespace Flashcards
             Stacks.Add(stack);
             if(db.Insert(stack)) ui.Write($"{name} is created.");
             else ui.Write($"failed to create.");
-
         }
 
-        private void ManageStack()
+        private void ManageStack(int stackId)
         {
-            ViewAllStacks();
-            int stackId = ui.GetInput("Choose an id of stack.").val;
-            int action = ui.ManageStack(Stacks[stackId-1].Name);
-
+            int action = ui.ManageStack(Stacks[stackId - 1].Name);
             switch (action)
             {
                 case 1:
@@ -79,12 +83,17 @@ namespace Flashcards
                 case 2:
                     CreateFlashcard(stackId);
                     break;
+                case 3:
+                    EditFlashcard(stackId);
+                    break;
                 default:
                     ui.Write("Invalid Input");
                     break;
             }
+            ui.WaitForInput();
+            ManageStack(stackId);
         }
-
+     
         private void CreateFlashcard(int stackId)
         {
             var front = ui.GetInput("Type a front word.").str;
@@ -93,6 +102,17 @@ namespace Flashcards
             Stacks[stackId - 1].InsertFlashCard(card);
             if (db.Insert(card)) ui.Write($"Successfully created.");
             else ui.Write($"failed to create.");
+        }
+
+        private void EditFlashcard(int stackId)
+        {
+            ViewAllFlashcards(stackId);
+            var front = ui.GetInput("Type a front word.").str;
+            var back = ui.GetInput("Type a new back word.").str;
+            Stacks[stackId - 1].EditFlashcardID(front, back);
+            Flashcard card = Stacks[stackId - 1].GetFlashcard(front);
+            if (db.Update(card)) ui.Write($"Successfully updated.");
+            else ui.Write($"failed to update.");
         }
 
         private void ViewAllStacks()

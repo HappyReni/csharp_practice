@@ -81,7 +81,7 @@ namespace Flashcards
                         $"ID INT PRIMARY KEY IDENTITY (1,1)," +
                         $"Name NVARCHAR(20))" :
                         $"CREATE TABLE {name} (" +
-                        $"ID INT PRIMARY KEY IDENTITY (1,1)," +
+                        $"ID INT PRIMARY KEY," +
                         $"StackId INT," +
                         $"Front NVARCHAR(20)," +
                         $"Back NVARCHAR(20))";
@@ -90,7 +90,6 @@ namespace Flashcards
                 using (SqlConnection conn = new(connInfo))
                 {
                     conn.Open();
-                    
                     
                     using (SqlCommand cmd = new SqlCommand(createTableQuery, conn))
                     {
@@ -128,6 +127,7 @@ namespace Flashcards
         }
         public bool Insert(Flashcard card)
         {
+            var Id = card.Id;
             var stackId = card.StackId;
             var Front = card.Front;
             var Back = card.Back;
@@ -137,8 +137,33 @@ namespace Flashcards
                 {
                     conn.Open();
 
-                    string insertQuery = $"INSERT INTO Flashcards (StackId,Front,Back) VALUES ({stackId}, '{Front}','{Back}')";
+                    string insertQuery = $"INSERT INTO Flashcards (Id,StackId,Front,Back) VALUES ({Id}, {stackId}, '{Front}','{Back}')";
                     using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool Update(Flashcard card)
+        {
+            var id = card.Id;
+            var front = card.Front;
+            var back = card.Back;
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string updateQuery = $"UPDATE Flashcards SET Back='{back}' WHERE ID = {id}";
+                    using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
                     {
                         cmd.ExecuteNonQuery();
                     }

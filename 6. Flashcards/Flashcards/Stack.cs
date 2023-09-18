@@ -26,8 +26,31 @@
         public List<object> GetField() => new List<object> { Id, Name };
         private bool CreateTable() { throw new Exception(); }
         private void DeleteTable() { throw new Exception(); }
+        public void SetFlashcards(List<Flashcard> flashcards) => Flashcards = flashcards;
         public void InsertFlashCard(Flashcard card) { Flashcards.Add(card); }
         public bool DeleteFlashCard() { throw new Exception(); }
+        public bool EditFlashcardID(string front, string back)
+        {
+            for(int i = 0; i < Flashcards.Count; i++)
+            {
+                if (Flashcards[i].Front == front)
+                {
+                    Flashcards[i].Back = back;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public Flashcard? GetFlashcard(string front)
+        {
+            for(int i = 0;i < Flashcards.Count;i++)
+            {
+                if (Flashcards[i].Front == front) return Flashcards[i];
+            }
+            return null;
+        }
         public List<FlashcardDTO> ShowStack() { throw new Exception(); }
+
+
     }
 }
