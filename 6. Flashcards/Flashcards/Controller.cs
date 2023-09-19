@@ -9,6 +9,7 @@ namespace Flashcards
         private readonly UI ui;
         private readonly Database db;
         private SELECTOR selector;
+        private List<Stack> Stacks { get; set; } = new();
 
         public Controller()
         {
@@ -28,13 +29,12 @@ namespace Flashcards
                 Action();
             }
         }
-        private List<Stack> Stacks { get; set; } = new();
         private void LoadData()
         {
             Stacks = db.GetStacksFromDatabase();
             foreach(var stack in Stacks)
             {
-                var cards = db.GetFlashcardsInStack(stack.Id);
+                var cards = db.GetFlashcardsInStack(stack.Id,"Load");
                 stack.SetFlashcards(cards);
             }
         }
@@ -86,6 +86,9 @@ namespace Flashcards
                 case 3:
                     EditFlashcard(stackId);
                     break;
+                case 4:
+                    DeleteFlashcard(stackId);
+                    break;
                 default:
                     ui.Write("Invalid Input");
                     break;
@@ -93,7 +96,7 @@ namespace Flashcards
             ui.WaitForInput();
             ManageStack(stackId);
         }
-     
+
         private void CreateFlashcard(int stackId)
         {
             var front = ui.GetInput("Type a front word.").str;
@@ -109,10 +112,21 @@ namespace Flashcards
             ViewAllFlashcards(stackId);
             var front = ui.GetInput("Type a front word.").str;
             var back = ui.GetInput("Type a new back word.").str;
-            Stacks[stackId - 1].EditFlashcardID(front, back);
-            Flashcard card = Stacks[stackId - 1].GetFlashcard(front);
+            var idx = Stacks[stackId - 1].FindFlashcard(front);
+            Stacks[stackId - 1].EditFlashcard(idx,back);
+            Flashcard card = Stacks[stackId - 1].GetFlashcard(idx);
             if (db.Update(card)) ui.Write($"Successfully updated.");
             else ui.Write($"failed to update.");
+        }
+        private void DeleteFlashcard(int stackId)
+        {
+            ViewAllFlashcards(stackId);
+            var front = ui.GetInput("Type a front word to delete.").str;
+            var idx = Stacks[stackId - 1].FindFlashcard(front);
+            Stacks[stackId - 1].DeleteFlashCard(idx);
+            Flashcard.DownCount();
+            if (db.Delete(idx+1)) ui.Write($"Successfully deleted.");
+            else ui.Write($"failed to delete.");
         }
 
         private void ViewAllStacks()
@@ -127,7 +141,7 @@ namespace Flashcards
 
         private void ViewAllFlashcards(int stackID)
         {
-            var cards = db.GetFlashcardsInStack(stackID);
+            var cards = db.GetFlashcardsInStack(stackID,"View");
             List<List<object>> cardList = new();
 
             if (cards == null) 

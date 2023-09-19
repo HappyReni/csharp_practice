@@ -2,6 +2,14 @@
 {
     internal class Flashcard
     {
+        public int Id { get; set; }
+        public int StackId { get; set; }
+        public string Front { get; set; }
+        public string Back { get; set; }
+        public static int Count { get; private set; } = 1;
+        public FlashcardDTO DTO { get; private set; }
+        public FlashcardQuestionDTO QuestionDTO { get; private set; }
+
         public Flashcard(int stackId, string front, string back)
         {
             Id = Count++;
@@ -11,14 +19,7 @@
             DTO = new FlashcardDTO(front,back);
             QuestionDTO = new FlashcardQuestionDTO(front);
         }
-
-        public int Id { get; set; }
-        public int StackId { get; set; }
-        public string Front { get; set; }
-        public string Back { get; set; }
-        public static int Count { get; private set; } = 1;
-        public FlashcardDTO DTO { get; private set; }
-        public FlashcardQuestionDTO QuestionDTO { get; private set; }
+        public static void DownCount() => Count--;
 
     }
 

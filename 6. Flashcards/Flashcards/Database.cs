@@ -177,7 +177,72 @@ namespace Flashcards
             }
         }
 
-        public List<Flashcard>? GetFlashcardsInStack(int stackId)
+        public bool Delete(int idx)
+        {
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string deleteeQuery = $"DELETE From Flashcards WHERE ID = {idx}";
+                    using (SqlCommand cmd = new SqlCommand(deleteeQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    UpdateID();
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool UpdateID()
+        {
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string selectQuery = $"SELECT * FROM Flashcards";
+                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                    {
+                        List<(int,int)> tempIdx = new List<(int,int)> ();
+                        using (SqlDataReader reader = cmd.ExecuteReader()) 
+                        {
+                            var new_idx = 1;
+                            while(reader.Read())
+                            {
+                                var original_idx = reader.GetInt32(0);
+                                var idx = (original_idx, new_idx);
+                                tempIdx.Add(idx);
+                                new_idx++;
+                            }
+                        }
+                        foreach(var idx in tempIdx)
+                        {
+                            string updateQuery = $"UPDATE Flashcards SET ID={idx.Item2} WHERE ID = {idx.Item1}";
+                            using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
+                            {
+                                updateCmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            catch(Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
+
+        public List<Flashcard>? GetFlashcardsInStack(int stackId,string arg)
         {
             List<Flashcard> cards = new List<Flashcard>();
 
@@ -187,7 +252,7 @@ namespace Flashcards
                 {
                     conn.Open();
 
-                    string selectQuery = $"SELECT * From Flashcards WHERE StackId = {stackId}";
+                    string selectQuery = $"SELECT * FROM Flashcards WHERE StackId = {stackId}";
                     using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -197,6 +262,7 @@ namespace Flashcards
                                 string front = reader.GetString("Front");
                                 string back = reader.GetString("Back");
                                 var card = new Flashcard(stackId, front, back);
+                                if (arg == "View") Flashcard.DownCount();
                                 cards.Add(card);
                             }
                         }
