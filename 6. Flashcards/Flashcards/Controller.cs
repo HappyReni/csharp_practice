@@ -21,8 +21,8 @@ namespace Flashcards
                 ui.WaitForInput();
                 Environment.Exit(0);
             }
-            selector = ui.MainMenu();
             LoadData();
+            selector = ui.MainMenu();
             while (true)
             {
                 Action();
@@ -129,6 +129,12 @@ namespace Flashcards
         {
             var cards = db.GetFlashcardsInStack(stackID);
             List<List<object>> cardList = new();
+
+            if (cards == null) 
+            { 
+                ui.Write("The stack is empty.");
+                return;
+            }
 
             foreach (var card in cards)
             {

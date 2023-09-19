@@ -66,6 +66,7 @@ namespace Flashcards
                         }
                     }
                 }
+
                 return stacks;
             }
             catch
@@ -82,7 +83,7 @@ namespace Flashcards
                         $"Name NVARCHAR(20))" :
                         $"CREATE TABLE {name} (" +
                         $"ID INT PRIMARY KEY," +
-                        $"StackId INT," +
+                        $"StackId INT FOREIGN KEY REFERENCES Stack(ID)," +
                         $"Front NVARCHAR(20)," +
                         $"Back NVARCHAR(20))";
             try
@@ -137,7 +138,7 @@ namespace Flashcards
                 {
                     conn.Open();
 
-                    string insertQuery = $"INSERT INTO Flashcards (Id,StackId,Front,Back) VALUES ({Id}, {stackId}, '{Front}','{Back}')";
+                    string insertQuery = $"INSERT INTO dbo.Flashcards (Id,StackId,Front,Back) VALUES ({Id}, {stackId}, '{Front}','{Back}')";
                     using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
                     {
                         cmd.ExecuteNonQuery();
@@ -205,7 +206,7 @@ namespace Flashcards
             }
             catch
             {
-                return null;
+                return cards;
             }
         }
 
