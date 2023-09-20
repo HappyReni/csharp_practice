@@ -75,27 +75,35 @@ namespace Flashcards
         private void ManageStack(int stackId)
         {
             int action = ui.ManageStack(Stacks[stackId - 1].Name);
+            var _stackId = stackId;
             switch (action)
             {
                 case 1:
-                    ViewAllFlashcards(stackId);
+                    ViewAllFlashcards(_stackId);
                     break;
                 case 2:
-                    CreateFlashcard(stackId);
+                    CreateFlashcard(_stackId);
                     break;
                 case 3:
-                    EditFlashcard(stackId);
+                    EditFlashcard(_stackId);
                     break;
                 case 4:
-                    DeleteFlashcard(stackId);
+                    DeleteFlashcard(_stackId);
                     break;
+                case 5:
+                    _stackId = ChangeStack();
+                    ui.Write("Successfully changed.");
+                    break;
+                case 0:
+                    return;
                 default:
                     ui.Write("Invalid Input");
                     break;
             }
-            ui.WaitForInput();
-            ManageStack(stackId);
+            ui.WaitForInput("Press any key to continue..");
+            ManageStack(_stackId);
         }
+
 
         private void CreateFlashcard(int stackId)
         {
@@ -129,6 +137,12 @@ namespace Flashcards
             else ui.Write($"failed to delete.");
         }
 
+        private int ChangeStack()
+        {
+            Console.Clear();
+            return ui.GetInput("Type an ID of Stack to change.").val;
+        }
+
         private void ViewAllStacks()
         {
             List<List<object>> stackList = new();
@@ -155,6 +169,7 @@ namespace Flashcards
                 cardList.Add(new List<object> { card.DTO.Front, card.DTO.Back });
             }
             ui.MakeTable(cardList, "Flashcard");
+
         }
 
         private void Study()

@@ -96,7 +96,7 @@ namespace Flashcards
         public void WaitForInput(string message = "")
         {
             Write(message);
-            Console.ReadLine();
+            Console.ReadKey();
         }
     }
 }
