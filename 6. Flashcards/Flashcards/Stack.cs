@@ -6,25 +6,29 @@ namespace Flashcards
     {
         public Stack(string name)
         {
-            Id = Count++;
+            Count++;
+
+            Id = Count;
             Name = name;
             Flashcards = new List<Flashcard>();
             CardCount = Flashcards.Count;
         }
         public Stack(int id, string name)
         {
+            Count++;
+
             Id = id;
             Name = name;
             Flashcards = new List<Flashcard>();
             CardCount = Flashcards.Count;
-            Count++;
         }
 
-        public static int Count { get; private set; } = 1;
-        public int Id { get; private set; }
+        public static int Count { get; private set; } = 0;
+        public int Id { get; set; }
         public string Name { get; set; }
         private List<Flashcard> Flashcards { get; set; }
         private int CardCount { get; set; }
+        public static void DownCount() => Count--;
         public List<object> GetField() => new List<object> { Id, Name };
         private bool CreateTable() { throw new Exception(); }
         private void DeleteTable() { throw new Exception(); }
@@ -41,6 +45,10 @@ namespace Flashcards
             return -1;
         }
         public void InsertFlashCard(Flashcard card) { Flashcards.Add(card); }
+        public void DeleteFlashCard()
+        {
+            Flashcards = new();
+        }
         public bool DeleteFlashCard(int idx) 
         {
             try

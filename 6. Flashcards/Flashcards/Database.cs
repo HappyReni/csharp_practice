@@ -42,9 +42,9 @@ namespace Flashcards
                 return false;
             }
         }
-        public List<Stack>? GetStacksFromDatabase()
+        public Dictionary<string,Stack>? GetStacksFromDatabase()
         {
-            List<Stack> stacks = new List<Stack>();
+            Dictionary<string, Stack> stacks = new Dictionary<string, Stack>();
             try
             {
                 using (SqlConnection conn = new(connInfo))
@@ -61,7 +61,7 @@ namespace Flashcards
                                 int id = reader.GetInt32("Id");
                                 string name = reader.GetString("Name");
                                 Stack stack = new(id, name);
-                                stacks.Add(stack);
+                                stacks[name] = stack;
                             }
                         }
                     }
@@ -83,7 +83,7 @@ namespace Flashcards
                         $"Name NVARCHAR(20))" :
                         $"CREATE TABLE {name} (" +
                         $"ID INT PRIMARY KEY," +
-                        $"StackId INT FOREIGN KEY REFERENCES Stack(ID)," +
+                        $"StackId INT FOREIGN KEY REFERENCES Stack(ID) ON DELETE CASCADE," +
                         $"Front NVARCHAR(20)," +
                         $"Back NVARCHAR(20))";
             try
@@ -104,9 +104,9 @@ namespace Flashcards
                 return false;
             }
         }
-        public bool Insert(Stack stack)
+        public int Insert(string name)
         {
-            var name = stack.Name;
+            var id = -1;
             try
             {
                 using (SqlConnection conn = new(connInfo))
@@ -118,12 +118,23 @@ namespace Flashcards
                     {
                         cmd.ExecuteNonQuery();
                     }
+                    string selectQuery = $"SELECT * FROM Stack WHERE Name = '{name}'";
+                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                    {
+                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                id = reader.GetInt32(0);
+                            }
+                        }
+                    }
                 }
-                return true;
+                return id;
             }
             catch
             {
-                return false;
+                return id;
             }
         }
         public bool Insert(Flashcard card)
@@ -155,7 +166,6 @@ namespace Flashcards
         public bool Update(Flashcard card)
         {
             var id = card.Id;
-            var front = card.Front;
             var back = card.Back;
             try
             {
@@ -176,7 +186,27 @@ namespace Flashcards
                 return false;
             }
         }
+        public bool Delete(string name)
+        {
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
 
+                    string deleteQuery = $"DELETE FROM Stack WHERE Name = '{name}'";
+                    using (SqlCommand cmd = new SqlCommand(deleteQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         public bool Delete(int idx)
         {
             try
@@ -200,7 +230,7 @@ namespace Flashcards
             }
         }
 
-        private bool UpdateID()
+        public bool UpdateID()
         {
             try
             {

@@ -37,6 +37,7 @@ namespace Flashcards
             Write("3. Edit a flashcard.");
             Write("4. Delete a flashcard.");
             Write("5. Change current stack.");
+            Write("6. Delete current stack.");
             Write("0. Return to main menu\n");
             Write("".PadRight(24, '='));
 
