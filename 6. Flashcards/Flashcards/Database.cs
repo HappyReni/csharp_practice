@@ -24,6 +24,7 @@ namespace Flashcards
 
             CreateTable("Stack");
             CreateTable("Flashcards");
+            CreateTable("Session");
             return res;
         }
         public bool Connect()
@@ -81,11 +82,20 @@ namespace Flashcards
                         $"CREATE TABLE {name} (" +
                         $"ID INT PRIMARY KEY IDENTITY (1,1)," +
                         $"Name NVARCHAR(20))" :
+                        name == "Flashcards" ?
                         $"CREATE TABLE {name} (" +
                         $"ID INT PRIMARY KEY," +
                         $"StackId INT FOREIGN KEY REFERENCES Stack(ID) ON DELETE CASCADE," +
                         $"Front NVARCHAR(20)," +
-                        $"Back NVARCHAR(20))";
+                        $"Back NVARCHAR(20))" :
+                        $"CREATE TABLE {name} (" +
+                        $"ID INT PRIMARY KEY," +
+                        $"StackId INT FOREIGN KEY REFERENCES Stack(ID) ON DELETE CASCADE," +
+                        $"StartTime DATETIME," +
+                        $"EndTime DATETIME," +
+                        $"Score INT," +
+                        $"QuestionCount INT)";
+
             try
             {
                 using (SqlConnection conn = new(connInfo))
