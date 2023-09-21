@@ -10,6 +10,7 @@ namespace Flashcards
         private readonly Database db;
         private SELECTOR selector;
         private Dictionary<string,Stack> Stacks { get; set; } = new();
+        private List<Session> Sessions { get; set; } = new();
 
         public Controller()
         {
@@ -51,7 +52,7 @@ namespace Flashcards
                     ManageStack(name);
                     break;
                 case SELECTOR.STUDY:
-                    Study();
+                    ViewAllSessions();
                     break;
                 case SELECTOR.EXIT:
                     Environment.Exit(0);
@@ -62,7 +63,6 @@ namespace Flashcards
             }
             selector = ui.GoToMainMenu("Type any keys to continue.");
         }
-
         private void CreateStack()
         {
             var name = ui.CreateStack();
@@ -98,10 +98,13 @@ namespace Flashcards
                     DeleteFlashcard(_name);
                     break;
                 case 5:
+                    Study(_name);
+                    return;
+                case 6:
                     _name = ChangeStack();
                     ui.Write("Successfully changed.");
                     break;
-                case 6:
+                case 7:
                     if (DeleteStack(_name)) return;
                     else break;
                 case 0:
@@ -210,13 +213,52 @@ namespace Flashcards
             {
                 cardList.Add(new List<object> { card.DTO.Front, card.DTO.Back });
             }
-            ui.MakeTable(cardList, "Flashcard");
-
+            ui.MakeTable(cardList, "Flashcards");
         }
 
-        private void Study()
+        private void Study(string name)
         {
-            throw new NotImplementedException();
+            Console.Clear();
+            var cards = Stacks[name].Flashcards;
+            var questionCount = cards.Count();
+            var score = 0;
+            var startTime = DateTime.Now;
+
+            ui.Write("Guess the back words.");
+            foreach (var card in cards)
+            {
+                Console.Clear();
+                var front = card.QuestionDTO.Front;
+                var answer = ui.GetInput(front).str;
+
+                if (answer == card.Back)
+                {
+                    score++;
+                    ui.Write("Correct!");
+                }
+                else 
+                {
+                    ui.Write("Wrong answer!");
+                }
+            }
+            var endTime = DateTime.Now;
+            Console.Clear() ;
+            ui.Write("Study Finished!");
+            ui.Write($"Your score is {score} out of {questionCount} questions");
+            
+            var session = new Session(Stacks[name].Id,startTime, endTime, score, questionCount);
+            Sessions.Add(session);
+        }
+        private void ViewAllSessions()
+        {
+            Console.Clear();
+            List<List<object>> tableData = new();
+
+            foreach (var session in Sessions)
+            {
+                tableData.Add(session.GetField());
+            }
+            ui.MakeTable(tableData, "Sessions");
         }
     }
 }

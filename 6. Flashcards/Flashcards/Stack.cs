@@ -26,7 +26,7 @@ namespace Flashcards
         public static int Count { get; private set; } = 0;
         public int Id { get; set; }
         public string Name { get; set; }
-        private List<Flashcard> Flashcards { get; set; }
+        public List<Flashcard> Flashcards { get; private set; }
         private int CardCount { get; set; }
         public static void DownCount() => Count--;
         public List<object> GetField() => new List<object> { Id, Name };

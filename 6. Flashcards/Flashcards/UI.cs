@@ -13,7 +13,7 @@ namespace Flashcards
             Write("".PadRight(24, '='));
             Write("1. Create a Stack");
             Write("2. Manage a Stack");
-            Write("3. Study");
+            Write("3. View all the study sessions.");
             Write("0. Exit\n");
             var selector = (SELECTOR)GetInput("Select ").val;
 
@@ -36,8 +36,9 @@ namespace Flashcards
             Write("2. Put a new flashcard into stack.");
             Write("3. Edit a flashcard.");
             Write("4. Delete a flashcard.");
-            Write("5. Change current stack.");
-            Write("6. Delete current stack.");
+            Write("5. Study current stack.");
+            Write("6. Change current stack.");
+            Write("7. Delete current stack.");
             Write("0. Return to main menu\n");
             Write("".PadRight(24, '='));
 
@@ -63,12 +64,21 @@ namespace Flashcards
                 .ExportAndWriteLine();
                 Write("".PadRight(24, '='));
             }
-            else
+            else if(type == "Flashcards")
             {
                 ConsoleTableBuilder
                 .From(data)
                 .WithTitle("Flashcards", ConsoleColor.Green)
                 .WithColumn("Front", "Back")
+                .ExportAndWriteLine();
+                Write("".PadRight(24, '='));
+            }
+            else
+            {
+                ConsoleTableBuilder
+                .From(data)
+                .WithTitle("Sessions", ConsoleColor.Green)
+                .WithColumn("StackID", "StartTime", "EndTime", "Score", "Question Count")
                 .ExportAndWriteLine();
                 Write("".PadRight(24, '='));
             }
