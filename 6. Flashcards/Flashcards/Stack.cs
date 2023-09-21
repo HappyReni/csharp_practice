@@ -11,7 +11,6 @@ namespace Flashcards
             Id = Count;
             Name = name;
             Flashcards = new List<Flashcard>();
-            CardCount = Flashcards.Count;
         }
         public Stack(int id, string name)
         {
@@ -20,18 +19,14 @@ namespace Flashcards
             Id = id;
             Name = name;
             Flashcards = new List<Flashcard>();
-            CardCount = Flashcards.Count;
         }
 
         public static int Count { get; private set; } = 0;
         public int Id { get; set; }
         public string Name { get; set; }
         public List<Flashcard> Flashcards { get; private set; }
-        private int CardCount { get; set; }
         public static void DownCount() => Count--;
         public List<object> GetField() => new List<object> { Id, Name };
-        private bool CreateTable() { throw new Exception(); }
-        private void DeleteTable() { throw new Exception(); }
         public void SetFlashcards(List<Flashcard> flashcards) => Flashcards = flashcards;
         public int FindFlashcard(string front) 
         {
@@ -61,6 +56,14 @@ namespace Flashcards
                 return false;
             }
         }
+        public void UpdateFlashcardID(int _id)
+        {
+            for (int i = 0; i < Flashcards.Count; i++)
+            {
+                if(Flashcards[i].Id>_id) Flashcards[i].Id -= 1;
+            }
+
+        }
         public bool EditFlashcard(int idx, string back)
         {
             try
@@ -84,8 +87,6 @@ namespace Flashcards
                 return null;
             }
         }
-        public List<FlashcardDTO> ShowStack() { throw new Exception(); }
-
 
     }
 }

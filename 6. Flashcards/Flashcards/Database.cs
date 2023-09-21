@@ -172,6 +172,60 @@ namespace Flashcards
                 return false;
             }
         }
+        public bool Insert(Session session)
+        {
+            var stackId = session.StackId;
+            var startTime = session.StartTime;
+            var endTime = session.EndTime;
+            var score = session.Score;
+            var questionCount = session.QuestionCount;
+
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string insertQuery = $"INSERT INTO Session (StackId,StartTime,EndTime,Score,QuestionCount) VALUES ({stackId}, {startTime},{endTime}, {score}, {questionCount})";
+                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public string? SearchStackName(int id, string table)
+        {
+            try
+            {
+                var name = "";
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+                    var searchQuery = $"SELECT * FROM {table} WHERE id = {id}";
+                    using (SqlCommand cmd = new SqlCommand(searchQuery, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                name = reader.GetString("Name");
+                            }
+                            return name;
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
         public bool Update(Flashcard card)
         {
@@ -225,8 +279,8 @@ namespace Flashcards
                 {
                     conn.Open();
 
-                    string deleteeQuery = $"DELETE From Flashcards WHERE ID = {idx}";
-                    using (SqlCommand cmd = new SqlCommand(deleteeQuery, conn))
+                    string deleteQuery = $"DELETE From Flashcards WHERE ID = {idx}";
+                    using (SqlCommand cmd = new SqlCommand(deleteQuery, conn))
                     {
                         cmd.ExecuteNonQuery();
                     }
@@ -282,7 +336,7 @@ namespace Flashcards
             }
         }
 
-        public List<Flashcard>? GetFlashcardsInStack(int stackId,string arg)
+        public List<Flashcard>? GetFlashcardsInStack(int stackId, string arg)
         {
             List<Flashcard> cards = new List<Flashcard>();
 
@@ -299,9 +353,10 @@ namespace Flashcards
                         {
                             while (reader.Read())
                             {
+                                int id = reader.GetInt32(0);
                                 string front = reader.GetString("Front");
                                 string back = reader.GetString("Back");
-                                var card = new Flashcard(stackId, front, back);
+                                var card = new Flashcard(id, stackId, front, back);
                                 if (arg == "View") Flashcard.DownCount();
                                 cards.Add(card);
                             }
@@ -313,6 +368,41 @@ namespace Flashcards
             catch
             {
                 return cards;
+            }
+        }
+        public List<Session>? GetSessions()
+        {
+            List<Session> Sessions = new List<Session>();
+
+            try
+            {
+                using (SqlConnection conn = new(connInfo))
+                {
+                    conn.Open();
+
+                    string selectQuery = $"SELECT * FROM Session";
+                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int stackId = reader.GetInt32(1);
+                                DateTime startTime = reader.GetDateTime(2);
+                                DateTime endTime = reader.GetDateTime(3);
+                                int score = reader.GetInt32(4);
+                                int questionCount = reader.GetInt32(5);
+                                var session = new Session(stackId,startTime,endTime,score,questionCount);
+                                Sessions.Add(session);
+                            }
+                        }
+                    }
+                }
+                return Sessions;
+            }
+            catch
+            {
+                return Sessions;
             }
         }
 

@@ -38,6 +38,7 @@ namespace Flashcards
                 var cards = db.GetFlashcardsInStack(stack.Id,"Load");
                 stack.SetFlashcards(cards);
             }
+            Sessions = db.GetSessions();
         }
         private void Action()
         {
@@ -117,7 +118,6 @@ namespace Flashcards
             ManageStack(_name);
         }
 
-
         private void CreateFlashcard(string name)
         {
             var front = ui.GetInput("Type a front word.").str;
@@ -133,9 +133,10 @@ namespace Flashcards
             ViewAllFlashcards(name);
             var front = ui.GetInput("Type a front word.").str;
             var back = ui.GetInput("Type a new back word.").str;
-            var idx = Stacks[name].FindFlashcard(front);
-            Stacks[name].EditFlashcard(idx,back);
-            Flashcard card = Stacks[name].GetFlashcard(idx);
+            var index = Stacks[name].FindFlashcard(front);
+
+            Stacks[name].EditFlashcard(index, back);
+            Flashcard card = Stacks[name].GetFlashcard(index);
             if (db.Update(card)) ui.Write($"Successfully updated.");
             else ui.Write($"failed to update.");
         }
@@ -143,16 +144,27 @@ namespace Flashcards
         {
             ViewAllFlashcards(name);
             var front = ui.GetInput("Type a front word to delete.").str;
-            var idx = Stacks[name].FindFlashcard(front);
-            Stacks[name].DeleteFlashCard(idx);
-            Flashcard.DownCount();
-            if (db.Delete(idx+1)) ui.Write($"Successfully deleted.");
+            var index = Stacks[name].FindFlashcard(front);
+            var id = Stacks[name].Flashcards[index].Id;
+
+            if (db.Delete(id)) 
+            {
+                ui.Write($"Successfully deleted.");
+                Stacks[name].DeleteFlashCard(index);
+                foreach (var stack in Stacks.Values)
+                {
+                    stack.UpdateFlashcardID(id);
+                }
+                Flashcard.DownCount();
+
+            }
             else ui.Write($"failed to delete.");
         }
 
         private string ChangeStack()
         {
             Console.Clear();
+            ViewAllStacks();
             return ui.GetInput("Type an ID of Stack to change.").str;
         }
 
@@ -225,21 +237,22 @@ namespace Flashcards
             var startTime = DateTime.Now;
 
             ui.Write("Guess the back words.");
+
             foreach (var card in cards)
             {
-                Console.Clear();
                 var front = card.QuestionDTO.Front;
                 var answer = ui.GetInput(front).str;
 
                 if (answer == card.Back)
                 {
                     score++;
-                    ui.Write("Correct!");
+                    ui.WaitForInput("Correct!");
                 }
                 else 
                 {
-                    ui.Write("Wrong answer!");
+                    ui.WaitForInput("Wrong answer!");
                 }
+                Console.Clear();
             }
             var endTime = DateTime.Now;
             Console.Clear() ;
@@ -248,6 +261,8 @@ namespace Flashcards
             
             var session = new Session(Stacks[name].Id,startTime, endTime, score, questionCount);
             Sessions.Add(session);
+
+            db.Insert(session);
         }
         private void ViewAllSessions()
         {
@@ -256,7 +271,9 @@ namespace Flashcards
 
             foreach (var session in Sessions)
             {
-                tableData.Add(session.GetField());
+                var sessionData = session.GetField();
+                sessionData[0] = db.SearchStackName((int)sessionData[0], "Stack");
+                if (sessionData[0] != null) tableData.Add(sessionData);
             }
             ui.MakeTable(tableData, "Sessions");
         }

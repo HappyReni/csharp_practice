@@ -19,6 +19,16 @@
             DTO = new FlashcardDTO(front,back);
             QuestionDTO = new FlashcardQuestionDTO(front);
         }
+        public Flashcard(int id, int stackId, string front, string back)
+        {
+            Id = id;
+            StackId = stackId;
+            Front = front;
+            Back = back;
+            DTO = new FlashcardDTO(front, back);
+            QuestionDTO = new FlashcardQuestionDTO(front);
+            Count++;
+        }
         public static void DownCount() => Count--;
 
     }
