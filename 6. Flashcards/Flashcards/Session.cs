@@ -9,12 +9,12 @@ namespace Flashcards
     internal class Session
     {
         public int StackId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
         public int Score { get; set; }
         public int QuestionCount { get; set; }
 
-        public Session(int stackId, DateTime startTime, DateTime endTime, int score, int questionCount)
+        public Session(int stackId, string startTime, string endTime, int score, int questionCount)
         {
             StackId = stackId;
             StartTime = startTime;

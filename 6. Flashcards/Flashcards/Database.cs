@@ -89,7 +89,7 @@ namespace Flashcards
                         $"Front NVARCHAR(20)," +
                         $"Back NVARCHAR(20))" :
                         $"CREATE TABLE {name} (" +
-                        $"ID INT PRIMARY KEY," +
+                        $"ID INT PRIMARY KEY IDENTITY (1,1)," +
                         $"StackId INT FOREIGN KEY REFERENCES Stack(ID) ON DELETE CASCADE," +
                         $"StartTime DATETIME," +
                         $"EndTime DATETIME," +
@@ -186,7 +186,7 @@ namespace Flashcards
                 {
                     conn.Open();
 
-                    string insertQuery = $"INSERT INTO Session (StackId,StartTime,EndTime,Score,QuestionCount) VALUES ({stackId}, {startTime},{endTime}, {score}, {questionCount})";
+                    string insertQuery = $"INSERT INTO Session (StackId,StartTime,EndTime,Score,QuestionCount) VALUES ({stackId}, '{startTime}','{endTime}', {score}, {questionCount})";
                     using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
                     {
                         cmd.ExecuteNonQuery();
@@ -373,6 +373,7 @@ namespace Flashcards
         public List<Session>? GetSessions()
         {
             List<Session> Sessions = new List<Session>();
+            var format = "yyyy-MM-dd HH:mm:ss";
 
             try
             {
@@ -392,7 +393,7 @@ namespace Flashcards
                                 DateTime endTime = reader.GetDateTime(3);
                                 int score = reader.GetInt32(4);
                                 int questionCount = reader.GetInt32(5);
-                                var session = new Session(stackId,startTime,endTime,score,questionCount);
+                                var session = new Session(stackId, startTime.ToString(format), endTime.ToString(format), score,questionCount);
                                 Sessions.Add(session);
                             }
                         }

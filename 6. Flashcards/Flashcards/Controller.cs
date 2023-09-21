@@ -258,8 +258,8 @@ namespace Flashcards
             Console.Clear() ;
             ui.Write("Study Finished!");
             ui.Write($"Your score is {score} out of {questionCount} questions");
-            
-            var session = new Session(Stacks[name].Id,startTime, endTime, score, questionCount);
+            var format = "yyyy-MM-dd HH:mm:ss";
+            var session = new Session(Stacks[name].Id,startTime.ToString(format), endTime.ToString(format), score, questionCount);
             Sessions.Add(session);
 
             db.Insert(session);
