@@ -1,9 +1,4 @@
-﻿
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
-
-namespace Flashcards
+﻿namespace Flashcards
 {
     internal static class Validation
     {

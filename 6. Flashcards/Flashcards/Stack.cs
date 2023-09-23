@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Flashcards
+﻿namespace Flashcards
 {
     internal class Stack
     {

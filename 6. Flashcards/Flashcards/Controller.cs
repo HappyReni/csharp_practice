@@ -1,9 +1,4 @@
-﻿using Microsoft.SqlServer.Server;
-using System;
-using System.Xml;
-using System.Xml.Linq;
-
-namespace Flashcards
+﻿namespace Flashcards
 {
     internal class Controller
     {
