@@ -115,24 +115,24 @@ namespace Flashcards
         }
         public int Insert(string name)
         {
-            var id = -1;
-
-            using (SqlConnection conn = new(connInfo))
+            try
             {
-                conn.Open();
-
-                string insertQuery = $"INSERT INTO Stack (Name) VALUES ('{name}')";
-                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                using (SqlConnection conn = new(connInfo))
                 {
-                    cmd.ExecuteNonQuery();
+                    conn.Open();
+
+                    string insertQuery = $"INSERT INTO Stack (Name) VALUES ('{name}')";
+                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    return GetIndexFromStack(name, conn);
                 }
-                id = GetIndexFromStack(name, conn);
             }
-            if (id == -1)
+            catch
             {
                 throw new Exception();
             }
-            return id;
         }
 
         private static int GetIndexFromStack(string name, SqlConnection conn)
@@ -174,7 +174,7 @@ namespace Flashcards
             }
             catch
             {
-                return false;
+                throw new Exception("Insert failed.");
             }
         }
         public bool Insert(Session session)
@@ -204,7 +204,7 @@ namespace Flashcards
                 return false;
             }
         }
-        public string? SearchStackName(int id, string table)
+        public string SearchStackName(int id, string table)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace Flashcards
             }
             catch
             {
-                return null;
+                throw new Exception("no such a stack."); ;
             }
         }
 
@@ -273,7 +273,7 @@ namespace Flashcards
             }
             catch
             {
-                return false;
+                throw new Exception("Delete failed.");
             }
         }
         public bool Delete(int idx)
@@ -295,7 +295,7 @@ namespace Flashcards
             }
             catch
             {
-                return false;
+                throw new Exception("Delete failed.");
             }
         }
 
@@ -334,14 +334,13 @@ namespace Flashcards
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine(ex.ToString());
-                return false;
+                throw new Exception("Update failed.");
             }
         }
 
-        public List<Flashcard>? SetFlashcardsInStack(int stackId, string arg)
+        public List<Flashcard> SetFlashcardsInStack(int stackId, string arg)
         {
             List<Flashcard> cards = new List<Flashcard>();
 
@@ -372,7 +371,7 @@ namespace Flashcards
             }
             catch
             {
-                return cards;
+                throw new Exception("The stack is empty.");
             }
         }
         public List<Session>? GetSessions()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -134,7 +135,6 @@ namespace Flashcards
                             return;
                         case MANAGE_SELECTOR.CHANGE:
                             _name = ChangeStack();
-                            ui.Write("Successfully changed.");
                             break;
                         case MANAGE_SELECTOR.DELETESTACK:
                             if (DeleteStack(_name)) return;
@@ -193,29 +193,44 @@ namespace Flashcards
         private void DeleteFlashcard(string name)
         {
             ViewAllFlashcards(name);
-            var front = ui.GetInput("Type a front word to delete.").str;
-            var index = Stacks[name].FindFlashcard(front);
-            var id = Stacks[name].Flashcards[index].Id;
-
-            if (db.Delete(id)) 
+            try
             {
-                ui.Write($"Successfully deleted.");
-                Stacks[name].DeleteFlashCard(index);
-                foreach (var stack in Stacks.Values)
+                var front = ui.GetInput("Type a front word to delete.").str;
+                if (Validation.IsValidFlashcard(front, Stacks[name].Flashcards))
                 {
-                    stack.UpdateFlashcardID(id);
-                }
-                Flashcard.DownCount();
+                    var index = Stacks[name].FindFlashcard(front);
+                    var id = Stacks[name].Flashcards[index].Id;
 
+                    if (db.Delete(id))
+                    {
+                        Stacks[name].DeleteFlashCard(index);
+                        foreach (var stack in Stacks.Values)
+                        {
+                            stack.UpdateFlashcardID(id);
+                        }
+                        Flashcard.DownCount();
+                        ui.Write($"Successfully deleted.");
+                    }
+                }
             }
-            else ui.Write($"failed to delete.");
+            catch(Exception e)
+            {
+                ui.Write(e.Message);
+            }
         }
 
         private string ChangeStack()
         {
             Console.Clear();
             ViewAllStacks();
-            return ui.GetInput("Type an ID of Stack to change.").str;
+
+            var name = ui.GetInput("Type an ID of Stack to change.").str;
+            if (Validation.IsValidStackName(name, Stacks))
+            {
+                ui.Write("Successfully changed.");
+                return name;
+            }
+            else throw new Exception("no such a stack.");
         }
 
         private bool DeleteStack(string name)
@@ -265,29 +280,51 @@ namespace Flashcards
             var cards = db.SetFlashcardsInStack(Stacks[name].Id,"View");
             List<List<object>> cardList = new();
 
-            if (cards == null) 
-            { 
-                ui.Write("The stack is empty.");
-                return;
-            }
-
-            foreach (var card in cards)
+            try
             {
-                cardList.Add(new List<object> { card.DTO.Front, card.DTO.Back });
+                foreach (var card in cards)
+                {
+                    cardList.Add(new List<object> { card.DTO.Front, card.DTO.Back });
+                }
+                ui.MakeTable(cardList, "Flashcards");
             }
-            ui.MakeTable(cardList, "Flashcards");
+            catch (Exception e)
+            {
+                ui.Write(e.Message);
+            }
         }
 
         private void Study(string name)
         {
             Console.Clear();
-            var cards = Stacks[name].Flashcards;
-            var questionCount = cards.Count();
+            try
+            {
+                var cards = Stacks[name].Flashcards;
+                var questionCount = cards.Count();
+                var score = 0;
+                var startTime = DateTime.Now;
+
+                ui.Write("Guess the back words.");
+                score = StartStudySessions(cards);
+                var endTime = DateTime.Now;
+                var format = "yyyy-MM-dd HH:mm:ss";
+                var session = new Session(Stacks[name].Id,
+                                           startTime.ToString(format),
+                                           endTime.ToString(format),
+                                           score,
+                                           questionCount);
+                StudyReport(session);
+                db.Insert(session);
+            }
+            catch(Exception e)
+            {
+                ui.Write(e.Message);
+            }
+        }
+
+        private int StartStudySessions(List<Flashcard> cards)
+        {
             var score = 0;
-            var startTime = DateTime.Now;
-
-            ui.Write("Guess the back words.");
-
             foreach (var card in cards)
             {
                 var front = card.QuestionDTO.Front;
@@ -298,34 +335,45 @@ namespace Flashcards
                     score++;
                     ui.WaitForInput("Correct!");
                 }
-                else 
+                else
                 {
                     ui.WaitForInput("Wrong answer!");
                 }
                 Console.Clear();
             }
-            var endTime = DateTime.Now;
-            Console.Clear() ;
-            ui.Write("Study Finished!");
-            ui.Write($"Your score is {score} out of {questionCount} questions");
-            var format = "yyyy-MM-dd HH:mm:ss";
-            var session = new Session(Stacks[name].Id,startTime.ToString(format), endTime.ToString(format), score, questionCount);
-            Sessions.Add(session);
 
-            db.Insert(session);
+            return score;
         }
+
+        private Session StudyReport(Session session)
+        {
+            Console.Clear();
+            ui.Write("Study Finished!");
+            ui.Write($"Your score is {session.Score} out of {session.QuestionCount} questions");
+            Sessions.Add(session);
+            return session;
+        }
+
         private void ViewAllSessions()
         {
             Console.Clear();
             List<List<object>> tableData = new();
 
-            foreach (var session in Sessions)
+            try
             {
-                var sessionData = session.GetField();
-                sessionData[0] = db.SearchStackName((int)sessionData[0], "Stack");
-                if (sessionData[0] != null) tableData.Add(sessionData);
+                foreach (var session in Sessions)
+                {
+                    var sessionData = session.GetField();
+                    sessionData[0] = db.SearchStackName(session.StackId, "Stack");
+                    if (sessionData[0] != null) tableData.Add(sessionData);
+                }
+                ui.MakeTable(tableData, "Sessions");
             }
-            ui.MakeTable(tableData, "Sessions");
+            catch (Exception e)
+            {
+                ui.Write(e.Message);
+            }
+
         }
     }
 }
