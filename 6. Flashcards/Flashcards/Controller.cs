@@ -42,6 +42,7 @@ namespace Flashcards
         private void GetStacksFromDatabase()
         {
             Stacks = db.GetStacksFromDatabase();
+            if (Stacks == null) Stacks = new();
         }
 
         private void SetFlashcardsInStack()
@@ -56,6 +57,7 @@ namespace Flashcards
         private void GetSessionsFromDatabase()
         {
             Sessions = db.GetSessions();
+            if (Sessions == null) Sessions = new();
         }
 
         private void Action()
@@ -85,55 +87,71 @@ namespace Flashcards
         private void CreateStack()
         {
             var name = ui.CreateStack();
-            var id = db.Insert(name);
-            if (id != -1)
+            try
             {
-                ui.Write($"{name} is created.");
-                var stack = new Stack(id,name);
-                Stacks[name] = stack;
+                if (!Validation.IsUniqueStackName(name, Stacks.Keys.ToList<string>()))
+                {
+                    var id = db.Insert(name);
+                    var stack = new Stack(id, name);
+                    Stacks[name] = stack;
+                    ui.Write($"{name} is created.");
+                }
             }
-            else
+            catch(Exception e)
             {
-                ui.Write($"failed to create.");
+                var message = "Not an unique name.";
+                if (e.Message == message) ui.Write($"{message} Try other names.");
+                else ui.Write($"failed to create.");
             }
         }
 
         private void ManageStack(string name)
         {
-            int action = ui.ManageStack(name);
-            var _name = name;
-            switch (action)
+            try
             {
-                case 1:
-                    ViewAllFlashcards(_name);
-                    break;
-                case 2:
-                    CreateFlashcard(_name);
-                    break;
-                case 3:
-                    EditFlashcard(_name);
-                    break;
-                case 4:
-                    DeleteFlashcard(_name);
-                    break;
-                case 5:
-                    Study(_name);
-                    return;
-                case 6:
-                    _name = ChangeStack();
-                    ui.Write("Successfully changed.");
-                    break;
-                case 7:
-                    if (DeleteStack(_name)) return;
-                    else break;
-                case 0:
-                    return;
-                default:
-                    ui.Write("Invalid Input");
-                    break;
+                if (Validation.IsValidStackName(name, Stacks))
+                {
+                    int action = ui.ManageStack(name);
+                    var _name = name;
+                    switch (action)
+                    {
+                        case 1:
+                            ViewAllFlashcards(_name);
+                            break;
+                        case 2:
+                            CreateFlashcard(_name);
+                            break;
+                        case 3:
+                            EditFlashcard(_name);
+                            break;
+                        case 4:
+                            DeleteFlashcard(_name);
+                            break;
+                        case 5:
+                            Study(_name);
+                            return;
+                        case 6:
+                            _name = ChangeStack();
+                            ui.Write("Successfully changed.");
+                            break;
+                        case 7:
+                            if (DeleteStack(_name)) return;
+                            else break;
+                        case 0:
+                            return;
+                        default:
+                            ui.Write("Invalid Input");
+                            break;
+                    }
+                    ui.WaitForInput("Press any key to continue..");
+                    ManageStack(_name);
+                }
             }
-            ui.WaitForInput("Press any key to continue..");
-            ManageStack(_name);
+            catch(Exception e)
+            {
+                ui.Write(e.Message);
+            }
+            
         }
 
         private void CreateFlashcard(string name)

@@ -12,10 +12,15 @@ namespace Flashcards
             {
                 if (_name == name)
                 {
-                    return false;
+                    throw new Exception("Not an unique name.");
                 }
             }
-            return true;
+            return false;
+        }
+        public static bool IsValidStackName(string name, Dictionary<string, Stack> Stacks)
+        {
+            if (!Stacks.ContainsKey(name)) throw new Exception("Not a valid name.");
+            else return true;
         }
     }
 }

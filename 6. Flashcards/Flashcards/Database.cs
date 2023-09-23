@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
-using System.Xml.Linq;
 
 namespace Flashcards
 {
@@ -11,13 +10,13 @@ namespace Flashcards
         public string dbName;
         public string connInfo;
 
-        public Database() 
+        public Database()
         {
             currentDirectory = Path.GetFullPath(Path.Combine(System.AppContext.BaseDirectory, @"..\..\..\"));
             dbName = "MyDB.mdf";
             connInfo = $@"Data Source = (localdb)\MSSQLLocalDB; AttachDbFilename=""{currentDirectory}{dbName}""; Integrated Security = True; Connect Timeout = 10;";
             isConnected = Init();
-        } 
+        }
         public bool Init()
         {
             var res = Connect();
@@ -37,13 +36,13 @@ namespace Flashcards
                 }
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
                 return false;
             }
         }
-        public Dictionary<string,Stack>? GetStacksFromDatabase()
+        public Dictionary<string, Stack>? GetStacksFromDatabase()
         {
             Dictionary<string, Stack> stacks = new Dictionary<string, Stack>();
             try
@@ -101,7 +100,7 @@ namespace Flashcards
                 using (SqlConnection conn = new(connInfo))
                 {
                     conn.Open();
-                    
+
                     using (SqlCommand cmd = new SqlCommand(createTableQuery, conn))
                     {
                         cmd.ExecuteNonQuery();
@@ -117,36 +116,42 @@ namespace Flashcards
         public int Insert(string name)
         {
             var id = -1;
-            try
-            {
-                using (SqlConnection conn = new(connInfo))
-                {
-                    conn.Open();
 
-                    string insertQuery = $"INSERT INTO Stack (Name) VALUES ('{name}')";
-                    using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+            using (SqlConnection conn = new(connInfo))
+            {
+                conn.Open();
+
+                string insertQuery = $"INSERT INTO Stack (Name) VALUES ('{name}')";
+                using (SqlCommand cmd = new SqlCommand(insertQuery, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                id = GetIndexFromStack(name, conn);
+            }
+            if (id == -1)
+            {
+                throw new Exception();
+            }
+            return id;
+        }
+
+        private static int GetIndexFromStack(string name, SqlConnection conn)
+        {
+            var id = 0;
+            string selectQuery = $"SELECT * FROM Stack WHERE Name = '{name}'";
+            using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
                     {
-                        cmd.ExecuteNonQuery();
-                    }
-                    string selectQuery = $"SELECT * FROM Stack WHERE Name = '{name}'";
-                    using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
-                    {
-                        using(SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                id = reader.GetInt32(0);
-                            }
-                        }
+                        id = reader.GetInt32(0);
                     }
                 }
-                return id;
             }
-            catch
-            {
-                return id;
-            }
+            return id;
         }
+
         public bool Insert(Flashcard card)
         {
             var Id = card.Id;
@@ -305,11 +310,11 @@ namespace Flashcards
                     string selectQuery = $"SELECT * FROM Flashcards";
                     using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
                     {
-                        List<(int,int)> tempIdx = new List<(int,int)> ();
-                        using (SqlDataReader reader = cmd.ExecuteReader()) 
+                        List<(int, int)> tempIdx = new List<(int, int)>();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
                         {
                             var new_idx = 1;
-                            while(reader.Read())
+                            while (reader.Read())
                             {
                                 var original_idx = reader.GetInt32(0);
                                 var idx = (original_idx, new_idx);
@@ -317,7 +322,7 @@ namespace Flashcards
                                 new_idx++;
                             }
                         }
-                        foreach(var idx in tempIdx)
+                        foreach (var idx in tempIdx)
                         {
                             string updateQuery = $"UPDATE Flashcards SET ID={idx.Item2} WHERE ID = {idx.Item1}";
                             using (SqlCommand updateCmd = new SqlCommand(updateQuery, conn))
@@ -329,7 +334,7 @@ namespace Flashcards
                 }
                 return true;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return false;
@@ -393,7 +398,7 @@ namespace Flashcards
                                 DateTime endTime = reader.GetDateTime(3);
                                 int score = reader.GetInt32(4);
                                 int questionCount = reader.GetInt32(5);
-                                var session = new Session(stackId, startTime.ToString(format), endTime.ToString(format), score,questionCount);
+                                var session = new Session(stackId, startTime.ToString(format), endTime.ToString(format), score, questionCount);
                                 Sessions.Add(session);
                             }
                         }
