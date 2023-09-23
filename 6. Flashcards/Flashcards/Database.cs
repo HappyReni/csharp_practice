@@ -234,10 +234,10 @@ namespace Flashcards
 
         public bool Update(Flashcard card)
         {
-            var id = card.Id;
-            var back = card.Back;
-            try
+            try 
             {
+                var id = card.Id;
+                var back = card.Back;
                 using (SqlConnection conn = new(connInfo))
                 {
                     conn.Open();
@@ -252,7 +252,7 @@ namespace Flashcards
             }
             catch
             {
-                return false;
+                throw new Exception("Update failed.");
             }
         }
         public bool Delete(string name)

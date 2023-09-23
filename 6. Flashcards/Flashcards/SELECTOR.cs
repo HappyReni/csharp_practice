@@ -6,12 +6,15 @@
     MANAGE,
     STUDY,
 }
-
-enum FILTER_SELECTOR
+enum MANAGE_SELECTOR
 {
     INVALID_SELECT = -1,
-    YEAR = 1,
-    WEEK,
-    DAY,
-    ALL,
+    BACK = 0,
+    VIEW = 1,
+    CREATE,
+    EDIT,
+    DELETE,
+    STUDY,
+    CHANGE,
+    DELETESTACK,
 }

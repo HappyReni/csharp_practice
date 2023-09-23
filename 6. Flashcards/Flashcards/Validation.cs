@@ -1,6 +1,7 @@
 ﻿
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Flashcards
 {
@@ -21,6 +22,17 @@ namespace Flashcards
         {
             if (!Stacks.ContainsKey(name)) throw new Exception("Not a valid name.");
             else return true;
+        }
+        public static bool IsValidFlashcard(string front, List<Flashcard> cards)
+        {
+            foreach (var card in cards)
+            {
+                if (card.Front == front)
+                {
+                    return true;
+                }
+            }
+            throw new Exception("Not a valid flashcard. Try again.");
         }
     }
 }

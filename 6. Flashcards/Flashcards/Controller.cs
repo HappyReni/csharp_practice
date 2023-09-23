@@ -113,32 +113,32 @@ namespace Flashcards
                 {
                     int action = ui.ManageStack(name);
                     var _name = name;
-                    switch (action)
+                    switch ((MANAGE_SELECTOR)action)
                     {
-                        case 1:
+                        case MANAGE_SELECTOR.BACK:
+                            return;
+                        case MANAGE_SELECTOR.VIEW:
                             ViewAllFlashcards(_name);
                             break;
-                        case 2:
+                        case MANAGE_SELECTOR.CREATE:
                             CreateFlashcard(_name);
                             break;
-                        case 3:
+                        case MANAGE_SELECTOR.EDIT:
                             EditFlashcard(_name);
                             break;
-                        case 4:
+                        case MANAGE_SELECTOR.DELETE:
                             DeleteFlashcard(_name);
                             break;
-                        case 5:
+                        case MANAGE_SELECTOR.STUDY:
                             Study(_name);
                             return;
-                        case 6:
+                        case MANAGE_SELECTOR.CHANGE:
                             _name = ChangeStack();
                             ui.Write("Successfully changed.");
                             break;
-                        case 7:
+                        case MANAGE_SELECTOR.DELETESTACK:
                             if (DeleteStack(_name)) return;
                             else break;
-                        case 0:
-                            return;
                         default:
                             ui.Write("Invalid Input");
                             break;
@@ -151,7 +151,6 @@ namespace Flashcards
             {
                 ui.Write(e.Message);
             }
-            
         }
 
         private void CreateFlashcard(string name)
@@ -159,22 +158,37 @@ namespace Flashcards
             var front = ui.GetInput("Type a front word.").str;
             var back = ui.GetInput("Type a back word.").str;
             var card = new Flashcard(Stacks[name].Id, front, back);
-            Stacks[name].InsertFlashCard(card);
-            if (db.Insert(card)) ui.Write($"Successfully created.");
+
+            if (db.Insert(card))
+            {
+                Stacks[name].InsertFlashCard(card);
+                ui.Write($"Successfully created.");
+            }
             else ui.Write($"failed to create.");
         }
 
         private void EditFlashcard(string name)
         {
             ViewAllFlashcards(name);
-            var front = ui.GetInput("Type a front word.").str;
-            var back = ui.GetInput("Type a new back word.").str;
-            var index = Stacks[name].FindFlashcard(front);
-
-            Stacks[name].EditFlashcard(index, back);
-            Flashcard card = Stacks[name].GetFlashcard(index);
-            if (db.Update(card)) ui.Write($"Successfully updated.");
-            else ui.Write($"failed to update.");
+            try
+            {
+                var front = ui.GetInput("Type a front word.").str;
+                if (Validation.IsValidFlashcard(front, Stacks[name].Flashcards))
+                {
+                    var back = ui.GetInput("Type a new back word.").str;
+                    var index = Stacks[name].FindFlashcard(front);
+                    Flashcard card = Stacks[name].GetFlashcard(index);
+                    if (db.Update(card))
+                    {
+                        Stacks[name].EditFlashcard(index, back);
+                        ui.Write($"Successfully updated.");
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                ui.Write(e.Message);
+            }
         }
         private void DeleteFlashcard(string name)
         {

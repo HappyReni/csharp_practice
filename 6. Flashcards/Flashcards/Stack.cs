@@ -42,6 +42,10 @@ namespace Flashcards
         public void InsertFlashCard(Flashcard card) { Flashcards.Add(card); }
         public void DeleteFlashCard()
         {
+            for (int i = 0; i < Flashcards.Count; i++)
+            {
+                Flashcard.DownCount();
+            }
             Flashcards = new();
         }
         public bool DeleteFlashCard(int idx) 
@@ -76,7 +80,7 @@ namespace Flashcards
                 return false;
             }
         }
-        public Flashcard? GetFlashcard(int idx)
+        public Flashcard GetFlashcard(int idx)
         {
             try
             {
@@ -84,7 +88,7 @@ namespace Flashcards
             }
             catch
             {
-                return null;
+                throw new Exception("Flashcards index error.");
             }
         }
 
