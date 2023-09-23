@@ -17,29 +17,47 @@ namespace Flashcards
             ui = new UI();
             db = new Database();
 
-            if(!db.isConnected)
-            {
-                ui.Write("Can't connect to DB. Check your connection again.");
-                ui.WaitForInput();
-                Environment.Exit(0);
-            }
-            LoadData();
+            CheckDatabaseConnection();
+            GetStacksFromDatabase();
+            SetFlashcardsInStack();
+            GetSessionsFromDatabase();
+
             selector = ui.MainMenu();
             while (true)
             {
                 Action();
             }
         }
-        private void LoadData()
+
+        private void CheckDatabaseConnection()
+        {
+            if (!db.isConnected)
+            {
+                ui.Write("Can't connect to DB. Check your connection again.");
+                ui.WaitForInput();
+                Environment.Exit(0);
+            }
+        }
+
+        private void GetStacksFromDatabase()
         {
             Stacks = db.GetStacksFromDatabase();
+        }
+
+        private void SetFlashcardsInStack()
+        {
             foreach(var stack in Stacks.Values)
             {
-                var cards = db.GetFlashcardsInStack(stack.Id,"Load");
+                var cards = db.SetFlashcardsInStack(stack.Id,"Load");
                 stack.SetFlashcards(cards);
             }
+        }
+
+        private void GetSessionsFromDatabase()
+        {
             Sessions = db.GetSessions();
         }
+
         private void Action()
         {
             switch (selector)
@@ -212,7 +230,7 @@ namespace Flashcards
 
         private void ViewAllFlashcards(string name)
         {
-            var cards = db.GetFlashcardsInStack(Stacks[name].Id,"View");
+            var cards = db.SetFlashcardsInStack(Stacks[name].Id,"View");
             List<List<object>> cardList = new();
 
             if (cards == null) 

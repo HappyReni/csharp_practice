@@ -336,7 +336,7 @@ namespace Flashcards
             }
         }
 
-        public List<Flashcard>? GetFlashcardsInStack(int stackId, string arg)
+        public List<Flashcard>? SetFlashcardsInStack(int stackId, string arg)
         {
             List<Flashcard> cards = new List<Flashcard>();
 
