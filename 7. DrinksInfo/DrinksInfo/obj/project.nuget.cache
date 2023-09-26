@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "4jvlB5zPVLqUbdUBcOTkxqZTDsiC7iiSz1Z8DJk5bTAxhZMG+Vnh2yH3456PedEmSJNn9JHCw7RqR4YkfY1wQg==",
+  "dgSpecHash": "bPB7VkpuviTLoaSyAmNrmeW3RLBHLQ9PpmJEGUP2BwvXxXpBjmDBAgXHMMjmsVpvEgYXEQAam+ixjtewyDfS7Q==",
   "success": true,
   "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\7. DrinksInfo\\DrinksInfo\\DrinksInfo.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\dnjsv\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\restsharp\\110.2.0\\restsharp.110.2.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.text.json\\7.0.2\\system.text.json.7.0.2.nupkg.sha512"
+  ],
   "logs": []
 }
