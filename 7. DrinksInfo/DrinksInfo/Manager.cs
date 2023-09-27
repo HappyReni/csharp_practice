@@ -16,8 +16,10 @@ namespace DrinksInfo
             ui = new UI();
             drinkService = new DrinkService();
             drinkService.GetCategories();
-            string category = ui.GetInput("Select >>").str;
+            string category = ui.GetInput("Select").str;
             drinkService.GetDrinksByCategory(category);
+            int id = ui.GetInput("Select ID of drink to see info.").val;
+            drinkService.GetDrinksDetail(id);
         }
     }
 }

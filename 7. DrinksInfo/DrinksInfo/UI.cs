@@ -44,23 +44,29 @@ namespace DrinksInfo
 
         //    return GetInput("Select").val;
         //}
-        public void Write(string text)
+        public static void Write(string text)
         {
             Console.WriteLine(text);
         }
-        public void Write(int text)
+        public static void Write(int text)
         {
             Console.WriteLine(text);
+        }
+        public static void Clear()
+        {
+            // Somehow, Console.Clear() doesn't work properly. it just skips lines.
+            // This code clears the console.
+            // https://github.com/dotnet/runtime/issues/28355
+            Console.Write("\f\u001bc\x1b[3J");
         }
         public static void MakeTable<T>(List<T> data, string tableName) where T : class
         {
-            Console.Clear();
-
+            Clear();
             ConsoleTableBuilder
                 .From(data)
                 .WithTitle(tableName, ConsoleColor.Green)
                 .WithColumn(tableName)
-                .ExportAndWriteLine();
+                .ExportAndWriteLine(TableAligntment.Center);
             Console.WriteLine("".PadRight(24, '='));
         }
 

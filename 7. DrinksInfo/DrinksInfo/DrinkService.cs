@@ -4,6 +4,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,6 +40,36 @@ namespace DrinksInfo
 
                 List<Drink> returnedList = serialize.DrinkList;
                 UI.MakeTable(returnedList, "Drinks");
+            }
+        }
+        public void GetDrinksDetail(int id)
+        {
+            var client = new RestClient("http://www.thecocktaildb.com/api/json/v1/1/");
+            var request = new RestRequest($"lookup.php?i={id}");
+            var response = client.ExecuteAsync(request);
+
+            if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string rawResponse = response.Result.Content;
+                var serialize = JsonConvert.DeserializeObject<DrinkDetails>(rawResponse);
+
+                List<DrinkDetail> returnedList = serialize.DetailList;
+                var detail = returnedList[0];
+                var propList = new List<object>();
+
+                foreach(var prop in detail.GetType().GetProperties())
+                {
+                    propList.Add(new
+                    {
+                        Key = prop.Name,
+                        Value = prop.GetValue(detail)
+                    });
+                }
+                foreach(var prop in propList)
+                {
+                    Console.WriteLine(prop);
+                }
+                UI.MakeTable(propList, "Drinks Info");
             }
         }
     }
