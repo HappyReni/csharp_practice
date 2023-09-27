@@ -31,26 +31,30 @@ namespace DrinksInfo
             }
             return categories;
         }
-        public void GetDrinksByCategory(string category)
+        public List<Drink> GetDrinksByCategory(string category)
         {
             var client = new RestClient("http://www.thecocktaildb.com/api/json/v1/1/");
             var request = new RestRequest($"filter.php?c={category}");
             var response = client.ExecuteAsync(request);
+            var drinks = new List<Drink>();
 
             if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 string rawResponse = response.Result.Content;
                 var serialize = JsonConvert.DeserializeObject<Drinks>(rawResponse);
 
-                List<Drink> returnedList = serialize.DrinkList;
-                UI.MakeTable(returnedList, "Drinks");
+                drinks = serialize.DrinkList;
+                UI.MakeTable(drinks, "Drinks");
+                return drinks;
             }
+            return drinks;
         }
-        public void GetDrinksDetail(int id)
+        public List<object> GetDrinksDetail(int id)
         {
             var client = new RestClient("http://www.thecocktaildb.com/api/json/v1/1/");
             var request = new RestRequest($"lookup.php?i={id}");
             var response = client.ExecuteAsync(request);
+            var propList = new List<object>();
 
             if (response.Result.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -59,7 +63,6 @@ namespace DrinksInfo
 
                 List<DrinkDetail> returnedList = serialize.DetailList;
                 var detail = returnedList[0];
-                var propList = new List<object>();
                 var trimmedName = "";
 
                 foreach(var prop in detail.GetType().GetProperties())
@@ -78,7 +81,9 @@ namespace DrinksInfo
                     });
                 }
                 UI.MakeTable(propList, "Drinks Info");
+                return propList;
             }
+            return propList;
         }
     }
 }

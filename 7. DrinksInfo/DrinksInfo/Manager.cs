@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DrinksInfo.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,8 +24,25 @@ namespace DrinksInfo
         {
             DrinkServiceInstance.GetCategories();
             ChooseCategory();
-            int id = Ui.GetInput("Select ID of drink to see info.").val;
-            DrinkServiceInstance.GetDrinksDetail(id);
+            ChooseDrink();
+        }
+
+        private void ChooseDrink()
+        {
+            try
+            {
+                int id = Ui.GetInput("Select ID of drink to see info.").val;
+                if (Validation.CheckDrink(Category, id))
+                {
+                    DrinkServiceInstance.GetDrinksDetail(id);
+                }
+            }
+            catch (Exception e)
+            {
+                UI.Write(e.Message);
+            }
+            UI.WaitForInput("Press any key..");
+            BeginService();
         }
 
         private void ChooseCategory()
