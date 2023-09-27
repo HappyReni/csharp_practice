@@ -1,7 +1,4 @@
-﻿using DrinksInfo.Models;
-using RestSharp;
-
-namespace DrinksInfo
+﻿namespace DrinksInfo
 {
     internal static class Validation
     {
