@@ -1,8 +1,6 @@
-﻿//using ConsoleTableExt;
+﻿using ConsoleTableExt;
 
-using ConsoleTableExt;
-
-namespace Flashcards
+namespace DrinksInfo
 {
     internal class UI
     {
@@ -46,14 +44,14 @@ namespace Flashcards
 
         //    return GetInput("Select").val;
         //}
-        //public void Write(string text)
-        //{
-        //    Console.WriteLine(text);
-        //}
-        //public void Write(int text)
-        //{
-        //    Console.WriteLine(text);
-        //}
+        public void Write(string text)
+        {
+            Console.WriteLine(text);
+        }
+        public void Write(int text)
+        {
+            Console.WriteLine(text);
+        }
         public static void MakeTable<T>(List<T> data, string tableName) where T : class
         {
             Console.Clear();
@@ -71,24 +69,24 @@ namespace Flashcards
         //    WaitForInput(message);
         //    return MainMenu();
         //}
-        //public (bool res, string str, int val) GetInput(string message)
-        //{
-        //    // This function returns string input too in case you need it
-        //    int number;
-        //    Write(message);
-        //    Console.Write(">> ");
-        //    string str = Console.ReadLine();
-        //    var res = int.TryParse(str, out number);
+        public (bool res, string str, int val) GetInput(string message)
+        {
+            // This function returns string input too in case you need it
+            int number;
+            Write(message);
+            Console.Write(">> ");
+            string str = Console.ReadLine();
+            var res = int.TryParse(str, out number);
 
-        //    number = res ? number : (int)SELECTOR.INVALID_SELECT;
-        //    str = str == null ? "" : str;
+            number = res ? number : -1;
+            str = str == null ? "" : str;
 
-        //    return (res, str, number);
-        //}
-        //public void WaitForInput(string message = "")
-        //{
-        //    Write(message);
-        //    Console.ReadKey();
-        //}
+            return (res, str, number);
+        }
+        public void WaitForInput(string message = "")
+        {
+            Write(message);
+            Console.ReadKey();
+        }
     }
 }

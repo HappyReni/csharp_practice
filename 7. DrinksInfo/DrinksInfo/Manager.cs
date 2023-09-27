@@ -8,5 +8,16 @@ namespace DrinksInfo
 {
     internal class Manager
     {
+        public UI ui { get; set; }
+        public DrinkService drinkService { get; set; }
+
+        public Manager()
+        {
+            ui = new UI();
+            drinkService = new DrinkService();
+            drinkService.GetCategories();
+            string category = ui.GetInput("Select >>").str;
+            drinkService.GetDrinksByCategory(category);
+        }
     }
 }
