@@ -8,18 +8,42 @@ namespace DrinksInfo
 {
     internal class Manager
     {
-        public UI ui { get; set; }
-        public DrinkService drinkService { get; set; }
+        public UI Ui { get; set; }
+        public DrinkService DrinkServiceInstance { get; set; }
+        private string Category { get; set; } = "";
 
         public Manager()
         {
-            ui = new UI();
-            drinkService = new DrinkService();
-            drinkService.GetCategories();
-            string category = ui.GetInput("Select").str;
-            drinkService.GetDrinksByCategory(category);
-            int id = ui.GetInput("Select ID of drink to see info.").val;
-            drinkService.GetDrinksDetail(id);
+            Ui = new UI();
+            DrinkServiceInstance = new DrinkService();
+            BeginService();
+        }
+
+        private void BeginService()
+        {
+            DrinkServiceInstance.GetCategories();
+            ChooseCategory();
+            int id = Ui.GetInput("Select ID of drink to see info.").val;
+            DrinkServiceInstance.GetDrinksDetail(id);
+        }
+
+        private void ChooseCategory()
+        {
+            try
+            {
+                Category = Ui.GetInput("Select").str;
+                if (Validation.CheckCategory(Category))
+                {
+                    DrinkServiceInstance.GetDrinksByCategory(Category);
+                }
+            }
+            catch(Exception e)
+            {
+                UI.Write(e.Message);
+                UI.WaitForInput();
+                BeginService();
+            }
+
         }
     }
 }
