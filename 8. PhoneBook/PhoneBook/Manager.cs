@@ -97,7 +97,20 @@ namespace PhoneBook
         }
         private void DeleteContact()
         {
-            throw new NotImplementedException();
+            UI.Clear();
+            var name = Ui.GetInput("Type a name to delete.").str;
+
+            try
+            {
+                var contact = Service.Contacts.Where(c => c.Name == name).First();
+                Service.Contacts.Remove(contact);
+                Service.SaveChanges();
+                UI.Write("Contact deleted.");
+            }
+            catch
+            {
+                UI.Write("There is no such a name.");
+            }
         }
     }
 }
