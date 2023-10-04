@@ -69,7 +69,7 @@ namespace PhoneBook
                 var contactData = new List<List<object>>() { new List<object> { contact.Id, contact.Name, contact.Email, contact.PhoneNumber } };
                 UI.MakeTable(contactData, "Contact");
             }
-            catch()
+            catch
             {
                 UI.Write("There is no such a name.");
             }
@@ -77,7 +77,23 @@ namespace PhoneBook
         }
         private void UpdateContact()
         {
-            throw new NotImplementedException();
+            UI.Clear();
+            var name = Ui.GetInput("Type a name to update.").str;
+
+            try
+            {
+                var contact = Service.Contacts.Where(c => c.Name == name).First();
+                contact.Email = Ui.GetInput("Type an email address.").str;
+                contact.PhoneNumber = Ui.GetInput("Type a phone number.").str;
+                Service.SaveChanges();
+                var contactData = new List<List<object>>() { new List<object> { contact.Id, contact.Name, contact.Email, contact.PhoneNumber } };
+                UI.MakeTable(contactData, "Contact");
+            }
+            catch
+            {
+                UI.Write("There is no such a name.");
+            }
+
         }
         private void DeleteContact()
         {
