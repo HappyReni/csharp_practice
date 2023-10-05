@@ -102,7 +102,7 @@ namespace PhoneBook
             }
             catch
             {
-                UI.Write("There is no such a name.");
+                UI.Write("There is no such a name..");
             }
 
         }
