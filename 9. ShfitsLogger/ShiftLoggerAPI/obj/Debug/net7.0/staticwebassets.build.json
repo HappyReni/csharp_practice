@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "48yupQyVXxCpmjrigOWP6seQyGwoJxlKpZ39NTccBss=",
+  "Source": "ShiftLoggerAPI",
+  "BasePath": "_content/ShiftLoggerAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
