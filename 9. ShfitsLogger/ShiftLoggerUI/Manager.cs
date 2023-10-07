@@ -49,6 +49,7 @@ namespace ShiftLoggerUI
 
         private void CreateShift()
         {
+            UI.Clear();
             var name = UI.GetInput("Type a worker's name.").str;
             var startTime = DateTime.Parse(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
             var endTime = DateTime.Parse(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
@@ -68,7 +69,9 @@ namespace ShiftLoggerUI
 
         private void DeleteShift()
         {
-            throw new NotImplementedException();
+            ViewAllShifts();
+            var id = UI.GetInput("Type an ID to delete.").val;
+            ShiftController.DeleteShift(id);
         }
 
         private void ViewAllShifts()

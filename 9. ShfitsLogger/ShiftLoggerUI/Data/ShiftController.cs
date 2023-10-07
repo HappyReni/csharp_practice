@@ -14,16 +14,18 @@ namespace ShiftLoggerUI.Data
             var shifts = new List<Shift>();
             var endpoint = "https://localhost:7040/api/Shifts";
 
-            using HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(endpoint);
-
-            if (response.IsSuccessStatusCode)
+            using (HttpClient client = new HttpClient())
             {
-                var json = await response.Content.ReadAsStreamAsync();
-                shifts = await JsonSerializer.DeserializeAsync<List<Shift>>(json);
+                var response = await client.GetAsync(endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStreamAsync();
+                    shifts = await JsonSerializer.DeserializeAsync<List<Shift>>(json);
+                    return shifts;
+                }
                 return shifts;
             }
-            return shifts;
         }
 
         public static async void AddShift(Shift shift)
@@ -37,6 +39,24 @@ namespace ShiftLoggerUI.Data
                 if (response.IsCompletedSuccessfully)
                 {
                     UI.Write("Successfully added.");
+                }
+                else
+                {
+                    UI.Write("Something went wrong.");
+                }
+            }
+        }
+        public static async void DeleteShift(int id)
+        {
+            var endpoint = $"https://localhost:7040/api/Shifts/{id}";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.DeleteAsync(endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    UI.Write("Successfully deleted.");
                 }
                 else
                 {
