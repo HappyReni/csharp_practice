@@ -49,7 +49,11 @@ namespace ShiftLoggerUI
 
         private void CreateShift()
         {
-            throw new NotImplementedException();
+            var name = UI.GetInput("Type a worker's name.").str;
+            var startTime = DateTime.Parse(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
+            var endTime = DateTime.Parse(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
+
+            ShiftController.AddShift(new Shift() { Id = 0, Name = name, StartTime = startTime, EndTime = endTime });
         }
 
         private void ReadShift()
@@ -70,10 +74,6 @@ namespace ShiftLoggerUI
         private void ViewAllShifts()
         {
             var shifts = ShiftController.GetShifts().Result;
-            var tableList = new List<List<Shift>>
-            {
-                shifts
-            };
             UI.MakeTable(shifts, "Shifts");
         }
     }

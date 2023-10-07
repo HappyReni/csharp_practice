@@ -1,6 +1,9 @@
 ﻿using Microsoft.DotNet.MSIdentity.Shared;
+using ShiftLoggerAPI.Models;
 using ShiftLoggerUI.Models;
+using System.Net.Http.Json;
 using System.Text.Json;
+using Shift = ShiftLoggerUI.Models.Shift;
 
 namespace ShiftLoggerUI.Data
 {
@@ -21,6 +24,25 @@ namespace ShiftLoggerUI.Data
                 return shifts;
             }
             return shifts;
+        }
+
+        public static async void AddShift(Shift shift)
+        {
+            var endpoint = "https://localhost:7040/api/Shifts";
+
+            using (HttpClient client = new HttpClient())
+            {
+                Task response = client.PostAsJsonAsync(endpoint, shift);
+                response.Wait();
+                if (response.IsCompletedSuccessfully)
+                {
+                    UI.Write("Successfully added.");
+                }
+                else
+                {
+                    UI.Write("Something went wrong.");
+                }
+            }
         }
     }
 }
