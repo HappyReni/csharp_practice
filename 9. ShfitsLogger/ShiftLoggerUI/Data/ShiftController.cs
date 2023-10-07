@@ -64,6 +64,25 @@ namespace ShiftLoggerUI.Data
                 }
             }
         }
+        public static async void UpdateShift(int id,Shift shift)
+        {
+            var endpoint = $"https://localhost:7040/api/Shifts/{id}";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.PutAsJsonAsync(endpoint, shift);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    UI.Write("Successfully Updated.");
+                }
+                else
+                {
+                    UI.Write("Something went wrong.");
+                }
+            }
+        }
+
         public static async void DeleteShift(int id)
         {
             var endpoint = $"https://localhost:7040/api/Shifts/{id}";

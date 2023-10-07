@@ -66,7 +66,14 @@ namespace ShiftLoggerUI
 
         private void UpdateShift()
         {
-            throw new NotImplementedException();
+            ViewAllShifts();
+            var id = UI.GetInput("Type an ID to update.").val;
+            var name = UI.GetInput("Type new worker's name.").str;
+            var startTime = DateTime.Parse(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
+            var endTime = DateTime.Parse(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
+
+            ShiftController.UpdateShift(id,
+                new Shift() { Id = id, Name = name, StartTime = startTime, EndTime = endTime });
         }
 
         private void DeleteShift()
