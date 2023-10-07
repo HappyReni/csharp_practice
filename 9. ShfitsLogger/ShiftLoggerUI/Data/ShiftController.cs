@@ -9,6 +9,24 @@ namespace ShiftLoggerUI.Data
 {
     public static class ShiftController
     {
+        public static async Task<Shift> GetShift(int id)
+        {
+            var shift = new Shift();
+            var endpoint = $"https://localhost:7040/api/Shifts/{id}";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync(endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStreamAsync();
+                    shift = await JsonSerializer.DeserializeAsync<Shift>(json);
+                    return shift;
+                }
+                return shift;
+            }
+        }
         public static async Task<List<Shift>> GetShifts()
         {
             var shifts = new List<Shift>();

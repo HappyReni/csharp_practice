@@ -59,7 +59,9 @@ namespace ShiftLoggerUI
 
         private void ReadShift()
         {
-            throw new NotImplementedException();
+            ViewAllShifts();
+            var id = UI.GetInput("Type an ID to read.").val;
+            UI.MakeTable(new List<Shift>() { ShiftController.GetShift(id).Result }, "Shift");
         }
 
         private void UpdateShift()
