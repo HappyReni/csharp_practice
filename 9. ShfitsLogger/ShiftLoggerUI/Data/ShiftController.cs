@@ -24,7 +24,7 @@ namespace ShiftLoggerUI.Data
                     shift = await JsonSerializer.DeserializeAsync<Shift>(json);
                     return shift;
                 }
-                return shift;
+                else throw new Exception("Error occured with API call.");
             }
         }
         public static async Task<List<Shift>> GetShifts()
@@ -42,7 +42,7 @@ namespace ShiftLoggerUI.Data
                     shifts = await JsonSerializer.DeserializeAsync<List<Shift>>(json);
                     return shifts;
                 }
-                return shifts;
+                else throw new Exception("Error occured with API call.");
             }
         }
 
@@ -60,11 +60,11 @@ namespace ShiftLoggerUI.Data
                 }
                 else
                 {
-                    UI.Write("Something went wrong.");
+                    throw new Exception("Error occured with API call.");
                 }
             }
         }
-        public static async void UpdateShift(int id,Shift shift)
+        public static async Task UpdateShift(int id,Shift shift)
         {
             var endpoint = $"https://localhost:7040/api/Shifts/{id}";
 
@@ -78,12 +78,12 @@ namespace ShiftLoggerUI.Data
                 }
                 else
                 {
-                    UI.Write("Something went wrong.");
+                    throw new Exception("Error occured with API call.");
                 }
             }
         }
 
-        public static async void DeleteShift(int id)
+        public static async Task DeleteShift(int id)
         {
             var endpoint = $"https://localhost:7040/api/Shifts/{id}";
 
@@ -97,7 +97,7 @@ namespace ShiftLoggerUI.Data
                 }
                 else
                 {
-                    UI.Write("Something went wrong.");
+                    throw new Exception("Error occured with API call.");
                 }
             }
         }

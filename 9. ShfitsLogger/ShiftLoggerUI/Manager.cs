@@ -50,43 +50,80 @@ namespace ShiftLoggerUI
         private void CreateShift()
         {
             UI.Clear();
-            var name = UI.GetInput("Type a worker's name.").str;
-            var startTime = DateTime.Parse(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
-            var endTime = DateTime.Parse(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
+            try 
+            {
+                var name = UI.GetInput("Type a worker's name.").str;
+                var startTime = Validation.CheckDateTime(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
+                var endTime = Validation.CheckDateTime(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
 
-            ShiftController.AddShift(new Shift() { Id = 0, Name = name, StartTime = startTime, EndTime = endTime });
+                ShiftController.AddShift(new Shift() { Id = 0, Name = name, StartTime = startTime, EndTime = endTime });
+            }
+            catch(Exception ex)
+            {
+                UI.Write(ex.Message);
+            }
+            
         }
 
         private void ReadShift()
         {
             ViewAllShifts();
-            var id = UI.GetInput("Type an ID to read.").val;
-            UI.MakeTable(new List<Shift>() { ShiftController.GetShift(id).Result }, "Shift");
+            try
+            {
+                var id = UI.GetInput("Type an ID to read.").val;
+                UI.MakeTable(new List<Shift>() { ShiftController.GetShift(id).Result }, "Shift");
+            }
+            catch (Exception ex)
+            {
+                UI.Write(ex.Message);
+            }
         }
 
-        private void UpdateShift()
+        private async void UpdateShift()
         {
             ViewAllShifts();
-            var id = UI.GetInput("Type an ID to update.").val;
-            var name = UI.GetInput("Type new worker's name.").str;
-            var startTime = DateTime.Parse(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
-            var endTime = DateTime.Parse(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
+            try
+            {
+                var id = UI.GetInput("Type an ID to update.").val;
+                var name = UI.GetInput("Type new worker's name.").str;
+                var startTime = Validation.CheckDateTime(UI.GetInput("Type a start time of work. (YYYY-MM-dd HH:mm:ss)").str);
+                var endTime = Validation.CheckDateTime(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
+                await ShiftController.UpdateShift(id,
+                                new Shift() { Id = id, Name = name, StartTime = startTime, EndTime = endTime });
+            } catch(Exception ex)
+            {
+                UI.Write(ex.Message);
+            }
 
-            ShiftController.UpdateShift(id,
-                new Shift() { Id = id, Name = name, StartTime = startTime, EndTime = endTime });
+
         }
 
-        private void DeleteShift()
+        private async void DeleteShift()
         {
             ViewAllShifts();
-            var id = UI.GetInput("Type an ID to delete.").val;
-            ShiftController.DeleteShift(id);
+            try
+            {
+                var id = UI.GetInput("Type an ID to delete.").val;
+                await ShiftController.DeleteShift(id);
+            }
+            catch (Exception ex)
+            {
+                UI.Write(ex.Message);
+            }
         }
 
         private void ViewAllShifts()
         {
-            var shifts = ShiftController.GetShifts().Result;
-            UI.MakeTable(shifts, "Shifts");
+            try
+            {
+                var shifts = ShiftController.GetShifts().Result;
+                UI.MakeTable(shifts, "Shifts");
+            }
+            catch (Exception ex)
+            {
+                UI.Write(ex.Message);
+            }
+            
         }
     }
 }
