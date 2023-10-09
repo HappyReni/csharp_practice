@@ -90,12 +90,11 @@ namespace ShiftLoggerUI
                 var endTime = Validation.CheckDateTime(UI.GetInput("Type a end time of work. (YYYY-MM-dd HH:mm:ss)").str);
                 await ShiftController.UpdateShift(id,
                                 new Shift() { Id = id, Name = name, StartTime = startTime, EndTime = endTime });
-            } catch(Exception ex)
+            } 
+            catch(Exception ex)
             {
                 UI.Write(ex.Message);
             }
-
-
         }
 
         private async void DeleteShift()
