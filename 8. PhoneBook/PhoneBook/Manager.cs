@@ -105,7 +105,7 @@ namespace PhoneBook
                 UI.Write("There is no such a name..");
             }
 
-        }
+        } 
         private void UpdateContact()
         {
             ViewAllContact();
