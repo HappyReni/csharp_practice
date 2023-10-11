@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "D7XBgNRlbDVAaJ0WVeDbB78qfeoqpFetsuBLXUVjSHxVNsXP1qhlqwZjAvAsF4Fc/MNvJ37mMEx1xCfePl01sg==",
+  "success": true,
+  "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\10. ExerciseTracker\\ExerciseUI\\ExerciseUI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dnjsv\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512"
+  ],
+  "logs": []
+}

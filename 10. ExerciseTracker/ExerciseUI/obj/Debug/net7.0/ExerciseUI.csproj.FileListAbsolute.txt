@@ -1,0 +1,17 @@
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\bin\Debug\net7.0\ExerciseUI.exe
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\bin\Debug\net7.0\ExerciseUI.deps.json
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\bin\Debug\net7.0\ExerciseUI.runtimeconfig.json
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\bin\Debug\net7.0\ExerciseUI.dll
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\bin\Debug\net7.0\ExerciseUI.pdb
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\bin\Debug\net7.0\ConsoleTableExt.dll
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.csproj.AssemblyReference.cache
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.GeneratedMSBuildEditorConfig.editorconfig
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.AssemblyInfoInputs.cache
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.AssemblyInfo.cs
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.csproj.CoreCompileInputs.cache
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.csproj.CopyComplete
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.dll
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\refint\ExerciseUI.dll
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.pdb
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ExerciseUI.genruntimeconfig.cache
+E:\Workplace\c#\csharp_practice\10. ExerciseTracker\ExerciseUI\obj\Debug\net7.0\ref\ExerciseUI.dll
