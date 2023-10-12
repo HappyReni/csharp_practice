@@ -2,17 +2,12 @@
 
 namespace ExerciseUI.Model
 {
-    internal class ExerciseModel
+    public class ExerciseModel
     {
-        [JsonPropertyName("id")]
         public int Id { get; set; }
-        [JsonPropertyName("dateStart")]
         public DateTime DateStart { get; set; }
-        [JsonPropertyName("dateEnd")]
         public DateTime DateEnd { get; set; }
-        [JsonPropertyName("duration")]
-        public TimeSpan Duration => DateStart - DateEnd;
-        [JsonPropertyName("comment")]
+        public TimeSpan Duration => DateEnd - DateStart;
         public string Comments { get; set; }
     
     }

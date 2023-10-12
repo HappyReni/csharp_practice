@@ -1,26 +1,82 @@
 ﻿using ConsoleTableExt;
+using ExerciseUI.Controllers;
+using ExerciseUI.Model;
 
 namespace ExerciseUI
 {
     internal class UserInterface
     {
-        public UserInterface() { }
+        private SELECTOR Selector { get; set; }
+        private ExerciseController controller { get; set; }
+        public UserInterface() 
+        { 
+            Selector = MainMenu();
+            controller = new ExerciseController();
+            while (true)
+            {
+                Action();
+            }
+        }
 
         public static SELECTOR MainMenu()
         {
             Console.Clear();
             Write("Exercise Tracker");
             Write("".PadRight(24, '='));
-            Write("1. Add a record");
-            Write("2. View a record");
-            Write("3. Update a record");
-            Write("4. Delete a record");
-            Write("5. View all record");
+            Write("1. Add a track");
+            Write("2. View a track");
+            Write("3. Update a track");
+            Write("4. Delete a track");
+            Write("5. View all track");
             Write("0. Exit\n");
-            var selector = (SELECTOR)GetInput("Select ").val;
 
-            return selector;
+            return (SELECTOR)GetInput("Select ").val;
         }
+        private void Action()
+        {
+            switch (Selector)
+            {
+                case SELECTOR.CREATE:
+                    CreateTrack();
+                    break;
+                case SELECTOR.READ:
+                    //ReadShift();
+                    break;
+                case SELECTOR.UPDATE:
+                    //UpdateShift();
+                    break;
+                case SELECTOR.DELETE:
+                    //DeleteShift();
+                    break;
+                case SELECTOR.VIEWALL:
+                    ViewAllTracks();
+                    break;
+                case SELECTOR.EXIT:
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Write("Invalid Input");
+                    break;
+            }
+            Selector = GoToMainMenu("Type any keys to continue.");
+        }
+
+        private void CreateTrack()
+        {
+            DateTime startTime = DateTime.Parse(GetInput("Input a start time.").str);
+            DateTime endTime = DateTime.Parse(GetInput("Input an end time.").str);
+            string comment = GetInput("Type a comment.").str;
+            var exercise = new ExerciseModel() { DateStart = startTime, DateEnd = endTime, Comments = comment};
+
+            controller.AddExercise(exercise);
+            Write("Successfully Added.");
+        }
+        private void ViewAllTracks()
+        {
+            var exercises = controller.GetExercises().ToList();
+            UserInterface.MakeTable(exercises, "All Tracks");
+        }
+
         public static void Write(string text)
         {
             Console.WriteLine(text);

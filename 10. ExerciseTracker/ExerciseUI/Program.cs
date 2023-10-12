@@ -1,3 +1,3 @@
 ﻿using ExerciseUI;
 
-UserInterface.MainMenu();
+new UserInterface();
