@@ -11549,11 +11549,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerUI\\ShiftLoggerUI.csproj",
+      "projectUniqueName": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerUI\\ShiftLoggerUI.csproj",
       "projectName": "ShiftLoggerUI",
-      "projectPath": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerUI\\ShiftLoggerUI.csproj",
+      "projectPath": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerUI\\ShiftLoggerUI.csproj",
       "packagesPath": "C:\\Users\\dnjsv\\.nuget\\packages\\",
-      "outputPath": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerUI\\obj\\",
+      "outputPath": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerUI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\dnjsv\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -11570,8 +11570,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj": {
-              "projectPath": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj"
+            "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj": {
+              "projectPath": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj"
             }
           }
         }

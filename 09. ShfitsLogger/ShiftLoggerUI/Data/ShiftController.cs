@@ -11,94 +11,131 @@ namespace ShiftLoggerUI.Data
     {
         public static async Task<Shift> GetShift(int id)
         {
-            var shift = new Shift();
-            var endpoint = $"https://localhost:7040/api/Shifts/{id}";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                var response = await client.GetAsync(endpoint);
+                var shift = new Shift();
+                var endpoint = $"https://localhost:7040/api/Shifts/{id}";
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    var json = await response.Content.ReadAsStreamAsync();
-                    shift = await JsonSerializer.DeserializeAsync<Shift>(json);
+                    var response = await client.GetAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStreamAsync();
+                        shift = await JsonSerializer.DeserializeAsync<Shift>(json);
+                    }
                     return shift;
                 }
-                else throw new Exception("Error occured with API call.");
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error occured with API call : {ex}");
+            }
+
         }
         public static async Task<List<Shift>> GetShifts()
         {
-            var shifts = new List<Shift>();
-            var endpoint = "https://localhost:7040/api/Shifts";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                var response = await client.GetAsync(endpoint);
+                var shifts = new List<Shift>();
+                var endpoint = "https://localhost:7040/api/Shifts";
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    var json = await response.Content.ReadAsStreamAsync();
-                    shifts = await JsonSerializer.DeserializeAsync<List<Shift>>(json);
+                    var response = await client.GetAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var json = await response.Content.ReadAsStreamAsync();
+                        shifts = await JsonSerializer.DeserializeAsync<List<Shift>>(json);
+                    }
                     return shifts;
                 }
-                else throw new Exception("Error occured with API call.");
             }
+            catch(Exception ex)
+            {
+                throw new Exception($"Error occured with API call : {ex}");
+            }
+
         }
 
         public static async void AddShift(Shift shift)
         {
-            var endpoint = "https://localhost:7040/api/Shifts";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                Task response = client.PostAsJsonAsync(endpoint, shift);
-                response.Wait();
-                if (response.IsCompletedSuccessfully)
+                var endpoint = "https://localhost:7040/api/Shifts";
+
+                using (HttpClient client = new HttpClient())
                 {
-                    UI.Write("Successfully added.");
-                }
-                else
-                {
-                    throw new Exception("Error occured with API call.");
+                    Task response = client.PostAsJsonAsync(endpoint, shift);
+                    response.Wait();
+                    if (response.IsCompletedSuccessfully)
+                    {
+                        UI.Write("Successfully added.");
+                    }
+                    else
+                    {
+                        UI.Write("Attept Failed.");
+                    }
                 }
             }
+            catch(Exception ex)
+            {
+                throw new Exception($"Error occured with API call : {ex}");
+            }
+
         }
         public static async Task UpdateShift(int id,Shift shift)
         {
-            var endpoint = $"https://localhost:7040/api/Shifts/{id}";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                var response = await client.PutAsJsonAsync(endpoint, shift);
+                var endpoint = $"https://localhost:7040/api/Shifts/{id}";
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    UI.Write("Successfully Updated.");
-                }
-                else
-                {
-                    throw new Exception("Error occured with API call.");
+                    var response = await client.PutAsJsonAsync(endpoint, shift);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        UI.Write("Successfully Updated.");
+                    }
+                    else
+                    {
+                        UI.Write("Attept Failed.");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error occured with API call : {ex}");
+            }
+
         }
 
         public static async Task DeleteShift(int id)
         {
-            var endpoint = $"https://localhost:7040/api/Shifts/{id}";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                var response = await client.DeleteAsync(endpoint);
+                var endpoint = $"https://localhost:7040/api/Shifts/{id}";
 
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
                 {
-                    UI.Write("Successfully deleted.");
+                    var response = await client.DeleteAsync(endpoint);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        UI.Write("Successfully deleted.");
+                    }
+                    else
+                    {
+                        UI.Write("Attept Failed.");
+                    }
                 }
-                else
-                {
-                    throw new Exception("Error occured with API call.");
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error occured with API call : {ex}");
             }
         }
     }

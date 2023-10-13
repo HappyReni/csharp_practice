@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj": {}
+    "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj": {}
   },
   "projects": {
-    "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj": {
+    "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj",
+        "projectUniqueName": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj",
         "projectName": "ShiftLoggerAPI",
-        "projectPath": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj",
+        "projectPath": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\ShiftLoggerAPI.csproj",
         "packagesPath": "C:\\Users\\dnjsv\\.nuget\\packages\\",
-        "outputPath": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerAPI\\obj\\",
+        "outputPath": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dnjsv\\AppData\\Roaming\\NuGet\\NuGet.Config",

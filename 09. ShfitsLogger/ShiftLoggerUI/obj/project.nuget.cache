@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Gpcy2zVK/C9HFFTQ2Cgx5VlJSvoswcSrJneAo/M2nEYid7nBFLilsXZ48Dncz871ahN3qR3mtRPC9j4/AA8LNg==",
+  "dgSpecHash": "gpiBlyIK4SU5330yLWQonxnIjKSeAW+Tfq17hB+fPRVo3jZf/UA+Guza3M2CPCXe74YogACP5luQsGaVkNOvSg==",
   "success": true,
-  "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\9. ShfitsLogger\\ShiftLoggerUI\\ShiftLoggerUI.csproj",
+  "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\09. ShfitsLogger\\ShiftLoggerUI\\ShiftLoggerUI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dnjsv\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
