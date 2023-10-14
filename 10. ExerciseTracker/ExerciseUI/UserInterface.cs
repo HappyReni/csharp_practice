@@ -79,7 +79,10 @@ namespace ExerciseUI
             DateTime startTime = DateTime.Parse(GetInput("Input a start time.").str);
             DateTime endTime = DateTime.Parse(GetInput("Input an end time.").str);
             string comment = GetInput("Type a comment.").str;
-            var exercise = new ExerciseModel() { Id = id, DateStart = startTime, DateEnd = endTime, Comments = comment };
+            var exercise = controller.GetExercise(id);
+            exercise.DateStart = startTime;
+            exercise.DateEnd = endTime;
+            exercise.Comments = comment;
 
             if (controller.UpdateExercise(exercise))
                 Write("Successfully Updated.");
