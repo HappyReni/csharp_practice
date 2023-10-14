@@ -9,10 +9,25 @@ namespace ExerciseUI.Services
         public ExerciseService() { repository = new(); }
 
         public IEnumerable<ExerciseModel> GetExercises() => repository.GetAll().ToList();
-        public void AddExercise(ExerciseModel entity) 
+        public bool AddExercise(ExerciseModel entity) 
         { 
             // Validation
-            repository.Create(entity); 
+            return repository.Create(entity); 
+        }
+
+        public bool RemoveExercise(int id)
+        {
+            return repository.Delete(id);
+        }
+
+        public bool UpdatingExercise(ExerciseModel entity)
+        {
+            return repository.Update(entity);
+        }
+
+        public ExerciseModel GetExercise(int id)
+        {
+            return repository.Get(id);
         }
     }
 }

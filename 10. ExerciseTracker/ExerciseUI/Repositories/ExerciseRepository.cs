@@ -6,9 +6,9 @@ namespace ExerciseUI.Repositories
     {
         T Get(int id);
         IEnumerable<T> GetAll();
-        void Create(T entity);
-        void Delete(int id);
-        void Update(T entity);
+        bool Create(T entity);
+        bool Delete(int id);
+        bool Update(T entity);
     }
     public class ExerciseRepository<T> : IRepository<T> where T : class
     {
@@ -19,12 +19,13 @@ namespace ExerciseUI.Repositories
             context = new();
         }
         
-        public void Create(T entity)
+        public bool Create(T entity)
         {
             try
             {
                 context.Set<T>().Add(entity);
                 context.SaveChanges();
+                return true;
             }
             catch
             {
@@ -32,14 +33,31 @@ namespace ExerciseUI.Repositories
             }
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var item = context.Set<T>().Find(id);
+                context.Set<T>().Remove(item);
+                context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Error occured while deleting an exercise.");
+            }
         }
 
         public T Get(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return context.Set<T>().Find(id);
+            }
+            catch
+            {
+                throw new Exception("Error occured while fetching an exercise.");
+            }
         }
 
         public IEnumerable<T> GetAll() 
@@ -54,9 +72,18 @@ namespace ExerciseUI.Repositories
             }
         }
 
-        public void Update(T entity)
+        public bool Update(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                context.Set<T>().Update(entity);
+                context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                throw new Exception("Error occured while updating an exercise.");
+            }
         }
     }
 }

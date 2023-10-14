@@ -40,13 +40,13 @@ namespace ExerciseUI
                     CreateTrack();
                     break;
                 case SELECTOR.READ:
-                    //ReadShift();
+                    ReadTrack();
                     break;
                 case SELECTOR.UPDATE:
-                    //UpdateShift();
+                    UpdateTrack();
                     break;
                 case SELECTOR.DELETE:
-                    //DeleteShift();
+                    DeleteTrack();
                     break;
                 case SELECTOR.VIEWALL:
                     ViewAllTracks();
@@ -68,13 +68,43 @@ namespace ExerciseUI
             string comment = GetInput("Type a comment.").str;
             var exercise = new ExerciseModel() { DateStart = startTime, DateEnd = endTime, Comments = comment};
 
-            controller.AddExercise(exercise);
-            Write("Successfully Added.");
+            if(controller.AddExercise(exercise))
+                Write("Successfully Added.");
         }
+
+        private void UpdateTrack()
+        {
+            ViewAllTracks();
+            int id = GetInput("Input an id to update.").val;
+            DateTime startTime = DateTime.Parse(GetInput("Input a start time.").str);
+            DateTime endTime = DateTime.Parse(GetInput("Input an end time.").str);
+            string comment = GetInput("Type a comment.").str;
+            var exercise = new ExerciseModel() { Id = id, DateStart = startTime, DateEnd = endTime, Comments = comment };
+
+            if (controller.UpdateExercise(exercise))
+                Write("Successfully Updated.");
+        }
+
+        private void DeleteTrack()
+        {
+            ViewAllTracks();
+            int id = GetInput("Input an id to delete.").val;
+            if (controller.RemoveExercise(id)) 
+                Write("Successfully deleted.");
+        }
+
+        private void ReadTrack()
+        {
+            ViewAllTracks();
+            int id = GetInput("Input an id to read.").val;
+            List<ExerciseModel> list = new() { controller.GetExercise(id) };
+            MakeTable(list, "Track");
+        }
+
         private void ViewAllTracks()
         {
             var exercises = controller.GetExercises().ToList();
-            UserInterface.MakeTable(exercises, "All Tracks");
+            MakeTable(exercises, "All Tracks");
         }
 
         public static void Write(string text)

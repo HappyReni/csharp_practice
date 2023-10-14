@@ -3,6 +3,9 @@
     internal interface IExerciseController <T> where T : class
     {
         IEnumerable<T> GetExercises();
-        void AddExercise(T exercise);
+        bool AddExercise(T exercise);
+        bool RemoveExercise(int id);
+        bool UpdateExercise(T exercise);
+        T GetExercise(int id);
     }
 }
