@@ -7,11 +7,11 @@ namespace ExerciseUI
     internal class UserInterface
     {
         private SELECTOR Selector { get; set; }
-        private ExerciseController controller { get; set; }
-        public UserInterface() 
+        private IExerciseController<ExerciseModel> _controller { get; set; }
+        public UserInterface(IExerciseController<ExerciseModel> controller) 
         { 
             Selector = MainMenu();
-            controller = new ExerciseController();
+            _controller = controller;
             while (true)
             {
                 Action();
@@ -63,6 +63,7 @@ namespace ExerciseUI
 
         private void CreateTrack()
         {
+            Clear();
             try
             {
                 DateTime startTime = Validation.CheckDateTime(GetInput("Input a start time.").str);
@@ -71,7 +72,7 @@ namespace ExerciseUI
                 string comment = GetInput("Type a comment.").str;
                 var exercise = new ExerciseModel() { DateStart = startTime, DateEnd = endTime, Comments = comment };
 
-                if (controller.AddExercise(exercise))
+                if (_controller.AddExercise(exercise))
                     Write("Successfully Added.");
             }
             catch (Exception ex) 
@@ -90,12 +91,12 @@ namespace ExerciseUI
                 DateTime endTime = Validation.CheckDateTime(GetInput("Input an end time.").str);
                 Validation.CheckStartEndTime(startTime, endTime);
                 string comment = GetInput("Type a comment.").str;
-                var exercise = controller.GetExercise(id);
+                var exercise = _controller.GetExercise(id);
                 exercise.DateStart = startTime;
                 exercise.DateEnd = endTime;
                 exercise.Comments = comment;
 
-                if (controller.UpdateExercise(exercise))
+                if (_controller.UpdateExercise(exercise))
                     Write("Successfully Updated.");
             }
             catch (Exception ex)
@@ -107,22 +108,36 @@ namespace ExerciseUI
         private void DeleteTrack()
         {
             ViewAllTracks();
-            int id = GetInput("Input an id to delete.").val;
-            if (controller.RemoveExercise(id)) 
-                Write("Successfully deleted.");
+            try
+            {
+                int id = GetInput("Input an id to delete.").val;
+                if (_controller.RemoveExercise(id))
+                    Write("Successfully deleted.");
+            }
+            catch (Exception ex)
+            {
+                Write($"{ex.Message}");
+            }
         }
 
         private void ReadTrack()
         {
             ViewAllTracks();
-            int id = GetInput("Input an id to read.").val;
-            List<ExerciseModel> list = new() { controller.GetExercise(id) };
-            MakeTable(list, "Track");
+            try
+            {
+                int id = GetInput("Input an id to read.").val;
+                List<ExerciseModel> list = new() { _controller.GetExercise(id) };
+                MakeTable(list, "Track");
+            }
+            catch (Exception ex)
+            {
+                Write($"{ex.Message}");
+            }
         }
 
         private void ViewAllTracks()
         {
-            var exercises = controller.GetExercises().ToList();
+            var exercises = _controller.GetExercises().ToList();
             MakeTable(exercises, "All Tracks");
         }
 

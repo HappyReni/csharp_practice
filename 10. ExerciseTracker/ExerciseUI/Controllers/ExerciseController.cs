@@ -5,36 +5,36 @@ namespace ExerciseUI.Controllers
 {
     internal class ExerciseController : IExerciseController<ExerciseModel>
     {
-        private readonly ExerciseService service;
+        private readonly IExerciseService<ExerciseModel> _service;
 
-        public ExerciseController()
+        public ExerciseController(IExerciseService<ExerciseModel> exerciseService)
         {
-            service = new();
+            _service = exerciseService;
         }
 
         public bool AddExercise(ExerciseModel exercise)
         {
-            return service.AddExercise(exercise);
+            return _service.AddExercise(exercise);
         }
 
         public ExerciseModel GetExercise(int id)
         {
-            return service.GetExercise(id);
+            return _service.GetExercise(id);
         }
 
         public IEnumerable<ExerciseModel> GetExercises()
         {
-            return service.GetExercises();
+            return _service.GetExercises();
         }
 
         public bool RemoveExercise(int id)
         {
-            return service.RemoveExercise(id);
+            return _service.RemoveExercise(id);
         }
 
         public bool UpdateExercise(ExerciseModel entity)
         {
-            return service.UpdatingExercise(entity);
+            return _service.UpdatingExercise(entity);
         }
     }
 }

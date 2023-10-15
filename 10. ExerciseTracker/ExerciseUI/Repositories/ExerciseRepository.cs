@@ -12,19 +12,19 @@ namespace ExerciseUI.Repositories
     }
     public class ExerciseRepository<T> : IRepository<T> where T : class
     {
-        private readonly ExerciseContext context;
+        private readonly ExerciseContext _context;
 
-        public ExerciseRepository()
+        public ExerciseRepository(ExerciseContext context)
         {
-            context = new();
+            _context = context;
         }
         
         public bool Create(T entity)
         {
             try
             {
-                context.Set<T>().Add(entity);
-                context.SaveChanges();
+                _context.Set<T>().Add(entity);
+                _context.SaveChanges();
                 return true;
             }
             catch
@@ -37,9 +37,9 @@ namespace ExerciseUI.Repositories
         {
             try
             {
-                var item = context.Set<T>().Find(id);
-                context.Set<T>().Remove(item);
-                context.SaveChanges();
+                var item = _context.Set<T>().Find(id);
+                _context.Set<T>().Remove(item);
+                _context.SaveChanges();
                 return true;
             }
             catch
@@ -52,7 +52,7 @@ namespace ExerciseUI.Repositories
         {
             try
             {
-                return context.Set<T>().Find(id);
+                return _context.Set<T>().Find(id);
             }
             catch
             {
@@ -64,7 +64,7 @@ namespace ExerciseUI.Repositories
         {
             try
             {
-                return context.Set<T>();
+                return _context.Set<T>();
             }
             catch
             {
@@ -76,8 +76,8 @@ namespace ExerciseUI.Repositories
         {
             try
             {
-                context.Set<T>().Update(entity);
-                context.SaveChanges();
+                _context.Set<T>().Update(entity);
+                _context.SaveChanges();
                 return true;
             }
             catch
