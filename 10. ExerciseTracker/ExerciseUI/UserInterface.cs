@@ -63,29 +63,45 @@ namespace ExerciseUI
 
         private void CreateTrack()
         {
-            DateTime startTime = DateTime.Parse(GetInput("Input a start time.").str);
-            DateTime endTime = DateTime.Parse(GetInput("Input an end time.").str);
-            string comment = GetInput("Type a comment.").str;
-            var exercise = new ExerciseModel() { DateStart = startTime, DateEnd = endTime, Comments = comment};
+            try
+            {
+                DateTime startTime = Validation.CheckDateTime(GetInput("Input a start time.").str);
+                DateTime endTime = Validation.CheckDateTime(GetInput("Input an end time.").str);
+                Validation.CheckStartEndTime(startTime, endTime);
+                string comment = GetInput("Type a comment.").str;
+                var exercise = new ExerciseModel() { DateStart = startTime, DateEnd = endTime, Comments = comment };
 
-            if(controller.AddExercise(exercise))
-                Write("Successfully Added.");
+                if (controller.AddExercise(exercise))
+                    Write("Successfully Added.");
+            }
+            catch (Exception ex) 
+            {
+                Write($"{ex.Message}");
+            }
         }
 
         private void UpdateTrack()
         {
             ViewAllTracks();
-            int id = GetInput("Input an id to update.").val;
-            DateTime startTime = DateTime.Parse(GetInput("Input a start time.").str);
-            DateTime endTime = DateTime.Parse(GetInput("Input an end time.").str);
-            string comment = GetInput("Type a comment.").str;
-            var exercise = controller.GetExercise(id);
-            exercise.DateStart = startTime;
-            exercise.DateEnd = endTime;
-            exercise.Comments = comment;
+            try
+            {
+                int id = GetInput("Input an id to update.").val;
+                DateTime startTime = Validation.CheckDateTime(GetInput("Input a start time.").str);
+                DateTime endTime = Validation.CheckDateTime(GetInput("Input an end time.").str);
+                Validation.CheckStartEndTime(startTime, endTime);
+                string comment = GetInput("Type a comment.").str;
+                var exercise = controller.GetExercise(id);
+                exercise.DateStart = startTime;
+                exercise.DateEnd = endTime;
+                exercise.Comments = comment;
 
-            if (controller.UpdateExercise(exercise))
-                Write("Successfully Updated.");
+                if (controller.UpdateExercise(exercise))
+                    Write("Successfully Updated.");
+            }
+            catch (Exception ex)
+            {
+                Write($"{ex.Message}");
+            }
         }
 
         private void DeleteTrack()

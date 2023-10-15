@@ -10,8 +10,7 @@ namespace ExerciseUI.Services
 
         public IEnumerable<ExerciseModel> GetExercises() => repository.GetAll();
         public bool AddExercise(ExerciseModel entity) 
-        { 
-            // Validation
+        {
             return repository.Create(entity); 
         }
 
