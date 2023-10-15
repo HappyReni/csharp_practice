@@ -8,7 +8,7 @@ namespace ExerciseUI.Services
         private readonly ExerciseRepository<ExerciseModel> repository;
         public ExerciseService() { repository = new(); }
 
-        public IEnumerable<ExerciseModel> GetExercises() => repository.GetAll().ToList();
+        public IEnumerable<ExerciseModel> GetExercises() => repository.GetAll();
         public bool AddExercise(ExerciseModel entity) 
         { 
             // Validation
