@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "rqUFSl1QKqoVKSkhg4IshN3a/ULdnwzUa6H/irV2dLfE+mtBR6tdXat/xVYIXWJW3Vq//+QUZ9UEj0KhFBW+ZQ==",
+  "dgSpecHash": "6S87eHe3yJA/baPXNU6WoH/zOtJ0SMVkdjncOTKCjLSZTEgSl4NWs/JGygLN4jPggcUUQUxZWbbzd6CX3V1pag==",
   "success": true,
   "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\10. ExerciseTracker\\ExerciseUI\\ExerciseUI.csproj",
   "expectedPackageFiles": [
@@ -21,6 +21,7 @@
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\7.0.11\\microsoft.entityframeworkcore.tools.7.0.11.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.extensions.configuration\\7.0.0\\microsoft.extensions.configuration.7.0.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\7.0.0\\microsoft.extensions.configuration.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\7.0.0\\microsoft.extensions.dependencyinjection.7.0.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\7.0.0\\microsoft.extensions.dependencyinjection.abstractions.7.0.0.nupkg.sha512",

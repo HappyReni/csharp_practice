@@ -6,15 +6,15 @@ namespace ExerciseUI.Services
     internal class ExerciseService : IExerciseService<ExerciseModel>
     {
         private readonly IRepository<ExerciseModel> _repository;
-        public ExerciseService(IRepository<ExerciseModel> repository) 
+        public ExerciseService(IRepository<ExerciseModel> repository)
         {
             _repository = repository;
         }
 
         public IEnumerable<ExerciseModel> GetExercises() => _repository.GetAll();
-        public bool AddExercise(ExerciseModel entity) 
+        public bool AddExercise(ExerciseModel entity)
         {
-            return _repository.Create(entity); 
+            return _repository.Create(entity);
         }
 
         public bool RemoveExercise(int id)
