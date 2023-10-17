@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ve7GEumIgvx5H+j/AXKilsu9WchLZJ6t8M8osODR+czYG9kWm1DPnbRdq9PWGAouMfjvIzBf4vIJbV0DEBCtAw==",
+  "success": true,
+  "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\11. SportsResultNotifier\\SportsResultNotifier\\SportsResultNotifier.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dnjsv\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\htmlagilitypack\\1.11.54\\htmlagilitypack.1.11.54.nupkg.sha512"
+  ],
+  "logs": []
+}
