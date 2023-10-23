@@ -16,3 +16,16 @@ E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\ob
 E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\obj\Debug\net7.0\SportsResultNotifier.genruntimeconfig.cache
 E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\obj\Debug\net7.0\ref\SportsResultNotifier.dll
 E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\ConsoleTableExt.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\System.Diagnostics.EventLog.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\System.Drawing.Common.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\System.Security.Permissions.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\System.Windows.Extensions.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Diagnostics.EventLog.Messages.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Diagnostics.EventLog.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
+E:\Workplace\c#\csharp_practice\11. SportsResultNotifier\SportsResultNotifier\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll

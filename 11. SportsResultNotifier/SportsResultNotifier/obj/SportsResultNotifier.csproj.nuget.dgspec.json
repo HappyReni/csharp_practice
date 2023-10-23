@@ -47,6 +47,10 @@
             "HtmlAgilityPack": {
               "target": "Package",
               "version": "[1.11.54, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             }
           },
           "imports": [
