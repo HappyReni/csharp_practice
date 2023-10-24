@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using SportsResultNotifier.Model;
 using System.Data;
 
 namespace SportsResultNotifier
@@ -8,6 +9,8 @@ namespace SportsResultNotifier
         public HtmlDocument Document { get; set; }
         public List<string> Columns { get; set; }
         public List<List<string>> Rows { get; set; }
+        public List<TeamModel> EasternTeam { get; set; }
+        public List<TeamModel> WesternTeam { get; set; }
         public Scrapper()
         {
             string url = "https://www.basketball-reference.com/boxscores/";
@@ -41,10 +44,29 @@ namespace SportsResultNotifier
             Columns.ForEach(x => data.Columns.Add(x));
             foreach(var row in Rows)
             {
+                var teamData = GetModelData(row);
+                if (seperator == "E") 
+                    EasternTeam.Add(teamData);
+                else 
+                    WesternTeam.Add(teamData);
+
                 data.Rows.Add(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
             }
 
             return data;
+        }
+        public TeamModel GetModelData(List<string> data)
+        {
+            return new TeamModel()
+            {
+                Name = data[0],
+                Win = data[1],
+                Lost = data[2],
+                WL = data[3],
+                GB = data[4],
+                PSG = data[5],
+                PAG = data[6]
+            };
         }
     }
 }
