@@ -7,10 +7,10 @@ namespace SportsResultNotifier
     public class Scrapper
     {
         public HtmlDocument Document { get; set; }
-        public List<string> Columns { get; set; }
-        public List<List<string>> Rows { get; set; }
-        public List<TeamModel> EasternTeam { get; set; }
-        public List<TeamModel> WesternTeam { get; set; }
+        public List<string> Columns { get; set; } = new();
+        public List<List<string>> Rows { get; set; } = new();
+        public List<TeamModel> EasternTeam { get; set; } = new();
+        public List<TeamModel> WesternTeam { get; set; } = new();
         public Scrapper()
         {
             string url = "https://www.basketball-reference.com/boxscores/";
@@ -20,19 +20,35 @@ namespace SportsResultNotifier
 
         public void GetColumns(string seperator)
         {
-            Columns = Document.DocumentNode
-                                    .SelectNodes($"//*[@id=\"confs_standings_{seperator}\"]/thead/tr/th")
-                                    .Select(x => x.InnerText)
-                                    .ToList();
+            try
+            {
+                Columns = Document.DocumentNode
+                        .SelectNodes($"//*[@id=\"confs_standings_{seperator}\"]/thead/tr/th")
+                        .Select(x => x.InnerText)
+                        .ToList();
+            }
+            catch
+            {
+                Columns.Clear();
+            }
         }
+
         public void GetRows(string seperator)
         {
-            Rows = Document.DocumentNode
-                                    .SelectNodes($"//*[@id=\"confs_standings_{seperator}\"]/tbody/tr")
-                                    .Select(row => row.ChildNodes
-                                        .Select(cell => cell.InnerText)
-                                        .ToList())
-                                    .ToList();
+            try
+            {
+                Rows = Document.DocumentNode
+                        .SelectNodes($"//*[@id=\"confs_standings_{seperator}\"]/tbody/tr")
+                        .Select(row => row.ChildNodes
+                            .Select(cell => cell.InnerText)
+                            .ToList())
+                        .ToList();
+            }
+            catch
+            {
+                Rows.Clear();
+            }
+
         }
         public DataTable BuildTable(string seperator)
         {

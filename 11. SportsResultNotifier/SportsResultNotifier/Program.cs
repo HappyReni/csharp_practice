@@ -1,8 +1,6 @@
 ﻿using ConsoleTableExt;
 using SportsResultNotifier;
 using System.Data;
-using System.Net.Mail;
-using System.Net;
 
 static void MakeTable(DataTable data, string tableName)
 {
@@ -14,10 +12,12 @@ static void MakeTable(DataTable data, string tableName)
     Console.WriteLine("".PadRight(24, '='));
 }
 
-
 Scrapper scrapper = new Scrapper();
 var easternTable = scrapper.BuildTable("E");
 var westernTable = scrapper.BuildTable("W");
 
 MakeTable(easternTable, "Eastern Conference");
 MakeTable(westernTable, "Western Conference");
+
+Email email = new Email();
+email.Send();

@@ -3,12 +3,12 @@
     public class TeamModel
     {
         public string Name { get; set; }
-        public int Win { get; set; }
-        public int Lost { get; set; }
-        public double WL { get; set; }
-        public double GB { get; set; }
-        public double PSG { get; set; }
-        public double PAG { get; set; }
+        public string Win { get; set; }
+        public string Lost { get; set; }
+        public string WL { get; set; }
+        public string GB { get; set; }
+        public string PSG { get; set; }
+        public string PAG { get; set; }
 
     }
 }
