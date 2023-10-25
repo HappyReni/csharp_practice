@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public string Win { get; set; }
-        public string Lost { get; set; }
+        public string Lose { get; set; }
         public string WL { get; set; }
         public string GB { get; set; }
         public string PSG { get; set; }

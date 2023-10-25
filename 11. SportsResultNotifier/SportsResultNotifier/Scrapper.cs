@@ -77,7 +77,7 @@ namespace SportsResultNotifier
             {
                 Name = data[0],
                 Win = data[1],
-                Lost = data[2],
+                Lose = data[2],
                 WL = data[3],
                 GB = data[4],
                 PSG = data[5],

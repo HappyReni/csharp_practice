@@ -20,4 +20,4 @@ MakeTable(easternTable, "Eastern Conference");
 MakeTable(westernTable, "Western Conference");
 
 Email email = new Email();
-email.Send();
+email.Send(scrapper.EasternTeam);

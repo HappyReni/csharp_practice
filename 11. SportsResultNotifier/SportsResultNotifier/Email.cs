@@ -1,59 +1,117 @@
-﻿using System.Net.Mail;
+﻿using Microsoft.Extensions.Configuration;
+using SportsResultNotifier.Model;
+using System.Data;
 using System.Net;
-using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
 
 namespace SportsResultNotifier
 {
-    public class EmailProperty
-    {
-        public string smtpAddress;
-        public int portNumber;
-        public bool enableSSL = true;
-        public string emailFromAddress = "dnjsvlfwo@gmail.com"; //Sender Email Address  
-        public string password = "vjlc wibp cezc gohy"; //Sender Password  
-        public string emailToAddress = "dnjsvlfwo@gmail.com"; //Receiver Email Address  
-        private readonly IConfiguration configuration;
-        public EmailProperty()
-        {
-            configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            var configs = configuration.GetChildren();
-            foreach (var config in configs)
-            {
-                Console.WriteLine(config.Key + config.Value);
-            }
-        }
-    }
     public class Email
     {
-        private EmailProperty Prop { get; set; }
+        private Dictionary<string, string> Prop { get; set; }
+        private readonly IConfiguration configuration;
 
         public Email()
         {
             Prop = new();
+            configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            foreach (var config in configuration.GetChildren())
+            {
+                if (config.Key != null)
+                    Prop[config.Key] = config.Value;
+                if (config.Value == "")
+                    Console.WriteLine("Please type your email address and password in appsettings.json file.");
+            }
         }
-        
-        public void Send()
+
+        public void Send(List<TeamModel> data)
         {
-            //string subject = "Hello";
-            //string body = "<h1>Hello, This is Email sending test using gmail.</h1>";
+            try
+            {
+                if (data is not null)
+                {
+                    string subject = "Today's result";
+                    string body = BuildBody(data);
+                    using (MailMessage mail = new MailMessage())
+                    {
+                        mail.From = new MailAddress(Prop["emailFromAddress"]);
+                        mail.To.Add(Prop["emailToAddress"]);
+                        mail.Subject = subject;
+                        mail.Body = body;
+                        mail.IsBodyHtml = true;
 
-            //using (MailMessage mail = new MailMessage())
-            //{
-            //    mail.From = new MailAddress(emailFromAddress);
-            //    mail.To.Add(emailToAddress);
-            //    mail.Subject = subject;
-            //    mail.Body = body;
-            //    mail.IsBodyHtml = true;
-            //    //mail.Attachments.Add(new Attachment("D:\\TestFile.txt"));//--Uncomment this to send any attachment  
-            //    using (SmtpClient smtp = new SmtpClient(smtpAddress, portNumber))
-            //    {
-            //        smtp.Credentials = new NetworkCredential(emailFromAddress, password);
-            //        smtp.EnableSsl = enableSSL;
-            //        smtp.Send(mail);
-            //    }
-            //}
-            Console.Write("sent");
+                        using (SmtpClient smtp = new SmtpClient(Prop["smtpAddress"], Int32.Parse(Prop["portNumber"])))
+                        {
+                            smtp.Credentials = new NetworkCredential(Prop["emailFromAddress"], Prop["password"]);
+                            smtp.EnableSsl = true;
+                            smtp.Send(mail);
+                        }
+                    }
+                    Console.WriteLine($"The result is emailed to {Prop["emailToAddress"]}");
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Error occured while emailing.");
+            }
+        }
 
+        private string BuildBody(List<TeamModel> data)
+        {
+            string head = """
+                <html>
+                <head>
+                    <style>
+                        table {
+                            border-collapse: collapse;
+                            width: 100%;
+                        }
+
+                        th, td {
+                            border: 1px solid black;
+                            padding: 8px;
+                            text-align: center;
+                        }
+                        th {
+                            font-weight: bold; 
+                        }
+                    </style>
+                </head>
+                """;
+            string body = $"""
+                <body>
+                <table>
+                    <tr>
+                        <th>Western Conference</th>
+                        <th>W</th>
+                        <th>L</th>
+                        <th>W/L%</th>
+                        <th>GB</th>
+                        <th>PS/G</th>
+                        <th>PA/G</th>
+                    </tr>
+                """;
+            foreach(var model in data)
+            {
+                string tr = $"""
+                    <tr>
+                        <td>{model.Name}</td>
+                        <td>{model.Win}</td>
+                        <td>{model.Lose}</td>
+                        <td>{model.WL}</td>
+                        <td>{model.GB}</td>
+                        <td>{model.PSG}</td>
+                        <td>{model.PAG}</td>
+                    </tr>
+                    """;
+                body = body + tr;
+            }
+            string close = $"""
+                    </table>
+                </body>
+                </html>
+                """;
+            return head + body + close;
         }
     }
 }
