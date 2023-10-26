@@ -58,7 +58,7 @@ namespace SportsResultNotifier
             GetRows(seperator);
 
             Columns.ForEach(x => data.Columns.Add(x));
-            foreach(var row in Rows)
+            foreach (var row in Rows)
             {
                 var teamData = GetModelData(row);
                 if (seperator == "E") 

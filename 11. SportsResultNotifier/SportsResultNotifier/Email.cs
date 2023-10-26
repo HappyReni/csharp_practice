@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using SportsResultNotifier.Model;
-using System.Data;
 using System.Net;
 using System.Net.Mail;
 
@@ -9,46 +8,57 @@ namespace SportsResultNotifier
     public class Email
     {
         private Dictionary<string, string> Prop { get; set; }
+        private Dictionary<string, List<TeamModel>> TeamData { get; set; }
         private readonly IConfiguration configuration;
 
         public Email()
         {
             Prop = new();
+            TeamData = new();
             configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
             foreach (var config in configuration.GetChildren())
             {
                 if (config.Key != null)
                     Prop[config.Key] = config.Value;
                 if (config.Value == "")
-                    Console.WriteLine("Please type your email address and password in appsettings.json file.");
+                    Console.WriteLine("Please type your email address and password in appsettings.json in bin folder.");
             }
         }
 
-        public void Send(List<TeamModel> data)
+        public void SetData(List<TeamModel> data, string seperator)
+        {
+            if (data is null) return;
+            if (data.Count == 0) return;
+
+            TeamData[seperator] = data;
+        }
+
+        public void Send()
         {
             try
             {
-                if (data is not null)
+                string subject = "Today's result";
+                string body = "";
+                foreach (var key in TeamData.Keys)
                 {
-                    string subject = "Today's result";
-                    string body = BuildBody(data);
-                    using (MailMessage mail = new MailMessage())
-                    {
-                        mail.From = new MailAddress(Prop["emailFromAddress"]);
-                        mail.To.Add(Prop["emailToAddress"]);
-                        mail.Subject = subject;
-                        mail.Body = body;
-                        mail.IsBodyHtml = true;
-
-                        using (SmtpClient smtp = new SmtpClient(Prop["smtpAddress"], Int32.Parse(Prop["portNumber"])))
-                        {
-                            smtp.Credentials = new NetworkCredential(Prop["emailFromAddress"], Prop["password"]);
-                            smtp.EnableSsl = true;
-                            smtp.Send(mail);
-                        }
-                    }
-                    Console.WriteLine($"The result is emailed to {Prop["emailToAddress"]}");
+                    body = body + BuildBody(key);
                 }
+                using (MailMessage mail = new MailMessage())
+                {
+                    mail.From = new MailAddress(Prop["emailFromAddress"]);
+                    mail.To.Add(Prop["emailToAddress"]);
+                    mail.Subject = subject;
+                    mail.Body = body;
+                    mail.IsBodyHtml = true;
+
+                    using (SmtpClient smtp = new SmtpClient(Prop["smtpAddress"], Int32.Parse(Prop["portNumber"])))
+                    {
+                        smtp.Credentials = new NetworkCredential(Prop["emailFromAddress"], Prop["password"]);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
+                }
+                Console.WriteLine($"The result is emailed to {Prop["emailToAddress"]}");
             }
             catch
             {
@@ -56,7 +66,7 @@ namespace SportsResultNotifier
             }
         }
 
-        private string BuildBody(List<TeamModel> data)
+        private string BuildBody(string key)
         {
             string head = """
                 <html>
@@ -82,7 +92,7 @@ namespace SportsResultNotifier
                 <body>
                 <table>
                     <tr>
-                        <th>Western Conference</th>
+                        <th>{key}</th>
                         <th>W</th>
                         <th>L</th>
                         <th>W/L%</th>
@@ -91,7 +101,7 @@ namespace SportsResultNotifier
                         <th>PA/G</th>
                     </tr>
                 """;
-            foreach(var model in data)
+            foreach (var model in TeamData[key])
             {
                 string tr = $"""
                     <tr>

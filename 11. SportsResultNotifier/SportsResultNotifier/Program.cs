@@ -19,5 +19,7 @@ var westernTable = scrapper.BuildTable("W");
 MakeTable(easternTable, "Eastern Conference");
 MakeTable(westernTable, "Western Conference");
 
-Email email = new Email();
-email.Send(scrapper.EasternTeam);
+Email email = new();
+email.SetData(scrapper.EasternTeam, "Eastern Conference");
+email.SetData(scrapper.WesternTeam, "Western Conference");
+email.Send();
