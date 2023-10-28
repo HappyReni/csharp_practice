@@ -1,0 +1,5 @@
+E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.csproj.AssemblyReference.cache
+E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.GeneratedMSBuildEditorConfig.editorconfig
+E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.AssemblyInfoInputs.cache
+E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.AssemblyInfo.cs
+E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.csproj.CoreCompileInputs.cache
