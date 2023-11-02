@@ -5,7 +5,7 @@ namespace ExcelReader
 {
     public class ExcelContext : DbContext
     {
-        protected ExcelContext()
+        public ExcelContext()
         {
         }
 
@@ -18,6 +18,6 @@ namespace ExcelReader
             optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Excel;Integrated Security=true");
         }
 
-        public DbSet<ExcelModel> Excels { get; set; } = null;
+        public DbSet<ExcelModel> Excels { get; set; }
     }
 }
