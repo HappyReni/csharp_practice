@@ -45,12 +45,6 @@ namespace ExcelReader
 
                 for (int i = 2; i < rowCount + 1; i++)
                 {
-                    //for (int j =0; j < colCount; j++)
-                    //{
-                    //    char col = (char)('A' + j);
-
-                    //    Console.WriteLine(worksheet.Cells[$"{col}{i}"].Value.ToString());
-                    //}
                     var name = worksheet.Cells[$"A{i}"].Value.ToString();
                     var age = Int32.Parse(worksheet.Cells[$"B{i}"].Value.ToString());
                     var job = worksheet.Cells[$"C{i}"].Value.ToString();
