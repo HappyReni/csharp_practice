@@ -13,8 +13,16 @@ namespace ExcelReader
 
         public void Create(List<ExcelModel> models)
         {
-            _context.Excels.AddRange(models);
-            _context.SaveChanges();
+            try
+            {
+                _context.Excels.AddRange(models);
+                _context.SaveChanges();
+                Console.WriteLine("Data is added to database");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occured while adding data to database :" + ex.Message);
+            }
         }
     }
 }
