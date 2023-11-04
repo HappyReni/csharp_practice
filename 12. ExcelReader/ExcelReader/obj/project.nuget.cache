@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "5FMBfSljuCnm4YtuWJmRCR3SK5M5OkGTJ/MhK72luqlEmvZYdCZG0JrygGNn5ZBdYmXKRF9esDQaHf7WXK3gsA==",
+  "dgSpecHash": "8i9axBDIc3AlQX/SfVBrBSG52BZ1f0gs04lKSTzDRDXug20eQd+quhzFu3LDKdyFDQ/i+g/PQcttHPCj4E358g==",
   "success": true,
   "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\12. ExcelReader\\ExcelReader\\ExcelReader.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dnjsv\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\consoletableext\\3.2.0\\consoletableext.3.2.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\epplus\\7.0.0\\epplus.7.0.0.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\epplus.interfaces\\6.1.1\\epplus.interfaces.6.1.1.nupkg.sha512",
     "C:\\Users\\dnjsv\\.nuget\\packages\\epplus.system.drawing\\6.1.1\\epplus.system.drawing.6.1.1.nupkg.sha512",

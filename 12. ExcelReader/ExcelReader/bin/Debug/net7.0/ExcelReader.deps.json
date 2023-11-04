@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "ExcelReader/1.0.0": {
         "dependencies": {
+          "ConsoleTableExt": "3.2.0",
           "EPPlus": "7.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.13",
           "Microsoft.EntityFrameworkCore.Design": "7.0.13",
@@ -49,6 +50,14 @@
           "lib/netstandard2.0/Azure.Identity.dll": {
             "assemblyVersion": "1.7.0.0",
             "fileVersion": "1.700.22.46903"
+          }
+        }
+      },
+      "ConsoleTableExt/3.2.0": {
+        "runtime": {
+          "lib/netstandard2.0/ConsoleTableExt.dll": {
+            "assemblyVersion": "3.1.9.0",
+            "fileVersion": "3.1.9.0"
           }
         }
       },
@@ -762,6 +771,13 @@
       "sha512": "sha512-eHEiCO/8+MfNc9nH5dVew/+FvxdaGrkRL4OMNwIz0W79+wtJyEoeRlXJ3SrXhoy9XR58geBYKmzMR83VO7bcAw==",
       "path": "azure.identity/1.7.0",
       "hashPath": "azure.identity.1.7.0.nupkg.sha512"
+    },
+    "ConsoleTableExt/3.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-IhaHj6R2vSbb781aRXngan6nKRp8R5rnL2X5fL0uRW2wRiFyCIUh81T/QOih0//PjzoXMk2Uv4ayBAGDLH338A==",
+      "path": "consoletableext/3.2.0",
+      "hashPath": "consoletableext.3.2.0.nupkg.sha512"
     },
     "EPPlus/7.0.0": {
       "type": "package",

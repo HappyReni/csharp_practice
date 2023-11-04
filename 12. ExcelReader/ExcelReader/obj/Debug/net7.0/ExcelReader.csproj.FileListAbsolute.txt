@@ -77,3 +77,4 @@ E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ref
 E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.pdb
 E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ExcelReader.genruntimeconfig.cache
 E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\obj\Debug\net7.0\ref\ExcelReader.dll
+E:\Workplace\c#\csharp_practice\12. ExcelReader\ExcelReader\bin\Debug\net7.0\ConsoleTableExt.dll

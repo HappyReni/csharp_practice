@@ -1,6 +1,6 @@
-﻿using ExcelReader.Models;
+﻿using ConsoleTableExt;
+using ExcelReader.Models;
 using OfficeOpenXml;
-using System.Reflection;
 
 namespace ExcelReader
 {
@@ -86,6 +86,18 @@ namespace ExcelReader
 
         public void Show()
         {
+            Console.WriteLine("Making the data into table ...");
+            List<List<object>> data = _excelModels.Select(e => new List<object>
+                                     {
+                                         e.Name,
+                                         e.Age,
+                                         e.Job,
+                                         e.Address
+                                     }).ToList();
+            ConsoleTableBuilder
+                .From(data)
+                .WithColumn("Name", "Age", "Job", "Address")
+                .ExportAndWriteLine();
 
         }
     }
