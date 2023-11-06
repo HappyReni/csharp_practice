@@ -19,7 +19,7 @@ namespace CodeTracker
         public static int ValidYear(int year) => year >= 0 && year <= 9999 ? year : throw new Exception();
         public static string ValidWeek(string week)
         {
-            Regex regex = new Regex(@"[0-9]{4}-(0[1-9]|[1-4][0-9]|5[0-2]");
+            Regex regex = new Regex(@"[0-9]{4}-(0[1-9]|[1-4][0-9]|5[0-2])");
             return regex.IsMatch(week) ? week : throw new Exception();
         }
         public static DateTime ValidDate(string date)
