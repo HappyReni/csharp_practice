@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace CodeTracker
 {
-    internal static class Validation
+    public static class Validation
     {
         public static DateTime ValidDateTime(string date)
         {
