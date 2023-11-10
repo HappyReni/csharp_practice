@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstRazorPages.Pages.Movie
@@ -6,7 +7,8 @@ namespace FirstRazorPages.Pages.Movie
     public class IndexModel : PageModel
     {
         private readonly FirstRazorPages.Data.FirstRazorPagesContext _context;
-
+        [BindProperty(SupportsGet = true)]
+        public string? SearchString { get; set; }
         public IndexModel(FirstRazorPages.Data.FirstRazorPagesContext context)
         {
             _context = context;
@@ -16,10 +18,15 @@ namespace FirstRazorPages.Pages.Movie
 
         public async Task OnGetAsync()
         {
-            if (_context.Movie != null)
+            var movies = from m in _context.Movie
+                         select m;
+
+            if(!String.IsNullOrEmpty(SearchString))
             {
-                Movie = await _context.Movie.ToListAsync();
+                movies = movies.Where(m => m.Title.Contains(SearchString));
             }
+
+            Movie = await movies.AsQueryable().ToListAsync();
         }
     }
 }
