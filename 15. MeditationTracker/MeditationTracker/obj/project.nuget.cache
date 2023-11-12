@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "DMLT+vUuCHDJc6g8A4vYbcezw8sEQWYrKb865+4gFhqSOQeTl1chW6jU/mENmJFgIg/AeheV507ewUf3yahrxg==",
+  "dgSpecHash": "4wSy6lL0yf2UZCnXGw0S9Dm10Pu/BRvnBrmzwhlRiqFCWp7QM3I+JktjKI7NkGPBBzKFriY1pv5O3Z2nW3we9Q==",
   "success": true,
   "projectFilePath": "E:\\Workplace\\c#\\csharp_practice\\15. MeditationTracker\\MeditationTracker\\MeditationTracker.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.data.sqlite\\7.0.13\\microsoft.data.sqlite.7.0.13.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\microsoft.data.sqlite.core\\7.0.13\\microsoft.data.sqlite.core.7.0.13.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.4\\sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.core\\2.1.4\\sqlitepclraw.core.2.1.4.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.4\\sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.4\\sqlitepclraw.provider.e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\dnjsv\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512"
+  ],
   "logs": []
 }
