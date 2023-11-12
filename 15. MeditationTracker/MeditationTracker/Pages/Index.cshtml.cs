@@ -17,6 +17,7 @@ namespace MeditationTracker.Pages
         public void OnGet()
         {
             Records = GetAllRecords();
+            ViewData["Total"] = Records.AsEnumerable().Sum(x => x.Duration);
         }
         private List<MeditationModel> GetAllRecords()
         {

@@ -4,10 +4,14 @@
     ViewData["Title"] = "Home page";
 }
 
-<h2>Meditation Tracker</h2>
+<div>
+    <h1>Meditation Tracker</h1>
+    <div>@ViewData["Total"] hours</div>
+    <div id="result"></div>
+</div>
 
 <!-- Bootstrap Table -->
-<div class="container mt-3">
+<div class="content container mt-3">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -44,8 +48,7 @@
             }
         </tbody>
     </table>
+    <a href="/Create" class="btn btn-primary">Add Record</a>
+    <button type="button" class="btn btn-success" onclick="calculate()">Calculate Total</button>
 </div>
 
-<div class="container mt-3">
-    <a href="/Create" class="btn btn-primary">Add Record</a>
-</div>

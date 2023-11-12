@@ -58,7 +58,7 @@ namespace MeditationTracker.Pages
                 connection.Open();
                 var tableCmd = connection.CreateCommand();
                 tableCmd.CommandText =
-                   @$"UPDATE Meditation SET date = '{Meditation.Date}', duration = '{Meditation.Duration}'";
+                   $"UPDATE Meditation SET date = '{Meditation.Date}', duration = '{Meditation.Duration}' WHERE Id = {Meditation.Id}";
                 tableCmd.ExecuteNonQuery();
             }
 

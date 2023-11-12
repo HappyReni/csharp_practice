@@ -13,6 +13,14 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "E:\\Workplace\\c#\\csharp_practice\\15. MeditationTracker\\MeditationTracker\\wwwroot\\img\\background.png",
+      "PackagePath": "staticwebassets\\img\\background.png"
+    },
+    {
+      "Id": "E:\\Workplace\\c#\\csharp_practice\\15. MeditationTracker\\MeditationTracker\\wwwroot\\img\\logo.png",
+      "PackagePath": "staticwebassets\\img\\logo.png"
+    },
+    {
       "Id": "E:\\Workplace\\c#\\csharp_practice\\15. MeditationTracker\\MeditationTracker\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

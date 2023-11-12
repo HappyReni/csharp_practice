@@ -5,7 +5,7 @@
 
 <h2>Are you sure to delete this record?</h2>
 
-<div class="container mt-4">
+<div class="content container mt-4">
     <table class="table">
         <tbody>
             <tr>
@@ -18,11 +18,11 @@
             </tr>
         </tbody>
     </table>
+    <div class="container mt-4">
+        <form method="post">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a asp-page="Index" class="btn btn-secondary">Back to list</a>
+    </div>
 </div>
 
-<div class="container mt-4">
-    <form method="post">
-        <button type="submit" class="btn btn-danger">Delete</button>
-    </form>
-    <a asp-page="Index" class="btn btn-secondary">Back to list</a>
-</div>
