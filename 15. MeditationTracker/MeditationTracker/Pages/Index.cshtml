@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h2>Meditation Tracker</h2>
+
+<!-- Bootstrap Table -->
+<div class="container mt-3">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* 테이블 데이터를 여기에 반복해서 표시 *@
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-3">
+    <a href="/Create" class="btn btn-primary">Add Record</a>
+</div>
